@@ -1,12 +1,20 @@
 package com.example.progettolaboratorio;
+import javax.script.Invocable;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
 import javax.servlet.ServletException;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
+import java.io.Reader;
 import DAO.*;
 
 import java.awt.*;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
 import static DAO.DAO.loginUtente;
@@ -21,29 +29,40 @@ public void init() {
         DAO.registerDriver();
         }
 
-    private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        out.println("Sono nell errore0");
+    private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ScriptException, NoSuchMethodException {
         message=request.getParameter("message");
-        out.println("Sono nell errore1");
         PrintWriter out=response.getWriter();
-        System.out.println("Sono nell errore2");
         response.setContentType("text/plain");
-        System.out.println("Sono nell errore3");
+        ScriptEngineManager manager = new ScriptEngineManager();
+        ScriptEngine engine = manager.getEngineByName("JavaScript");
+        // read script file
+        engine.eval(Files.newBufferedReader(Paths.get("C:/Scripts/Jsfunctions.js"), StandardCharsets.UTF_8));
+        Invocable inv = (Invocable) engine;
+        // call function from script file
+        inv.invokeFunction("Error","message");
         //Da modificare in seguito
-        System.out.println("Sono nell errore4");
         // out.println("<script>");
         // out.println("<Alert("+message+")>");
         // out.println("</script>");
-        String massage = "errore";
-        out.println("<html><script><a href=\"file:///C:\\Users\\matti\\OneDrive\\Desktop\\Uni\\Terzo_anno\\Ium Tweb 2\\Progetto\\EsercizioVue\\src\\main\\webapp\\WEB-INF\\alertNonRegistrato.js\">Link 1</a></script><head>");
-         //
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        processRequest(request,response);
+        try {
+            processRequest(request,response);
+        } catch (ScriptException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        processRequest(request,response);
+        try {
+            processRequest(request,response);
+        } catch (ScriptException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
     }
 }
