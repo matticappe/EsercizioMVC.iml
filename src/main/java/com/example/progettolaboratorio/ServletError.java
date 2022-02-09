@@ -6,19 +6,14 @@ import javax.script.ScriptException;
 import javax.servlet.ServletException;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
-import java.io.Reader;
+
 import DAO.*;
 
-import java.awt.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-
-import static DAO.DAO.loginUtente;
-import static java.lang.System.out;
 
 @WebServlet(name = "ServletError", value = "/ServletError") //questa è la value che verrà usata nell'ancora del HTML
 
@@ -33,17 +28,9 @@ public void init() {
         message=request.getParameter("message");
         PrintWriter out=response.getWriter();
         response.setContentType("text/plain");
-        ScriptEngineManager manager = new ScriptEngineManager();
-        ScriptEngine engine = manager.getEngineByName("JavaScript");
-        // read script file
-        engine.eval(Files.newBufferedReader(Paths.get("C:/Scripts/Jsfunctions.js"), StandardCharsets.UTF_8));
-        Invocable inv = (Invocable) engine;
-        // call function from script file
-        inv.invokeFunction("Error","message");
-        //Da modificare in seguito
-        // out.println("<script>");
-        // out.println("<Alert("+message+")>");
-        // out.println("</script>");
+        System.out.println("1");
+        System.out.println(message);
+
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
