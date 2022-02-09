@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <title>Login</title>
+</head>
+<body>
+<h1>Login</h1>
+
+<form action="ServletController" method="get"/>
+    <input type="submit" name="action" value="login">
+    <input type="submit" name="action" value="inserisciDocente">
+    <input type="submit" name="action" value="stampa">
+    <input type="submit" name="action" value="cancellaPrenotazione">
+    <input type="submit" name="action" value="home">
+    <input type="submit" name="action" value="stampa2">
+</form>
+
+<form>
+    <p><input name="username" id="username" placeholder="User" required/> </p>
+    <p><input name="password" id="password" type="password" /> </p>
+    <p><input id="invia" type="button" value="LOGIN"/></p>
+</form>
+<div id="risposta" class="outputTextArea"></div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#invia").click(function () {
+            //alert("Prova");
+            var u = document.getElementById("username").value;
+            var p = document.getElementById("password").value;
+            $.post("ServletController", {username: u, password: p, invia: "LOGIN"},
+                function (data){
+                    $("#risposta").html(data);
+                });
+        });
+    });
+</script>
+</body>
+</html>

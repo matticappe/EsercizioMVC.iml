@@ -1,0 +1,76 @@
+algoritmo deprecato per il refresh di pagina
+<script language="Javascript">
+        // metti qui sotto il nuovo content della pagina da ricaricare dopo il login
+         <var newContent='<html><head><script language="Javascript">function Hi() {alert("Goodbye World");}</script></head><body onload="Hi();">New Content</body></html>'></var>
+        function ReplaceContent(NC) {
+            document.open();
+            document.write(NC);
+            document.close();
+        }
+        function Hi() {
+            ReplaceContent(newContent);
+        }
+</script>
+
+old index
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+    <title>Pagina principale</title>
+</head>
+<body>
+<h1>Home</h1>
+<form action="ServletController" method="get"/>
+    <input type="submit" name="action" value="login">
+    <input type="submit" name="action" value="inserisciDocente">
+    <input type="submit" name="action" value="stampa"/>
+    <input type="submit" name="action" value="cancellaPrenotazione">
+    <input type="submit" name="action" value="home">
+    <input type="submit" name="action" value="stampa2">
+</form>
+
+<div id="stampa" class="outputTextArea"></div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#funzioneStampa").click(function () {
+            $.get("ServletController", {invia: "STAMPA"},
+                function (data){
+                    $("#stampa").html(data);
+                });
+        });
+    });
+</script>
+</body>
+</html>
+
+un login utente,ergo non so cosa ci sia di diverso
+//public static int loginUtente(String account, String password2){
+//        Connection conn1 = null;
+//        try {
+//        conn1 = DriverManager.getConnection(url1, user, password);
+//        if (conn1 != null) {
+//            System.out.println("Connected to the database test");
+//        }
+//
+//        Statement st = conn1.createStatement();
+//        ResultSet rs = st.executeQuery("SELECT UTENTE.RUOLO FROM UTENTE WHERE UTENTE.ACCOUNT='"+ account +"' AND UTENTE.PASSWORD='"+ password2+"'");
+//        return(Integer.parseInt(rs.getString("RUOLO")));
+//        } catch (SQLException e) {
+//            System.out.println(e.getMessage());
+//            return -1;
+//        }
+//        finally {
+//        if (conn1 != null) {
+//            try {
+//                conn1.close();
+//            } catch (SQLException e2) {
+//                System.out.println(e2.getMessage());
+//            }
+//        }
+//     }
+//    }
+
+sintassi update
+UPDATE Person SET given_names = 'Stefano' WHERE ID = 4

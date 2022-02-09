@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="bootstrap-4.5.2-dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+    <script src="bootstrap-4.5.2-dist/js/jquery-slim.min.js"></script>
+    <script src="bootstrap-4.5.2-dist/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <title>PRJLAB</title>
+    <link rel="stylesheet" href="stile.css" />
+    <!--    -------------STILE DELLA PAGINA UTENTE (tabella)------------->
+
+    <script>
+        function notRegistered() {
+            alert("Non sei registrato! \nEffettua il login per compiere quest'azione");
+        }
+        function prenota(x) {
+            const elem = x;
+            if (elem.innerText === "Prenota")
+                elem.innerText = "Disdici prenotazione";
+            else elem.innerText = "Prenota";
+
+        }
+
+    </script>
+    <script async src='/cdn-cgi/bm/cv/669835187/api.js'></script></head>
+
+<body>
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+<!--   -------------------------------------INIZIO SCHERMATA DI LOGIN-------------------------------------------    -->
+
+
+<div id="loginScreen">
+    <div v-if="setVisibleLogin" class="d-flex justify-content-center">
+        <div class="col-8 col-lg-3">
+            <h2 class="d-flex justify-content-center">Form di autenticazione
+
+            </h2>
+            <div>
+
+                <h3 class="d-flex justify-content-center -->">Please sign in</h3>
+                <form>
+                    <label for="Username" class="sr-only">Username</label>
+                    <input name="username" id="username" v-model="username" placeholder="User" class="form-control">
+
+                    <label for="Password" class="sr-only">Password</label>
+                    <input name="password" id="password" v-model="password" placeholder="Password" type="password"
+                           class="form-control">
+
+                    <div class="checkbox mb-3">
+                        <label>
+                            <input type="checkbox" value="remember-me"> Remember me
+                        </label>
+                    </div>
+                    <button v-on:click="login" class="btn btn-lg btn-primary btn-block" input id="invia"
+                            type="button" value="login">Sign
+                        in</button>
+                </form>
+                <p class="mt-5 mb-3 text-muted d-flex justify-content-center">Lasciare vuoto per entrare come Guest
+                </p>
+
+            </div>
+        </div>
+    </div>
+
+    <div id="risposta" v-html="risposta" class="outputTextArea"></div>
+
+
+
+
+    <!--   --------------------------------FINE DELLA SCHERMATA DI LOGIN -----------------------------------------   -->
+
+    <!--   ----------------------------INIZIO SCHERMATA UTENTI NON REGISTRATI--------------------------------------  -->
+    <div v-if="!setVisibleLogin" id="logoutNonRegistrato" class="logout">
+        <button type="button" v-on:click="setVisibleLogin = !setVisibleLogin" class="btn btn-secondary"
+                data-toggle="tooltip" data-placement="top" title="Tooltip on top">
+            Log-in
+        </button>
+    </div>
+    <div v-if="!setVisibleLogin" id="userScreenNonRegistrato" class="row">
+        <div class="column1">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">Seleziona</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button"
+                                    id="dropdownMenuButton1NonRegistrato" data-toggle="dropdown"
+                                    aria-haspopup="true" aria-expanded="false">
+                                Seleziona materia
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="#">Action</a>
+                                <a class="dropdown-item" href="#">Another action</a>
+                                <a class="dropdown-item" href="#">Something else here</a>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button"
+                                    id="dropdownMenuButton2NonRegistrato" data-toggle="dropdown"
+                                    aria-haspopup="true" aria-expanded="false">
+                                Seleziona professore
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="#">Action</a>
+                                <a class="dropdown-item" href="#">Another action</a>
+                                <a class="dropdown-item" href="#">Something else here</a>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button"
+                                    id="dropdownMenuButton3NonRegistrato" data-toggle="dropdown"
+                                    aria-haspopup="true" aria-expanded="false">
+                                Seleziona giorno
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="#">Action</a>
+                                <a class="dropdown-item" href="#">Another action</a>
+                                <a class="dropdown-item" href="#">Something else here</a>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button"
+                                    id="dropdownMenuButton4NonRegistrato" data-toggle="dropdown"
+                                    aria-haspopup="true" aria-expanded="false">
+                                Seleziona orario
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="#">Action</a>
+                                <a class="dropdown-item" href="#">Another action</a>
+                                <a class="dropdown-item" href="#">Something else here</a>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <button type="button" id="StoricoUtenteNonRegistrato" class="btn btn-primary"
+                                disabled>Storico Prenotazioni</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+        </div>
+
+
+
+        <div class="column2">
+            <table class="table">
+                <thead class="thead-light">
+                <tr>
+                    <!--  titoli della tabella  -->
+                    <th scope="col">Materia</th>
+                    <th scope="col">Professore</th>
+                    <th scope="col">Giorno</th>
+                    <th scope="col">Ora</th>
+                    <th scope="col">Prenotazione</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <!--  questi sono tutti i campi della singola riga della tabella  -->
+                    <td>Ium-Tweb 2</td>
+                    <td>Liliana Ardissono</td>
+                    <td>29/12/2021</td>
+                    <td>15:00 - 16:00</td>
+                    <td><button type="button" class="btn btn-primary" onclick="notRegistered()">Prenota</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Reti 1</td>
+                    <td>Marco Botta</td>
+                    <td>29/12/2021</td>
+                    <td>14:00 - 15:00</td>
+                    <td><button type="button" class="btn btn-primary" disabled>Prenota</button></td>
+                </tr>
+                <tr>
+                    <td>Programmazione 3</td>
+                    <td>Liliana Ardissono</td>
+                    <td>29/12/2021</td>
+                    <td>16:00 - 17:00</td>
+                    <td><button type="button" class="btn btn-primary" disabled>Prenota</button></td>
+
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!--  ------------------------------INIZIO SCHERMATA UTENTI REGISTRATI-----------------------------------------  -->
+
+    <div v-if="!setVisibleLogin" id="logoutUtenteRegistrato" class="logout">
+        <button type="button" v-on:click="setVisibleLogin = !setVisibleLogin" class="btn btn-secondary"
+                data-toggle="tooltip" data-placement="top" title="Tooltip on top">
+            Logout
+        </button>
+    </div>
+    <div v-if="!setVisibleLogin" id="userScreenUtenteRegistrato" class="row">
+        <div class="column1">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">Seleziona</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button"
+                                    id="dropdownMenuButton1UtenteRegistrato" data-toggle="dropdown"
+                                    aria-haspopup="true" aria-expanded="false">
+                                Seleziona materia
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="#">Action</a>
+                                <a class="dropdown-item" href="#">Another action</a>
+                                <a class="dropdown-item" href="#">Something else here</a>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button"
+                                    id="dropdownMenuButton2UtenteRegistrato" data-toggle="dropdown"
+                                    aria-haspopup="true" aria-expanded="false">
+                                Seleziona professore
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="#">Action</a>
+                                <a class="dropdown-item" href="#">Another action</a>
+                                <a class="dropdown-item" href="#">Something else here</a>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button"
+                                    id="dropdownMenuButton3UtenteRegistrato" data-toggle="dropdown"
+                                    aria-haspopup="true" aria-expanded="false">
+                                Seleziona giorno
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="#">Action</a>
+                                <a class="dropdown-item" href="#">Another action</a>
+                                <a class="dropdown-item" href="#">Something else here</a>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button"
+                                    id="dropdownMenuButton4UtenteRegistrato" data-toggle="dropdown"
+                                    aria-haspopup="true" aria-expanded="false">
+                                Seleziona orario
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="#">Action</a>
+                                <a class="dropdown-item" href="#">Another action</a>
+                                <a class="dropdown-item" href="#">Something else here</a>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <button type="button" id="StoricoUtenteRegistrato" class="btn btn-primary">Storico
+                            Prenotazioni</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+        </div>
+
+
+
+        <div class="column2">
+            <table class="table">
+                <thead class="thead-light">
+                <tr>
+                    <!--  titoli della tabella  -->
+                    <th scope="col">Materia</th>
+                    <th scope="col">Professore</th>
+                    <th scope="col">Giorno</th>
+                    <th scope="col">Ora</th>
+                    <th scope="col">Prenotazione</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <!--  questi sono tutti i campi della singola riga della tabella  -->
+                    <td>Ium-Tweb 2</td>
+                    <td>Liliana Ardissono</td>
+                    <td>29/12/2021</td>
+                    <td>15:00 - 16:00</td>
+                    <td><button type="button" class="btn btn-primary" onclick="prenota(this)">Prenota</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Reti 1</td>
+                    <td>Marco Botta</td>
+                    <td>29/12/2021</td>
+                    <td>14:00 - 15:00</td>
+                    <td><button type="button" class="btn btn-primary" onclick="prenota(this)">Prenota</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Programmazione 3</td>
+                    <td>Liliana Ardissono</td>
+                    <td>29/12/2021</td>
+                    <td>16:00 - 17:00</td>
+                    <td><button type="button" class="btn btn-primary" onclick="prenota(this)">Prenota</button>
+                    </td>
+
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+    <!--  ---------------------------------------INIZIO SCHERMATA AMMINISTRATORI-----------------------------------  -->
+
+
+
+    <div v-if="!setVisibleLogin" id="logoutAmministratore" class="logout">
+        <button type="button" v-on:click="setVisibleLogin = !setVisibleLogin" class="btn btn-secondary"
+                data-toggle="tooltip" data-placement="top" title="Tooltip on top">
+            Logout
+        </button>
+    </div>
+    <div v-if="!setVisibleLogin" id="userScreenAmministratore" class="row">
+        <div class="column1">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">Seleziona</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button"
+                                    id="dropdownMenuButton1Amministratore" data-toggle="dropdown"
+                                    aria-haspopup="true" aria-expanded="false">
+                                Seleziona materia
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="#">Action</a>
+                                <a class="dropdown-item" href="#">Another action</a>
+                                <a class="dropdown-item" href="#">Something else here</a>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button"
+                                    id="dropdownMenuButton2Amministratore" data-toggle="dropdown"
+                                    aria-haspopup="true" aria-expanded="false">
+                                Seleziona professore
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="#">Action</a>
+                                <a class="dropdown-item" href="#">Another action</a>
+                                <a class="dropdown-item" href="#">Something else here</a>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button"
+                                    id="dropdownMenuButton3Amministratore" data-toggle="dropdown"
+                                    aria-haspopup="true" aria-expanded="false">
+                                Seleziona giorno
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="#">Action</a>
+                                <a class="dropdown-item" href="#">Another action</a>
+                                <a class="dropdown-item" href="#">Something else here</a>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button"
+                                    id="dropdownMenuButton4Amministratore" data-toggle="dropdown"
+                                    aria-haspopup="true" aria-expanded="false">
+                                Seleziona orario
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="#">Action</a>
+                                <a class="dropdown-item" href="#">Another action</a>
+                                <a class="dropdown-item" href="#">Something else here</a>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button"
+                                    id="dropdownMenuButton5Amministratore" data-toggle="dropdown"
+                                    aria-haspopup="true" aria-expanded="false">
+                                Seleziona Utente
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="#">Action</a>
+                                <a class="dropdown-item" href="#">Another action</a>
+                                <a class="dropdown-item" href="#">Something else here</a>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+        </div>
+
+
+        <div class="column2">
+            <table class="table">
+                <thead class="thead-light">
+                <tr>
+                    <!--  titoli della tabella  -->
+                    <th scope="col">Materia</th>
+                    <th scope="col">Professore</th>
+                    <th scope="col">Matricola</th>
+                    <th scope="col">Giorno</th>
+                    <th scope="col">Ora</th>
+                    <th scope="col">Prenotazione</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <!--  questi sono tutti i campi della singola riga della tabella  -->
+                    <td>Ium-Tweb 2</td>
+                    <td>Liliana Ardissono</td>
+                    <td>123456</td>
+                    <td>29/12/2021</td>
+                    <td>15:00 - 16:00</td>
+                    <td><button type="button" class="btn btn-primary" onclick="prenota(this)">Disdici
+                        Prenotazione</button></td>
+                </tr>
+                <tr>
+                    <td>Reti 1</td>
+                    <td>Marco Botta</td>
+                    <td>234567</td>
+                    <td>29/12/2021</td>
+                    <td>14:00 - 15:00</td>
+                    <td><button type="button" class="btn btn-primary" onclick="prenota(this)">Disdici
+                        Prenotazione</button></td>
+                </tr>
+                <tr>
+                    <td>Programmazione 3</td>
+                    <td>Liliana Ardissono</td>
+                    <td>345678</td>
+                    <td>29/12/2021</td>
+                    <td>16:00 - 17:00</td>
+                    <td><button type="button" class="btn btn-primary" onclick="prenota(this)">Disdici
+                        Prenotazione</button></td>
+
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+    <!--  --  ---------------------------------INIZIO SCHERMATA PROFESSORI--------------------------  -------------  -->
+
+
+    <div v-if="!setVisibleLogin" id="logoutProfessore" class="logout">
+        <button type="button" v-on:click="setVisibleLogin = !setVisibleLogin" class="btn btn-secondary"
+                data-toggle="tooltip" data-placement="top" title="Tooltip on top">
+            Logout
+        </button>
+    </div>
+    <div v-if="!setVisibleLogin" id="userScreenProfessore" class="row">
+        <div class="column1">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">Seleziona</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button"
+                                    id="dropdownMenuButton1Professore" data-toggle="dropdown" aria-haspopup="true"
+                                    aria-expanded="false">
+                                Seleziona materia
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="#">Action</a>
+                                <a class="dropdown-item" href="#">Another action</a>
+                                <a class="dropdown-item" href="#">Something else here</a>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button"
+                                    id="dropdownMenuButton2Professore" data-toggle="dropdown" aria-haspopup="true"
+                                    aria-expanded="false">
+                                Seleziona Utente (non so se ha senso</br> ma l ho messo lo stesso)
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="#">Action</a>
+                                <a class="dropdown-item" href="#">Another action</a>
+                                <a class="dropdown-item" href="#">Something else here</a>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button"
+                                    id="dropdownMenuButton3Professore" data-toggle="dropdown" aria-haspopup="true"
+                                    aria-expanded="false">
+                                Seleziona giorno
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="#">Action</a>
+                                <a class="dropdown-item" href="#">Another action</a>
+                                <a class="dropdown-item" href="#">Something else here</a>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button"
+                                    id="dropdownMenuButton4Professore" data-toggle="dropdown" aria-haspopup="true"
+                                    aria-expanded="false">
+                                Seleziona orario
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="#">Action</a>
+                                <a class="dropdown-item" href="#">Another action</a>
+                                <a class="dropdown-item" href="#">Something else here</a>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button"
+                                    id="dropdownMenuButton5Professore" data-toggle="dropdown" aria-haspopup="true"
+                                    aria-expanded="false">
+                                Seleziona Utente
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="#">Action</a>
+                                <a class="dropdown-item" href="#">Another action</a>
+                                <a class="dropdown-item" href="#">Something else here</a>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+        </div>
+
+
+
+        <div class="column2">
+            <table class="table">
+                <thead class="thead-light">
+                <tr>
+                    <!--  titoli della tabella  -->
+                    <th scope="col">Materia</th>
+                    <th scope="col">Matricola</th>
+                    <th scope="col">Giorno</th>
+                    <th scope="col">Ora</th>
+                    <th scope="col">Prenotazione</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <!--  questi sono tutti i campi della singola riga della tabella  -->
+                    <td>Ium-Tweb 2</td>
+                    <td>123456</td>
+                    <td>29/12/2021</td>
+                    <td>15:00 - 16:00</td>
+                    <td><button type="button" class="btn btn-primary" onclick="prenota(this)">Disdici
+                        Prenotazione</button></td>
+                </tr>
+                <tr>
+                    <td>Reti 1</td>
+                    <td>234567</td>
+                    <td>29/12/2021</td>
+                    <td>14:00 - 15:00</td>
+                    <td><button type="button" class="btn btn-primary" onclick="prenota(this)">Disdici
+                        Prenotazione</button></td>
+                </tr>
+                <tr>
+                    <td>Programmazione 3</td>
+                    <td>345678</td>
+                    <td>29/12/2021</td>
+                    <td>16:00 - 17:00</td>
+                    <td><button type="button" class="btn btn-primary" onclick="prenota(this)">Disdici
+                        Prenotazione</button></td>
+
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+<script>
+
+    new Vue({
+        el: '#loginScreen',
+        data: {
+            setVisibleLogin: true,
+            username: "",
+            password: "",
+            risposta: ""
+
+        },
+
+        methods: {
+            login() {
+                let self = this;
+                $.post("servletController", { "username": this.username, "password": this.password, "invia": "login" },
+                    function (data) {
+                        self.risposta = data;
+                        //self.setVisibleLogin = !self.setVisibleLogin;
+                        
+                    });
+            }
+        }
+    })
+</script>
+<script type="text/javascript">(function(){window['__CF$cv$params']={r:'6da386ef8a275a31',m:'3rL.fud4n.f99SrlZN6LTG5AKwOzFwM_MvG6TOdPl4o-1644309353-0-AWNPuc/s9PCbZkzph/V1BQ4DdztvvMfQ5AdBmdz7a3WgXjkPDRc6F7ot2CjvK74lYjAtbc99hus2s38HPXWEdQg6V9KA//FaoGIRigG0dF6MhwVyk702Pl27nn/XkSI6k9TqrL5jAzqf/j8N9vzCMyWPyWJU7nVavay0n5XVac+w4+6NlF76xselqoll8o78DA==',s:[0x072d80e02a,0x6e1dc2f7d6],}})();</script></body>
+
+</html>
