@@ -58,7 +58,8 @@
                             <input type="checkbox" value="remember-me"> Remember me
                         </label>
                     </div>
-                    <button v-on:click="login" class="btn btn-lg btn-primary btn-block" input id="invia"
+                    <!--<button v-on:click="login" class="btn btn-lg btn-primary btn-block" input id="invia"-->
+                    <button v-on:click="getError" class="btn btn-lg btn-primary btn-block" input id="invia"
                             type="button" value="login">Sign
                         in</button>
                 </form>
@@ -662,7 +663,10 @@
             setVisibleLogin: true,
             username: "",
             password: "",
-            risposta: ""
+            risposta: "",
+            errorMessage: "",
+            link:'servletController'
+
 
         },
 
@@ -673,8 +677,14 @@
                     function (data) {
                         self.risposta = data;
                         //self.setVisibleLogin = !self.setVisibleLogin;
-                        
                     });
+            },
+            getError: function(){
+                var self = this;
+                $.get(this.link, function(data) {
+                    self.errorMessage = data;
+                    //self.coppie = JSON.stringify(data); // non funziona
+                });
             }
         }
     })
