@@ -102,38 +102,44 @@ public class ServletController extends HttpServlet {
         PrintWriter out = response.getWriter();
         ServletContext ctx= request.getServletContext();
         RequestDispatcher rd=null;
-        String res="Guest";
+        String res="";
         try {
             String username = request.getParameter("username");
             String password = request.getParameter("password");
-            System.out.println("Username: " + username);
-            System.out.println("Password: " + password);
-            Utente result = null;
-            result = loginUtente(username, password);
-            //
-            if(result!=null){
-                res=result.toString();
-                s=request.getSession();
-                if(s.isNew()){
-                    String account=result.getAccount();
-                    s.setAttribute("User",account);
-                    int role=result.getRuolo();
-                    s.setAttribute("Ruolo",role);
-                    System.out.println("LoginEffettuato");
-                }
-            }else{
-                String messaggio="Login errato, Username o password errati";
-                request.setAttribute("message",messaggio);
-                rd=getServletContext().getNamedDispatcher("ServletError");
-
-               // String messaggio="Login errato, Username o password errati";
-                System.out.println("ROBA SBAGLIATA");
-                //request.setAttribute("message",messaggio);
-                System.out.println("ROBA SBAGLIATA0.5");
-                rd.include(request,response);
-                System.out.println("ROBA SBAGLIATA1");
+            if(username.equals(password) && username==null){
+                res="Guest";
             }
+            else {
+                System.out.println("Username: " + username);
+                System.out.println("Password: " + password);
+                Utente result = null;
+                result = loginUtente(username, password);
+                //
+                if (result != null) {
+                    res = result.toString();
+                    s = request.getSession();
+                    if (s.isNew()) {
+                        String account = result.getAccount();
+                        s.setAttribute("User", account);
+                        int role = result.getRuolo();
+                        s.setAttribute("Ruolo", role);
+                        System.out.println("LoginEffettuato");
+                    }
+                } else {
+                    String messaggio = "Login errato, Username o password errati";
+                    res=messaggio;
+                    //a sto punto sta roba sotto è useless
+                    request.setAttribute("message", messaggio);
+                    rd = getServletContext().getNamedDispatcher("ServletError");
 
+                    // String messaggio="Login errato, Username o password errati";
+                    System.out.println("ROBA SBAGLIATA");
+                    //request.setAttribute("message",messaggio);
+                    System.out.println("ROBA SBAGLIATA0.5");
+                    rd.include(request, response);
+                    System.out.println("ROBA SBAGLIATA1");
+                }
+            }
             out.flush();
             out.close();
         }finally {
@@ -148,8 +154,9 @@ public class ServletController extends HttpServlet {
         s.invalidate();
     }
 
-    public void inserimentoDocente(HttpServletRequest request, HttpServletResponse response) throws ServletException,
+    public int inserimentoDocente(HttpServletRequest request, HttpServletResponse response) throws ServletException,
             IOException {
+        int result = 0;
         try {
             HttpSession s=request.getSession();
             if((int)s.getAttribute("ruolo")==1) {
@@ -162,16 +169,17 @@ public class ServletController extends HttpServlet {
                 System.out.println(code);
                 String a = request.getParameter("attivo");
                 int attivo = Integer.parseInt(a);
-                String result = "";
+                if(nome.equals(cognome) && code.equals(a) && cognome.equals(a) && a==null){
+                    result=-1; //codifica interna di errore
+                }
                 int ris = DAO.inserimentoDocente(code, nome, cognome, attivo);
                 response.setContentType("text/plain");
                 if (ris == 0) {
-                    result = "DOCENTE GIA' INSERITO";
-                } else {
-                    result = "DOCENTE INSERITO CORRETTAMENTE";
+                    result = 0;
+                } else if(ris>=0){
+                    result = ris;
                 }
                 System.out.println(result);
-                out.println(result);
                 out.flush();
                 out.close();
             }
@@ -185,6 +193,7 @@ public class ServletController extends HttpServlet {
         }
         finally {
             out.close();
+            return result;
         }
     }
 
