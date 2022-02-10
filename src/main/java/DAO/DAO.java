@@ -309,7 +309,7 @@ public class DAO {
                 ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONE ");
                 while (rs.next()) {
                     //forse va rivista con una document.out per scrivere nel div corretto
-                    Prenotazione p = new Prenotazione(rs.getString("docente"),rs.getString("utente"), rs.getString("corso"), rs.getString("stato"), rs.getString("data"), rs.getInt("slot_ora"));
+                    Prenotazione p = new Prenotazione(rs.getString("docente"),rs.getString("utente"), rs.getString("corso"), rs.getString("stato"), rs.getString("data"), rs.getString("slot_ora"));
                     out.add(p);
                 }
             }
@@ -339,7 +339,7 @@ public class DAO {
                 ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONE WHERE UTENTE ="  +account);
                 while (rs.next()) {
                     //forse va rivista con una document.out per scrivere nel div corretto
-                    Prenotazione p = new Prenotazione(rs.getString("docente"),rs.getString("utente"), rs.getString("corso"), rs.getString("stato"), rs.getString("data"), rs.getInt("slot_ora"));
+                    Prenotazione p = new Prenotazione(rs.getString("docente"),rs.getString("utente"), rs.getString("corso"), rs.getString("stato"), rs.getString("data"), rs.getString("slot_ora"));
                     out.add(p);
                 }
             }
@@ -369,7 +369,7 @@ public class DAO {
                 ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONE WHERE UTENTE = '" + account + "'" + "AND STATO = '" + 1 + "'");
                 while (rs.next()) {
                     //forse va rivista con una document.out per scrivere nel div corretto
-                    Prenotazione p = new Prenotazione(rs.getString("docente"),rs.getString("utente"), rs.getString("corso"), rs.getString("stato"), rs.getString("data"), rs.getInt("slot_ora"));
+                    Prenotazione p = new Prenotazione(rs.getString("docente"),rs.getString("utente"), rs.getString("corso"), rs.getString("stato"), rs.getString("data"), rs.getString("slot_ora"));
                     out.add(p);
                 }
             }
@@ -391,7 +391,7 @@ public class DAO {
     //filtra per fascia oraria, giorno, materia e professore
     //da gestire nella servlet il controllo dell'input
     //tutto cio' che in input è null va gestito con *
-    public static ArrayList<Prenotazione> filterPrenotations(int slot_ora, String data, String materia, String professore, int stato){
+    public static ArrayList<Prenotazione> filterPrenotations(String slot_ora, String data, String materia, String professore, String stato){
         Connection conn1 = null;
         ArrayList<Prenotazione> out = new ArrayList<>();
         try{
@@ -401,7 +401,7 @@ public class DAO {
                 ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONE WHERE SLOT_ORA= '" +slot_ora+"'" +"AND DATA= '"+data+"'"+" AND CORSO= '" +materia+"'"+"AND PROFESSORE= '"+professore+"'"+"AND STATO= '"+stato+"'");
                 while (rs.next()) {
                     //forse va rivista con una document.out per scrivere nel div corretto
-                    Prenotazione p = new Prenotazione(rs.getString("docente"),rs.getString("utente"), rs.getString("corso"), rs.getString("stato"), rs.getString("data"), rs.getInt("slot_ora"));
+                    Prenotazione p = new Prenotazione(rs.getString("docente"),rs.getString("utente"), rs.getString("corso"), rs.getString("stato"), rs.getString("data"), rs.getString("slot_ora"));
                     out.add(p);
                 }
             }

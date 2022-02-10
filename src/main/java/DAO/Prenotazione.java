@@ -6,10 +6,10 @@ public class Prenotazione {
     private String utente;
     private String stato;
     private String data;
-    private int slot_ora;
+    private String slot_ora;
 
 
-    public Prenotazione(String docente, String corso, String utente,String stato,String data, int slot_ora) {
+    public Prenotazione(String docente, String corso, String utente,String stato,String data, String slot_ora) {
         this.docente = docente;
         this.corso = corso;
         this.utente = utente;
@@ -32,7 +32,7 @@ public class Prenotazione {
 
     public String getStato(){ return stato; }
 
-    public int getSlot_ora(){ return slot_ora;}
+    public String getSlot_ora(){ return slot_ora;}
 
     public String getData() {
         return data;

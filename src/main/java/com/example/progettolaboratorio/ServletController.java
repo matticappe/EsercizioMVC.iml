@@ -6,6 +6,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import DAO.*;
+import com.google.gson.Gson;
+
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -96,9 +98,9 @@ public class ServletController extends HttpServlet {
 
     public String login(HttpServletRequest request, HttpServletResponse response) throws ServletException,
             IOException {
+        Gson gson = new Gson();
         HttpSession s=null;
-        out.println("Sono nella post");
-        response.setContentType("text/plain");
+        response.setContentType("application/json");
         PrintWriter out = response.getWriter();
         ServletContext ctx= request.getServletContext();
         RequestDispatcher rd=null;
@@ -133,17 +135,15 @@ public class ServletController extends HttpServlet {
                     rd = getServletContext().getNamedDispatcher("ServletError");
 
                     // String messaggio="Login errato, Username o password errati";
-                    System.out.println("ROBA SBAGLIATA");
                     //request.setAttribute("message",messaggio);
-                    System.out.println("ROBA SBAGLIATA0.5");
                     rd.include(request, response);
-                    System.out.println("ROBA SBAGLIATA1");
                 }
             }
             out.flush();
             out.close();
         }finally {
             out.close();
+            request.setAttribute("LoginResult",res);
             return res;
         }
     }
@@ -199,10 +199,16 @@ public class ServletController extends HttpServlet {
 
     public void stampaUtenti(HttpServletRequest request, HttpServletResponse response) throws ServletException,
             IOException {
-        response.setContentType("text/html");
-        ArrayList<Utente> array= DAO.ViewAllUsers();
-        for(Utente utente: array)
-            out.println(utente);
+        HttpSession s=request.getSession();
+        if((int)s.getAttribute("role")==1) {
+            response.setContentType("text/html");
+            ArrayList<Utente> array = DAO.ViewAllUsers();
+            for (Utente utente : array)
+                out.println(utente);
+        }else{
+            // To be handled
+            //
+        }
     }
 
     public void cancellaPrenotazione(HttpServletRequest request, HttpServletResponse response) throws ServletException,
@@ -259,13 +265,22 @@ public class ServletController extends HttpServlet {
             IOException {
         try(PrintWriter out = response.getWriter()){
             String o = request.getParameter("slot_ora");
-            int slot_ora = Integer.parseInt(o);
             String data = request.getParameter("data");
             String materia = request.getParameter("materia");
             String docente = request.getParameter("docente");
             String s = request.getParameter("stato");
-            int stato = Integer.parseInt(s);
-            ArrayList<Prenotazione> array = DAO.filterPrenotations(slot_ora,data,materia,docente,stato);
+            if(data==null){
+                data="*";
+            }else if(materia==null){
+                materia="*";
+            }else if(docente==null){
+                docente="*";
+            }else if(o==null){
+                o="*";
+            }else if(s==null){
+                s="*";
+            }
+            ArrayList<Prenotazione> array = DAO.filterPrenotations(o,data,materia,docente,s);
             String messagge = "Gli utenti sono: ";
             out.println(messagge);
             for(Prenotazione prenotazione: array)
