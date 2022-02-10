@@ -143,8 +143,12 @@ public class ServletController extends HttpServlet {
             out.close();
         }finally {
             out.close();
+            //
             request.setAttribute("LoginResult",res);
+            Sendable send= new Sendable(res);
+            res=gson.toJson(send);
             return res;
+            //
         }
     }
 
