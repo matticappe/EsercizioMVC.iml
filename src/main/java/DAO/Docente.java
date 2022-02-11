@@ -4,10 +4,10 @@ public class Docente {
         private String nome;
         private String cognome;
         private String codDocente;
-        private int attivo;
+        private String attivo;
 
 
-        public Docente(String nome, String cognome, String codDocente, int attivo) {
+        public Docente(String nome, String cognome, String codDocente, String attivo) {
             this.nome = nome;
             this.cognome = cognome;
             this.codDocente = codDocente;
@@ -25,7 +25,7 @@ public class Docente {
 
         public String getCodDocente() { return codDocente;}
 
-        public int getAttivo() {return  attivo;}
+        public String getAttivo() {return  attivo;}
 
     @Override
         public String toString() {

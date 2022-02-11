@@ -14,6 +14,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 
 import static DAO.DAO.loginUtente;
+import static java.lang.System.console;
 import static java.lang.System.out;
 
 @WebServlet(name = "servletController", value = "/servletController") //questa è la value che verrà usata nell'ancora del HTML
@@ -172,11 +173,20 @@ public class ServletController extends HttpServlet {
                 String code = request.getParameter("code");
                 System.out.println(code);
                 String a = request.getParameter("attivo");
-                int attivo = Integer.parseInt(a);
+                if(nome == null){
+                    nome = "*";
+                }else if (code == null){
+                    code = "*";
+                }else if(a == null){
+                    a = "*";
+                }
+                if(cognome == null){
+                    cognome = "*";
+                }
                 if(nome.equals(cognome) && code.equals(a) && cognome.equals(a) && a==null){
                     result=-1; //codifica interna di errore
                 }
-                int ris = DAO.inserimentoDocente(code, nome, cognome, attivo);
+                int ris = DAO.inserimentoDocente(code, nome, cognome, a);
                 response.setContentType("text/plain");
                 if (ris == 0) {
                     result = 0;
@@ -220,6 +230,12 @@ public class ServletController extends HttpServlet {
         String utente= request.getParameter("utente");
         String docente= request.getParameter("docente");
         String corso= request.getParameter("corso");
+        if(utente == null){
+            utente = "*";
+        }else if(docente == null){
+            docente = "*";
+        }else if(corso == null)
+            corso = "*";
         int ris = DAO.cancellazionePrenotazione(utente, docente, corso);
         response.setContentType("text/plain");
         if(ris == 0){
@@ -234,6 +250,9 @@ public class ServletController extends HttpServlet {
             IOException {
         try(PrintWriter out = response.getWriter()){
             String username = request.getParameter("username");
+            if(username == null){
+                username = "*";
+            }
             ArrayList<Prenotazione> array = DAO.viewOwnPrenotations(username);
             String messagge = "Le prenotazioni sono: ";
             out.println(messagge);
@@ -246,6 +265,9 @@ public class ServletController extends HttpServlet {
             IOException {
         try(PrintWriter out = response.getWriter()){
             String username = request.getParameter("username");
+            if(username == null){
+                username = "*";
+            }
             ArrayList<Prenotazione> array = DAO.viewOwnActPrenotations(username);
             String messagge = "Le prenotazione attive sono: ";
             out.println(messagge);
@@ -298,8 +320,16 @@ public class ServletController extends HttpServlet {
             String nome = request.getParameter("nome");
             String cognome = request.getParameter("cognome");
             String codProf = request.getParameter("codProf");
-            String a = request.getParameter("attivo");
-            int attivo = Integer.parseInt(a);
+            String attivo = request.getParameter("attivo");
+            if(nome == null){
+                nome = "*";
+            }else if(cognome == null){
+                cognome = "*";
+            }else if(codProf == null){
+                codProf = "*";
+            }else if(attivo == null){
+                attivo = "*";
+            }
             ArrayList<Docente> array = DAO.filterProf(nome,cognome,codProf,attivo);
             String messagge = "I docenti sono: ";
             out.println(messagge);
@@ -312,6 +342,9 @@ public class ServletController extends HttpServlet {
             IOException {
         try(PrintWriter out = response.getWriter()){
             String titolo = request.getParameter("titlo");
+            if(titolo == null){
+                titolo = "*";
+            }
             ArrayList<Corso> array = DAO.availableSubjects(titolo);
             String messagge = "I docenti sono: ";
             out.println(messagge);
@@ -328,6 +361,9 @@ public class ServletController extends HttpServlet {
             if((int)s.getAttribute("ruolo")==1) {
                 System.out.println("Sono nella inserimentoDocente");
                 String corso = request.getParameter("corso");
+                if(corso == null){
+                    corso = "*";
+                }
                 System.out.println(corso);
                 String result = "";
                 int ris = DAO.inserimentoCorso(corso);
@@ -362,6 +398,13 @@ public class ServletController extends HttpServlet {
             String docente = request.getParameter("docente");
             String corso = request.getParameter("corso");
             String utente = request.getParameter("utente");
+            if(docente == null){
+                docente = "*";
+            }else if(corso == null){
+                corso = "*";
+            }else if(utente == null){
+                utente = "*";
+            }
             String result = "";
             int ris = DAO.effettuaPrenotazione(utente,docente,corso);
             response.setContentType("text/plain");
@@ -390,6 +433,11 @@ public class ServletController extends HttpServlet {
                 System.out.println("Sono nella effettuaPrenotazione");
                 String docente = request.getParameter("docente");
                 String corso = request.getParameter("corso");
+                if(docente == null){
+                    docente = "*";
+                }else if(corso == null){
+                    corso = "*";
+                }
                 String result = "";
                 int ris = DAO.inserimentoInsegna(docente, corso);
                 response.setContentType("text/plain");
@@ -418,6 +466,9 @@ public class ServletController extends HttpServlet {
     public void isAdmin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
         try(PrintWriter out = response.getWriter()) {
             String username = request.getParameter("username");
+            if(username == null){
+                username = "*";
+            }
             boolean flag;
             String result;
             flag = DAO.isAdmin(username);
@@ -442,6 +493,9 @@ public class ServletController extends HttpServlet {
             if((int)s.getAttribute("ruolo")==1) {
                 String titolo = request.getParameter("titolo");
                 String result;
+                if(titolo == null){
+                    titolo = "*";
+                }
                 result = DAO.updateInsegnaDocente(titolo);
                 response.setContentType("text/plain");
                 out.println(result);
@@ -465,6 +519,9 @@ public class ServletController extends HttpServlet {
             HttpSession s= request.getSession();
             if((int) s.getAttribute("ruolo")==1) {
                 String codDocente = request.getParameter("codDocente");
+                if(codDocente == null){
+                    codDocente = "*";
+                }
                 String result;
                 result = DAO.updateInsegnaMateria(codDocente);
                 response.setContentType("text/plain");
