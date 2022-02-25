@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import static DAO.DAO.loginUtente;
 import static java.lang.System.out;
 
-@WebServlet(name = "servletController", value = "/servletController") //questa è la value che verrà usata nell'ancora del HTML
+@WebServlet(name = "ServletController", value = "/ServletController") //questa è la value che verrà usata nell'ancora del HTML
 public class ServletController extends HttpServlet {
     private String message;
     public void init() {
@@ -144,6 +144,7 @@ public class ServletController extends HttpServlet {
         }finally {
             out.close();
             //
+            System.out.println("FINALLY SERVLET" + res);
             request.setAttribute("LoginResult",res);
             Sendable send= new Sendable(res);
             res=gson.toJson(send);

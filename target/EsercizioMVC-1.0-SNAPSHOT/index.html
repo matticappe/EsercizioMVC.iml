@@ -58,9 +58,12 @@
                             <input type="checkbox" value="remember-me"> Remember me
                         </label>
                     </div>
-                    <button v-on:click="login" class="btn btn-lg btn-primary btn-block" input id="invia"
-                            type="button" value="login">Sign
-                        in</button>
+                    <button v-on:click="login(); getError();" class="btn btn-lg btn-primary btn-block" input id="invia"
+
+                            type="button" value="login">Sign in
+                    </button>
+                    <di v-for="error in errorMessage"><p>{{error.result}}</p></di>
+
                 </form>
                 <p class="mt-5 mb-3 text-muted d-flex justify-content-center">Lasciare vuoto per entrare come Guest
                 </p>
@@ -662,19 +665,34 @@
             setVisibleLogin: true,
             username: "",
             password: "",
-            risposta: ""
+            risposta: "",
+            errorMessage:[],
+            link:'ServletController',
+            codice: "login"
+
 
         },
 
         methods: {
             login() {
                 let self = this;
-                $.post("servletController", { "username": this.username, "password": this.password, "invia": "login" },
+                $.post("ServletController", { "username": this.username, "password": this.password, "invia":this.codice },
                     function (data) {
                         self.risposta = data;
-                        //self.setVisibleLogin = !self.setVisibleLogin;
-                        
+                        this.setVisibleLogin = !this.setVisibleLogin;
                     });
+            },
+
+            getError(){
+                console.log("sono nella function");
+                var self = this;
+                console.log("dopo self");
+                $.get("ServletController", function(data) {
+                    console.log("dopo get");
+                    self.errorMessage = data;
+                    console.log("getError funtion terminata");
+                });
+                console.log("get terminata");
             }
         }
     })

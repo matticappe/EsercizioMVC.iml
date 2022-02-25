@@ -7,7 +7,7 @@ public class Sendable {
         this.result=result;
     }
 
-    public String getresult(){
+    public String getResult(){
         return this.result;
     }
 }
