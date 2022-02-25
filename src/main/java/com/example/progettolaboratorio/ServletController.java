@@ -23,6 +23,7 @@ public class ServletController extends HttpServlet {
         //registrazione del driver
         DAO.registerDriver();
     }
+    public String risTest;
 
     private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException,
             IOException {
@@ -33,6 +34,10 @@ public class ServletController extends HttpServlet {
             case "login":
                 System.out.println("Sono nel login");
                 login(request,response);
+                break;
+            case "getLogin":
+                System.out.println("Sono nel getlogin");
+                getLogin(request,response);
                 break;
             case "inserisci_docente":
                 inserimentoDocente(request,response);
@@ -96,7 +101,7 @@ public class ServletController extends HttpServlet {
         processRequest(request,response);
     }
 
-    public String login(HttpServletRequest request, HttpServletResponse response) throws ServletException,
+    public void login(HttpServletRequest request, HttpServletResponse response) throws ServletException,
             IOException {
         Gson gson = new Gson();
         HttpSession s=null;
@@ -143,13 +148,22 @@ public class ServletController extends HttpServlet {
             out.close();
         }finally {
             out.close();
+            risTest=res;
             //
-            System.out.println("FINALLY SERVLET" + res);
-            request.setAttribute("LoginResult",res);
-            Sendable send= new Sendable(res);
-            res=gson.toJson(send);
-            return res;
-            //
+        }
+    }
+
+    public void getLogin(HttpServletRequest request, HttpServletResponse response) throws ServletException,
+            IOException{
+        Gson gson = new Gson();
+        response.setContentType("application/json");
+        PrintWriter out = response.getWriter();
+        if(risTest!=null){
+            risTest=gson.toJson(risTest);
+            out.print(risTest);
+        }
+        else{
+            //To Be Handled
         }
     }
 

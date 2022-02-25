@@ -668,23 +668,37 @@
             risposta: "",
             errorMessage:[],
             link:'ServletController',
-            codice: "login"
+            codice: "login",
+            codice2: "getLogin"
 
 
         },
 
+
+
         methods: {
             login() {
                 let self = this;
-                $.post("ServletController", { "username": this.username, "password": this.password, "invia":this.codice },
-                    function (data) {
-                        self.risposta = data;
-                        this.setVisibleLogin = !this.setVisibleLogin;
+                $.post("ServletController", { "username": this.username, "password": this.password, "invia":this.codice })
+                    .then(function (data) {
+                        console.log("data1 "+data);
+                        console.log("Risposta1 "+data.risposta);
                     });
+                console.log("data0 "+this.data);
+                console.log("data00 "+self.data);
+
+                $.get("ServletController", {"invia":this.codice2})
+                    .then(function(data){
+                        console.log("data2 "+ data);
+                        console.log("risposta2 = "+ self.risposta);
+                    });
+                console.log("test "+ this.data );
+                console.log("risposta = "+ this.risposta);
+                this.setVisibleLogin = !this.setVisibleLogin;
+
             },
 
             getError(){
-                console.log("sono nella function");
                 var self = this;
                 console.log("dopo self");
                 $.get("ServletController", function(data) {
