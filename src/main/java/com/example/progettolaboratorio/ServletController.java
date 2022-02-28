@@ -36,10 +36,8 @@ public class ServletController extends HttpServlet {
                     System.out.println("Sono nel login");
                     String answ=login(request,response);
                     System.out.println("TRA POCO INVIO CORRETTO"+answ);
-                    //String str ="RISPOSTAAAAAAAA";
                     String s = gson.toJson(answ);
                     out.println(s);
-
                     break;
                 case "inserisci_docente":
                     inserimentoDocente(request, response);
