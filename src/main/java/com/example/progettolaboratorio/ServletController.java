@@ -109,7 +109,7 @@ public class ServletController extends HttpServlet {
         //Gson gson = new Gson();
         HttpSession s=null;
         //response.setContentType("application/json");     //questo non ci va
-        //PrintWriter out = response.getWriter();
+        //PrintWriter out = response.getWriter();          //anche questo non ci va
         ServletContext ctx= request.getServletContext();
         RequestDispatcher rd=null;
         String res="";
