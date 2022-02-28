@@ -95,7 +95,7 @@ public class DAO {
     }
 
 
-    public static int inserimentoDocente(String codiceFiscale, String nome, String cognome,int attivo){
+    public static int inserimentoDocente(String codiceFiscale, String nome, String cognome,String attivo){
         Connection conn1 = null;
         int ris = 0;
         try {
@@ -423,7 +423,7 @@ public class DAO {
     //filtra per nome,cognome,codiceProf e se attivo
     //da gestire nella servlet il controllo dell'input
     //tutto cio' che in input è null va gestito con *
-    public static ArrayList<Docente> filterProf(String nome, String cognome, String codProf, int attivo){
+    public static ArrayList<Docente> filterProf(String nome, String cognome, String codProf, String attivo){
         Connection conn1 = null;
         ArrayList<Docente> out = new ArrayList<>();
         try{
@@ -433,7 +433,7 @@ public class DAO {
                 ResultSet rs = st.executeQuery("SELECT * FROM DOCENTE WHERE NOME= '" +nome+"'" +"AND COGNOME= '"+cognome+"'"+" AND CODDOCENTE= '" +codProf+"'"+"AND ATTIVO= '"+attivo+"'");
                 while (rs.next()) {
                     //forse va rivista con una document.out per scrivere nel div corretto
-                    Docente p = new Docente(rs.getString("nome"),rs.getString("cognome"), rs.getString("codDocente"), rs.getInt("attivo"));
+                    Docente p = new Docente(rs.getString("nome"),rs.getString("cognome"), rs.getString("codDocente"), rs.getString("attivo"));
                     out.add(p);
                 }
             }
