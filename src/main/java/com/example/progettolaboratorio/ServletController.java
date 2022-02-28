@@ -1,89 +1,97 @@
 package com.example.progettolaboratorio;
 
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.http.*;
-import javax.servlet.annotation.*;
 import DAO.*;
 import com.google.gson.Gson;
+import javax.servlet.*;
+import javax.servlet.http.*;
+import javax.servlet.annotation.*;
 
+import java.io.*;
 
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Objects;
 
 import static DAO.DAO.loginUtente;
 import static java.lang.System.out;
 
-@WebServlet(name = "servletController", value = "/servletController") //questa è la value che verrà usata nell'ancora del HTML
+@WebServlet(name = "ServletController", value = "/ServletController") //questa è la value che verrà usata nell'ancora del HTML
 public class ServletController extends HttpServlet {
     private String message;
     public void init() {
         //registrazione del driver
         DAO.registerDriver();
     }
+    public String risTest;
 
     private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException,
             IOException {
-        response.setContentType("text/html");
-        String action = request.getParameter("invia");
-        System.out.println("Action = " + action);
-        switch (action) {
-            case "login":
-                System.out.println("Sono nel login");
-                login(request,response);
-                break;
-            case "inserisci_docente":
-                inserimentoDocente(request,response);
-                break;
-            case "cancella_prenotazione":
-                cancellaPrenotazione(request,response);
-                break;
-            case "inserimentoCorso":
-                inserimentoCorso(request,response);
-                break;
-            case "effettuaPrenotazione":
-                effettuaPrenotazione(request,response);
-                break;
-            case "inserimentoInsegna":
-                inserimentoInsegna(request,response);
-                break;
-            case "updateInsegnaDocente":
-                updateInsegnaDocente(request,response);
-                break;
-            case "updateInsegnaMateria":
-                updateInsegnaMateria(request,response);
-                break;
-            case "stampa_utenti":
-                stampaUtenti(request,response);
-                break;
-            case "viewOwnPrenotations":
-                viewOwnPrenotations(request,response);
-                break;
-            case "viewAllPrenotations":
-                viewAllPrenotations(request,response);
-                break;
-            case "viewOwnActPrenotations":
-                viewOwnActPrenotations(request,response);
-                break;
-            case "filterProf":
-                filterProf(request,response);
-                break;
-            case "filterPrenotations":
-                filterPrenotations(request,response);
-                break;
-            case "availableSubjects":
-                availableSubjects(request,response);
-                break;
-            case "isAdmin":
-                isAdmin(request,response);
-                break;
-            case "logout":
-                logout(request,response);
-                break;
+        try(PrintWriter out = response.getWriter()) {
+            response.setContentType("application/json");
+            String action = request.getParameter("invia");
+            System.out.println("Action = " + action); //inserire un controllo per il != da null
+            //out.println(action);
+            switch (action) {
+                case "login":
+                    Gson gson = new Gson();
+                    System.out.println("Sono nel login");
+                    String answ=login(request,response);
+                    System.out.println("TRA POCO INVIO CORRETTO"+answ);
+                    //String str ="RISPOSTAAAAAAAA";
+                    String s = gson.toJson(answ);
+                    out.println(s);
 
-        }
+                    break;
+                case "inserisci_docente":
+                    inserimentoDocente(request, response);
+                    break;
+                case "cancella_prenotazione":
+                    cancellaPrenotazione(request, response);
+                    break;
+                case "inserimentoCorso":
+                    inserimentoCorso(request, response);
+                    break;
+                case "effettuaPrenotazione":
+                    effettuaPrenotazione(request, response);
+                    break;
+                case "inserimentoInsegna":
+                    inserimentoInsegna(request, response);
+                    break;
+                case "updateInsegnaDocente":
+                    updateInsegnaDocente(request, response);
+                    break;
+                case "updateInsegnaMateria":
+                    updateInsegnaMateria(request, response);
+                    break;
+                case "stampa_utenti":
+                    stampaUtenti(request, response);
+                    break;
+                case "viewOwnPrenotations":
+                    viewOwnPrenotations(request, response);
+                    break;
+                case "viewAllPrenotations":
+                    viewAllPrenotations(request, response);
+                    break;
+                case "viewOwnActPrenotations":
+                    viewOwnActPrenotations(request, response);
+                    break;
+                case "filterProf":
+                    filterProf(request, response);
+                    break;
+                case "filterPrenotations":
+                    filterPrenotations(request, response);
+                    break;
+                case "availableSubjects":
+                    availableSubjects(request, response);
+                    break;
+                case "isAdmin":
+                    isAdmin(request, response);
+                    break;
+                case "logout":
+                    logout(request, response);
+                    break;
+
+            }
+        }   //da togliere, del try
     }
 
     @Override
@@ -98,10 +106,10 @@ public class ServletController extends HttpServlet {
 
     public String login(HttpServletRequest request, HttpServletResponse response) throws ServletException,
             IOException {
-        Gson gson = new Gson();
+        //Gson gson = new Gson();
         HttpSession s=null;
-        response.setContentType("application/json");
-        PrintWriter out = response.getWriter();
+        //response.setContentType("application/json");     //questo non ci va
+        //PrintWriter out = response.getWriter();          //anche questo non ci va
         ServletContext ctx= request.getServletContext();
         RequestDispatcher rd=null;
         String res="";
@@ -126,6 +134,8 @@ public class ServletController extends HttpServlet {
                         int role = result.getRuolo();
                         s.setAttribute("Ruolo", role);
                         System.out.println("LoginEffettuato");
+                        String st = "risposta: Corretto";
+                        return st;
                     }
                 } else {
                     String messaggio = "Login errato, Username o password errati";
@@ -141,13 +151,11 @@ public class ServletController extends HttpServlet {
             }
             out.flush();
             out.close();
+            String end ="risposta: sono arrivato alla fine";
+            return end;
         }finally {
             out.close();
-            //
-            request.setAttribute("LoginResult",res);
-            Sendable send= new Sendable(res);
-            res=gson.toJson(send);
-            return res;
+            risTest=res;
             //
         }
     }
