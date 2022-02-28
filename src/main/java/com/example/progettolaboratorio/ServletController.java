@@ -27,12 +27,12 @@ public class ServletController extends HttpServlet {
             IOException {
         try(PrintWriter out = response.getWriter()) {
             response.setContentType("application/json");
+            Gson gson = new Gson();
             String action = request.getParameter("invia");
             System.out.println("Action = " + action); //inserire un controllo per il != da null
             //out.println(action);
             switch (action) {
                 case "login":
-                    Gson gson = new Gson();
                     System.out.println("Sono nel login");
                     String answ=login(request,response);
                     System.out.println("TRA POCO INVIO CORRETTO"+answ);
