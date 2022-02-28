@@ -683,18 +683,23 @@
                 let self = this;
                 $.post("ServletController", { "username": this.username, "password": this.password, "invia":this.codice }).then(function (data) {
                         self.risposta = data;
-                        this.risposta=data;
+                        //this.risposta=data;
                         console.log("Risposta1 "+data);
                         console.log("Risposta2 "+self.risposta);
-                    });
-                console.log("data0 "+self.risposta);
-                console.log("data1 "+self.risposta);        //se voglio prendere la roba modificata uso self
 
+                        this.setVisibleLogin='1';
+                        self.setVisibleLogin='1';
+                        console.log("vis0.1 "+this.setVisibleLogin);
+                        console.log("vis0.2 "+self.setVisibleLogin);
+                    });
+                //console.log("data0 "+self.risposta);
+                //console.log("data1 "+self.risposta);        //se voglio prendere la roba modificata uso self
+/*
                 this.setVisibleLogin=1;
                 self.setVisibleLogin=1;
                 console.log("vis1 "+this.setVisibleLogin);
                 console.log("vis2 "+self.setVisibleLogin);
-
+*/
 
             },
             /*
