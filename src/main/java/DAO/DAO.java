@@ -193,7 +193,7 @@ public class DAO {
                 ResultSet rs = st.executeQuery("SELECT * FROM UTENTE WHERE ACCOUNT = '" + account + "'" + "AND PASSWORD = '" + password2 + "'");
                 if(rs.next()){
                     out = new Utente(rs.getString("account"),rs.getString("password"),rs.getInt("ruolo"));
-                    System.out.println(out);
+                    System.out.println("loginUtente = "+out);
                 }
             }
         }catch (SQLException e){

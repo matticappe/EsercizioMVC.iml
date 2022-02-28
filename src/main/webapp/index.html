@@ -10,6 +10,7 @@
     <script src="bootstrap-4.5.2-dist/js/bootstrap.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
     <title>PRJLAB</title>
     <link rel="stylesheet" href="stile.css" />
     <!--    -------------STILE DELLA PAGINA UTENTE (tabella)------------->
@@ -30,14 +31,15 @@
     <script async src='/cdn-cgi/bm/cv/669835187/api.js'></script></head>
 
 <body>
-
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
 <!--   -------------------------------------INIZIO SCHERMATA DI LOGIN-------------------------------------------    -->
 
 
 <div id="loginScreen">
     <div v-if="setVisibleLogin" class="d-flex justify-content-center">
+        {{risposta}}
         <div class="col-8 col-lg-3">
             <h2 class="d-flex justify-content-center">Form di autenticazione
 
@@ -58,9 +60,12 @@
                             <input type="checkbox" value="remember-me"> Remember me
                         </label>
                     </div>
-                    <button v-on:click="login" class="btn btn-lg btn-primary btn-block" input id="invia"
-                            type="button" value="login">Sign
-                        in</button>
+                    <button v-on:click="login(); /*getError();*/" class="btn btn-lg btn-primary btn-block" input id="invia"
+
+                            type="button" value="login">Sign in
+                    </button>
+                    <di v-for="error in errorMessage"><p>{{error.result}}</p></di>
+
                 </form>
                 <p class="mt-5 mb-3 text-muted d-flex justify-content-center">Lasciare vuoto per entrare come Guest
                 </p>
@@ -656,26 +661,56 @@
 </div>
 <script>
 
-    new Vue({
+    var app=new Vue({
         el: '#loginScreen',
         data: {
             setVisibleLogin: true,
-            username: "",
-            password: "",
-            risposta: ""
+            username: '',
+            password: '',
+            risposta: 'falso',
+            errorMessage:[],
+            link:'ServletController',
+            codice:'login',
+            codice2: 'getLogin'
+
 
         },
 
+
+
         methods: {
-            login() {
+            login:function() {
                 let self = this;
-                $.post("servletController", { "username": this.username, "password": this.password, "invia": "login" },
-                    function (data) {
+                $.post("ServletController", { "username": this.username, "password": this.password, "invia":this.codice },function (data) {
                         self.risposta = data;
-                        //self.setVisibleLogin = !self.setVisibleLogin;
-                        
+                        console.log("data1 "+data);
+                        console.log("Risposta2 "+self.risposta);
                     });
+                console.log("data0 "+this.risposta);
+
+                /*
+                $.get("ServletController", {"invia":this.codice2})
+                    .then(function(data){
+                        console.log("data2 "+ data);
+                        console.log("risposta2 = "+ self.risposta);
+                    });
+                console.log("test "+ this.data );
+                console.log("risposta = "+ this.risposta);
+                this.setVisibleLogin = !this.setVisibleLogin;
+*/
+            },
+            /*
+            getError(){
+                var self = this;
+                console.log("dopo self");
+                $.get("ServletController", function(data) {
+                    console.log("dopo get");
+                    self.errorMessage = data;
+                    console.log("getError funtion terminata");
+                });
+                console.log("get terminata");
             }
+            */
         }
     })
 </script>
