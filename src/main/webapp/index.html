@@ -38,8 +38,8 @@
 
 
 <div id="loginScreen">
-    <div v-if="setVisibleLogin" class="d-flex justify-content-center">
-        {{risposta}}
+    <div v-if="setVisibleLogin==0" class="d-flex justify-content-center">
+        {{setVisibleLogin}}
         <div class="col-8 col-lg-3">
             <h2 class="d-flex justify-content-center">Form di autenticazione
 
@@ -74,7 +74,7 @@
         </div>
     </div>
 
-    <div id="risposta" v-html="risposta" class="outputTextArea"></div>
+    <div id="setVisibleLogin" v-html="setVisibleLogin" class="outputTextArea"></div>
 
 
 
@@ -82,13 +82,13 @@
     <!--   --------------------------------FINE DELLA SCHERMATA DI LOGIN -----------------------------------------   -->
 
     <!--   ----------------------------INIZIO SCHERMATA UTENTI NON REGISTRATI--------------------------------------  -->
-    <div v-if="!setVisibleLogin" id="logoutNonRegistrato" class="logout">
-        <button type="button" v-on:click="setVisibleLogin = !setVisibleLogin" class="btn btn-secondary"
+    <div v-if="setVisibleLogin==1" id="logoutNonRegistrato" class="logout">
+        <button type="button"  class="btn btn-secondary"
                 data-toggle="tooltip" data-placement="top" title="Tooltip on top">
             Log-in
         </button>
     </div>
-    <div v-if="!setVisibleLogin" id="userScreenNonRegistrato" class="row">
+    <div v-if="setVisibleLogin==1" id="userScreenNonRegistrato" class="row">
         <div class="column1">
             <table class="table">
                 <thead>
@@ -218,13 +218,13 @@
 
     <!--  ------------------------------INIZIO SCHERMATA UTENTI REGISTRATI-----------------------------------------  -->
 
-    <div v-if="!setVisibleLogin" id="logoutUtenteRegistrato" class="logout">
-        <button type="button" v-on:click="setVisibleLogin = !setVisibleLogin" class="btn btn-secondary"
+    <div v-if="setVisibleLogin==2" id="logoutUtenteRegistrato" class="logout">
+        <button type="button" class="btn btn-secondary"
                 data-toggle="tooltip" data-placement="top" title="Tooltip on top">
             Logout
         </button>
     </div>
-    <div v-if="!setVisibleLogin" id="userScreenUtenteRegistrato" class="row">
+    <div v-if="setVisibleLogin==2" id="userScreenUtenteRegistrato" class="row">
         <div class="column1">
             <table class="table">
                 <thead>
@@ -359,13 +359,13 @@
 
 
 
-    <div v-if="!setVisibleLogin" id="logoutAmministratore" class="logout">
-        <button type="button" v-on:click="setVisibleLogin = !setVisibleLogin" class="btn btn-secondary"
+    <div v-if="setVisibleLogin==4" id="logoutAmministratore" class="logout">
+        <button type="button" class="btn btn-secondary"
                 data-toggle="tooltip" data-placement="top" title="Tooltip on top">
             Logout
         </button>
     </div>
-    <div v-if="!setVisibleLogin" id="userScreenAmministratore" class="row">
+    <div v-if="setVisibleLogin==4" id="userScreenAmministratore" class="row">
         <div class="column1">
             <table class="table">
                 <thead>
@@ -512,13 +512,13 @@
     <!--  --  ---------------------------------INIZIO SCHERMATA PROFESSORI--------------------------  -------------  -->
 
 
-    <div v-if="!setVisibleLogin" id="logoutProfessore" class="logout">
-        <button type="button" v-on:click="setVisibleLogin = !setVisibleLogin" class="btn btn-secondary"
+    <div v-if="setVisibleLogin==3" id="logoutProfessore" class="logout">
+        <button type="button" class="btn btn-secondary"
                 data-toggle="tooltip" data-placement="top" title="Tooltip on top">
             Logout
         </button>
     </div>
-    <div v-if="!setVisibleLogin" id="userScreenProfessore" class="row">
+    <div v-if="setVisibleLogin==3" id="userScreenProfessore" class="row">
         <div class="column1">
             <table class="table">
                 <thead>
@@ -664,7 +664,7 @@
     var app=new Vue({
         el: '#loginScreen',
         data: {
-            setVisibleLogin: true,
+            setVisibleLogin: '0',         //0 = login, 1=non registrati, 2=registrati, 3=docenti, 4=admin
             username: '',
             password: '',
             risposta: 'falso',
@@ -681,23 +681,21 @@
         methods: {
             login:function() {
                 let self = this;
-                $.post("ServletController", { "username": this.username, "password": this.password, "invia":this.codice },function (data) {
+                $.post("ServletController", { "username": this.username, "password": this.password, "invia":this.codice }).then(function (data) {
                         self.risposta = data;
-                        console.log("data1 "+data);
+                        this.risposta=data;
+                        console.log("Risposta1 "+data);
                         console.log("Risposta2 "+self.risposta);
                     });
-                console.log("data0 "+this.risposta);
+                console.log("data0 "+self.risposta);
+                console.log("data1 "+self.risposta);        //se voglio prendere la roba modificata uso self
 
-                /*
-                $.get("ServletController", {"invia":this.codice2})
-                    .then(function(data){
-                        console.log("data2 "+ data);
-                        console.log("risposta2 = "+ self.risposta);
-                    });
-                console.log("test "+ this.data );
-                console.log("risposta = "+ this.risposta);
-                this.setVisibleLogin = !this.setVisibleLogin;
-*/
+                this.setVisibleLogin=1;
+                self.setVisibleLogin=1;
+                console.log("vis1 "+this.setVisibleLogin);
+                console.log("vis2 "+self.setVisibleLogin);
+
+
             },
             /*
             getError(){
