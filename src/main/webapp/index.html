@@ -38,7 +38,7 @@
 
 
 <div id="loginScreen">
-    <div v-if="setVisibleLogin==0" class="d-flex justify-content-center">
+    <div v-if="setVisibleLogin=='0'" class="d-flex justify-content-center">
         {{setVisibleLogin}}
         <div class="col-8 col-lg-3">
             <h2 class="d-flex justify-content-center">Form di autenticazione
@@ -82,13 +82,13 @@
     <!--   --------------------------------FINE DELLA SCHERMATA DI LOGIN -----------------------------------------   -->
 
     <!--   ----------------------------INIZIO SCHERMATA UTENTI NON REGISTRATI--------------------------------------  -->
-    <div v-if="setVisibleLogin==1" id="logoutNonRegistrato" class="logout">
+    <div v-if="setVisibleLogin=='1'" id="logoutNonRegistrato" class="logout">
         <button type="button"  class="btn btn-secondary"
                 data-toggle="tooltip" data-placement="top" title="Tooltip on top">
             Log-in
         </button>
     </div>
-    <div v-if="setVisibleLogin==1" id="userScreenNonRegistrato" class="row">
+    <div v-if="setVisibleLogin=='1'" id="userScreenNonRegistrato" class="row">
         <div class="column1">
             <table class="table">
                 <thead>
@@ -218,13 +218,13 @@
 
     <!--  ------------------------------INIZIO SCHERMATA UTENTI REGISTRATI-----------------------------------------  -->
 
-    <div v-if="setVisibleLogin==2" id="logoutUtenteRegistrato" class="logout">
+    <div v-if="setVisibleLogin=='2'" id="logoutUtenteRegistrato" class="logout">
         <button type="button" class="btn btn-secondary"
                 data-toggle="tooltip" data-placement="top" title="Tooltip on top">
             Logout
         </button>
     </div>
-    <div v-if="setVisibleLogin==2" id="userScreenUtenteRegistrato" class="row">
+    <div v-if="setVisibleLogin=='2'" id="userScreenUtenteRegistrato" class="row">
         <div class="column1">
             <table class="table">
                 <thead>
@@ -359,13 +359,13 @@
 
 
 
-    <div v-if="setVisibleLogin==4" id="logoutAmministratore" class="logout">
+    <div v-if="setVisibleLogin=='4'" id="logoutAmministratore" class="logout">
         <button type="button" class="btn btn-secondary"
                 data-toggle="tooltip" data-placement="top" title="Tooltip on top">
             Logout
         </button>
     </div>
-    <div v-if="setVisibleLogin==4" id="userScreenAmministratore" class="row">
+    <div v-if="setVisibleLogin=='4'" id="userScreenAmministratore" class="row">
         <div class="column1">
             <table class="table">
                 <thead>
@@ -512,13 +512,13 @@
     <!--  --  ---------------------------------INIZIO SCHERMATA PROFESSORI--------------------------  -------------  -->
 
 
-    <div v-if="setVisibleLogin==3" id="logoutProfessore" class="logout">
+    <div v-if="setVisibleLogin=='3'" id="logoutProfessore" class="logout">
         <button type="button" class="btn btn-secondary"
                 data-toggle="tooltip" data-placement="top" title="Tooltip on top">
             Logout
         </button>
     </div>
-    <div v-if="setVisibleLogin==3" id="userScreenProfessore" class="row">
+    <div v-if="setVisibleLogin=='3'" id="userScreenProfessore" class="row">
         <div class="column1">
             <table class="table">
                 <thead>
@@ -689,17 +689,16 @@
 
                         this.setVisibleLogin='1';
                         self.setVisibleLogin='1';
-                        console.log("vis0.1 "+this.setVisibleLogin);
+                        console.log("vis0.1 "+this.setVisibleLogin);    //li vedo entrambi, this e self
                         console.log("vis0.2 "+self.setVisibleLogin);
                     });
                 //console.log("data0 "+self.risposta);
-                //console.log("data1 "+self.risposta);        //se voglio prendere la roba modificata uso self
-/*
-                this.setVisibleLogin=1;
-                self.setVisibleLogin=1;
-                console.log("vis1 "+this.setVisibleLogin);
+                //console.log("data1 "+self.risposta);        //se voglio prendere la roba modificata uso self. Controllare cosa fa con gli '' nei vari div. prima non li aveva e funzionava, ora?
+
+
+                console.log("vis1 "+this.setVisibleLogin);      //li vede entrambi a 0 perche esegue subito dopo la post e data non è ancora arrivato nella post e quindi non sono ancora stati aggiornati
                 console.log("vis2 "+self.setVisibleLogin);
-*/
+
 
             },
             /*
