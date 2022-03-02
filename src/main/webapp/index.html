@@ -683,6 +683,7 @@
                 let self = this;
                 $.post("ServletController", { "username": this.username, "password": this.password, "invia":this.codice }).then(function (data) {
                         self.risposta = data;
+                        this.risposta=data;
                         //this.risposta=data;
                         console.log("Risposta1 "+data);
                         console.log("Risposta2 "+self.risposta);
@@ -692,9 +693,10 @@
                         console.log("vis0.1 "+this.setVisibleLogin);    //li vedo entrambi, this e self
                         console.log("vis0.2 "+self.setVisibleLogin);
                     });
-                //console.log("data0 "+self.risposta);
-                //console.log("data1 "+self.risposta);        //se voglio prendere la roba modificata uso self. Controllare cosa fa con gli '' nei vari div. prima non li aveva e funzionava, ora?
 
+                //i dati vengono modificati in anticipo dentro alla post, e troppo tardi qual fuori.
+                // nella post devo fare dei richiami ai metodi  e passargli i dati aggiornati.
+                //essi funzioneranno se modifico i this oltre ai self (non posso pero ditchare i this, perche a ogni richiamo possono servirmi risposte e messaggi diversi e magari piu di uno)
 
                 console.log("vis1 "+this.setVisibleLogin);      //li vede entrambi a 0 perche esegue subito dopo la post e data non è ancora arrivato nella post e quindi non sono ancora stati aggiornati
                 console.log("vis2 "+self.setVisibleLogin);
