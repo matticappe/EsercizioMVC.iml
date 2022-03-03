@@ -64,6 +64,7 @@
 
                             type="button" value="login">Sign in
                     </button>
+                    <h3 v-if="loginError=='vero'">Login non effettuato, Username o Password errati</h3>
                     <di v-for="error in errorMessage"><p>{{error.result}}</p></di>
 
                 </form>
@@ -83,7 +84,7 @@
 
     <!--   ----------------------------INIZIO SCHERMATA UTENTI NON REGISTRATI--------------------------------------  -->
     <div v-if="setVisibleLogin=='1'" id="logoutNonRegistrato" class="logout">
-        <button type="button"  class="btn btn-secondary"
+        <button type="button" v-on:click=setVisibleLogin='0' class="btn btn-secondary"
                 data-toggle="tooltip" data-placement="top" title="Tooltip on top">
             Log-in
         </button>
@@ -219,7 +220,7 @@
     <!--  ------------------------------INIZIO SCHERMATA UTENTI REGISTRATI-----------------------------------------  -->
 
     <div v-if="setVisibleLogin=='2'" id="logoutUtenteRegistrato" class="logout">
-        <button type="button" class="btn btn-secondary"
+        <button type="button" v-on:click=setVisibleLogin='0' class="btn btn-secondary"
                 data-toggle="tooltip" data-placement="top" title="Tooltip on top">
             Logout
         </button>
@@ -360,7 +361,7 @@
 
 
     <div v-if="setVisibleLogin=='4'" id="logoutAmministratore" class="logout">
-        <button type="button" class="btn btn-secondary"
+        <button type="button" v-on:click=setVisibleLogin='0' class="btn btn-secondary"
                 data-toggle="tooltip" data-placement="top" title="Tooltip on top">
             Logout
         </button>
@@ -513,7 +514,7 @@
 
 
     <div v-if="setVisibleLogin=='3'" id="logoutProfessore" class="logout">
-        <button type="button" class="btn btn-secondary"
+        <button type="button" v-on:click=setVisibleLogin='0' class="btn btn-secondary"
                 data-toggle="tooltip" data-placement="top" title="Tooltip on top">
             Logout
         </button>
@@ -670,9 +671,8 @@
             risposta: 'falso',
             errorMessage:[],
             link:'ServletController',
-            codice:'login',
-            codice2: 'getLogin'
-
+            loginError: '',
+            codice: 'login',
 
         },
 
@@ -685,6 +685,8 @@
                 function getRegistUser() {
                     console.log("SONO NEL GETREGIST USER"+self.setVisibleLogin);
                     //molto bene, i dati sono aggiornati e questa funzione viene richiamata dopo alla post
+                    //riempio il database, poi devo recuperarmi cio che mi serve per le prenotazioni e metterlo nei campi
+                    //posso usare una get o una post che andra a parlare con la servlet (dovro modificare la servlet per avere nome utente e i vari dati delle richieste)
                 }
 
                 $.post("ServletController", { "username": this.username, "password": this.password, "invia":this.codice }).then(function (data) {
@@ -694,12 +696,27 @@
                         console.log("Risposta1 "+data);
                         console.log("Risposta2 "+self.risposta);
 
-                        this.setVisibleLogin='1';
-                        self.setVisibleLogin='1';
-                        console.log("vis0.1 "+this.setVisibleLogin);    //li vedo entrambi, this e self
-                        console.log("vis0.2 "+self.setVisibleLogin);
 
-                        getRegistUser();
+
+                        if(self.risposta==='utenteRegistrato'){
+                            this.setVisibleLogin='2';
+                            self.setVisibleLogin='2';
+                            console.log("vis0.1 "+this.setVisibleLogin);    //li vedo entrambi, this e self
+                            console.log("vis0.2 "+self.setVisibleLogin);
+                            getRegistUser();
+                        }else if(self.risposta==='Guest'){
+                            this.setVisibleLogin='1';
+                            self.setVisibleLogin='1';
+                            console.log("vis0.1 "+this.setVisibleLogin);    //li vedo entrambi, this e self
+                            console.log("vis0.2 "+self.setVisibleLogin);
+
+                        }else if(self.risposta==='loginErrato'){
+                            //devo printare sul sito un messaggio di errore
+                            //AKA faccio apparire un div rigorosamente rosso
+                            self.loginError='vero';
+                            this.loginError='vero';
+                        }
+
                     });
 
 
