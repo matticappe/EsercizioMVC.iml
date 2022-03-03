@@ -681,6 +681,12 @@
         methods: {
             login:function() {
                 let self = this;
+
+                function getRegistUser() {
+                    console.log("SONO NEL GETREGIST USER"+self.setVisibleLogin);
+                    //molto bene, i dati sono aggiornati e questa funzione viene richiamata dopo alla post
+                }
+
                 $.post("ServletController", { "username": this.username, "password": this.password, "invia":this.codice }).then(function (data) {
                         self.risposta = data;
                         this.risposta=data;
@@ -692,7 +698,11 @@
                         self.setVisibleLogin='1';
                         console.log("vis0.1 "+this.setVisibleLogin);    //li vedo entrambi, this e self
                         console.log("vis0.2 "+self.setVisibleLogin);
+
+                        getRegistUser();
                     });
+
+
 
                 //i dati vengono modificati in anticipo dentro alla post, e troppo tardi qual fuori.
                 // nella post devo fare dei richiami ai metodi  e passargli i dati aggiornati.
@@ -703,6 +713,10 @@
 
 
             },
+
+
+
+
             /*
             getError(){
                 var self = this;
