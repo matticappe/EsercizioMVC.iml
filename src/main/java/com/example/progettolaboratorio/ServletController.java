@@ -261,7 +261,7 @@ public class ServletController extends HttpServlet {
                 if (result != null) {
                     res = result.toString();
                     s = request.getSession();
-                    if (s.isNew()) {
+                    if (s.isNew()) {            //isNew è un metodo di librerie gestione utente
                         String account = result.getAccount();
                         s.setAttribute("User", account);
                         int role = result.getRuolo();
