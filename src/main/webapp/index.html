@@ -38,7 +38,7 @@
 
 
 <div id="loginScreen">
-    <div v-if="setVisibleLogin==0" class="d-flex justify-content-center">
+    <div v-if="setVisibleLogin=='0'" class="d-flex justify-content-center">
         {{setVisibleLogin}}
         <div class="col-8 col-lg-3">
             <h2 class="d-flex justify-content-center">Form di autenticazione
@@ -64,6 +64,7 @@
 
                             type="button" value="login">Sign in
                     </button>
+                    <h3 v-if="loginError=='vero'">Login non effettuato, Username o Password errati</h3>
                     <di v-for="error in errorMessage"><p>{{error.result}}</p></di>
 
                 </form>
@@ -82,13 +83,13 @@
     <!--   --------------------------------FINE DELLA SCHERMATA DI LOGIN -----------------------------------------   -->
 
     <!--   ----------------------------INIZIO SCHERMATA UTENTI NON REGISTRATI--------------------------------------  -->
-    <div v-if="setVisibleLogin==1" id="logoutNonRegistrato" class="logout">
-        <button type="button"  class="btn btn-secondary"
+    <div v-if="setVisibleLogin=='1'" id="logoutNonRegistrato" class="logout">
+        <button type="button" v-on:click=setVisibleLogin='0' class="btn btn-secondary"
                 data-toggle="tooltip" data-placement="top" title="Tooltip on top">
             Log-in
         </button>
     </div>
-    <div v-if="setVisibleLogin==1" id="userScreenNonRegistrato" class="row">
+    <div v-if="setVisibleLogin=='1'" id="userScreenNonRegistrato" class="row">
         <div class="column1">
             <table class="table">
                 <thead>
@@ -218,13 +219,13 @@
 
     <!--  ------------------------------INIZIO SCHERMATA UTENTI REGISTRATI-----------------------------------------  -->
 
-    <div v-if="setVisibleLogin==2" id="logoutUtenteRegistrato" class="logout">
-        <button type="button" class="btn btn-secondary"
+    <div v-if="setVisibleLogin=='2'" id="logoutUtenteRegistrato" class="logout">
+        <button type="button" v-on:click=setVisibleLogin='0' class="btn btn-secondary"
                 data-toggle="tooltip" data-placement="top" title="Tooltip on top">
             Logout
         </button>
     </div>
-    <div v-if="setVisibleLogin==2" id="userScreenUtenteRegistrato" class="row">
+    <div v-if="setVisibleLogin=='2'" id="userScreenUtenteRegistrato" class="row">
         <div class="column1">
             <table class="table">
                 <thead>
@@ -359,13 +360,13 @@
 
 
 
-    <div v-if="setVisibleLogin==4" id="logoutAmministratore" class="logout">
-        <button type="button" class="btn btn-secondary"
+    <div v-if="setVisibleLogin=='4'" id="logoutAmministratore" class="logout">
+        <button type="button" v-on:click=setVisibleLogin='0' class="btn btn-secondary"
                 data-toggle="tooltip" data-placement="top" title="Tooltip on top">
             Logout
         </button>
     </div>
-    <div v-if="setVisibleLogin==4" id="userScreenAmministratore" class="row">
+    <div v-if="setVisibleLogin=='4'" id="userScreenAmministratore" class="row">
         <div class="column1">
             <table class="table">
                 <thead>
@@ -512,13 +513,13 @@
     <!--  --  ---------------------------------INIZIO SCHERMATA PROFESSORI--------------------------  -------------  -->
 
 
-    <div v-if="setVisibleLogin==3" id="logoutProfessore" class="logout">
-        <button type="button" class="btn btn-secondary"
+    <div v-if="setVisibleLogin=='3'" id="logoutProfessore" class="logout">
+        <button type="button" v-on:click=setVisibleLogin='0' class="btn btn-secondary"
                 data-toggle="tooltip" data-placement="top" title="Tooltip on top">
             Logout
         </button>
     </div>
-    <div v-if="setVisibleLogin==3" id="userScreenProfessore" class="row">
+    <div v-if="setVisibleLogin=='3'" id="userScreenProfessore" class="row">
         <div class="column1">
             <table class="table">
                 <thead>
@@ -670,9 +671,8 @@
             risposta: 'falso',
             errorMessage:[],
             link:'ServletController',
-            codice:'login',
-            codice2: 'getLogin'
-
+            loginError: '',
+            codice: 'login',
 
         },
 
@@ -681,27 +681,59 @@
         methods: {
             login:function() {
                 let self = this;
+
+                function getRegistUser() {
+                    console.log("SONO NEL GETREGIST USER"+self.setVisibleLogin);
+                    //molto bene, i dati sono aggiornati e questa funzione viene richiamata dopo alla post
+                    //riempio il database, poi devo recuperarmi cio che mi serve per le prenotazioni e metterlo nei campi
+                    //posso usare una get o una post che andra a parlare con la servlet (dovro modificare la servlet per avere nome utente e i vari dati delle richieste)
+                }
+
                 $.post("ServletController", { "username": this.username, "password": this.password, "invia":this.codice }).then(function (data) {
                         self.risposta = data;
+                        this.risposta=data;
                         //this.risposta=data;
                         console.log("Risposta1 "+data);
                         console.log("Risposta2 "+self.risposta);
 
-                        this.setVisibleLogin='1';
-                        self.setVisibleLogin='1';
-                        console.log("vis0.1 "+this.setVisibleLogin);
-                        console.log("vis0.2 "+self.setVisibleLogin);
+
+
+                        if(self.risposta==='utenteRegistrato'){
+                            this.setVisibleLogin='2';
+                            self.setVisibleLogin='2';
+                            console.log("vis0.1 "+this.setVisibleLogin);    //li vedo entrambi, this e self
+                            console.log("vis0.2 "+self.setVisibleLogin);
+                            getRegistUser();
+                        }else if(self.risposta==='Guest'){
+                            this.setVisibleLogin='1';
+                            self.setVisibleLogin='1';
+                            console.log("vis0.1 "+this.setVisibleLogin);    //li vedo entrambi, this e self
+                            console.log("vis0.2 "+self.setVisibleLogin);
+
+                        }else if(self.risposta==='loginErrato'){
+                            //devo printare sul sito un messaggio di errore
+                            //AKA faccio apparire un div rigorosamente rosso
+                            self.loginError='vero';
+                            this.loginError='vero';
+                        }
+
                     });
-                //console.log("data0 "+self.risposta);
-                //console.log("data1 "+self.risposta);        //se voglio prendere la roba modificata uso self
-/*
-                this.setVisibleLogin=1;
-                self.setVisibleLogin=1;
-                console.log("vis1 "+this.setVisibleLogin);
+
+
+
+                //i dati vengono modificati in anticipo dentro alla post, e troppo tardi qual fuori.
+                // nella post devo fare dei richiami ai metodi  e passargli i dati aggiornati.
+                //essi funzioneranno se modifico i this oltre ai self (non posso pero ditchare i this, perche a ogni richiamo possono servirmi risposte e messaggi diversi e magari piu di uno)
+
+                console.log("vis1 "+this.setVisibleLogin);      //li vede entrambi a 0 perche esegue subito dopo la post e data non è ancora arrivato nella post e quindi non sono ancora stati aggiornati
                 console.log("vis2 "+self.setVisibleLogin);
-*/
+
 
             },
+
+
+
+
             /*
             getError(){
                 var self = this;

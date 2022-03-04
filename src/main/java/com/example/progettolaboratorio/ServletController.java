@@ -2,7 +2,7 @@ package com.example.progettolaboratorio;
 
 import DAO.*;
 import com.google.gson.Gson;
-import sun.java2d.marlin.DPathConsumer2D;
+//import sun.java2d.marlin.DPathConsumer2D;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -243,10 +243,14 @@ public class ServletController extends HttpServlet {
         RequestDispatcher rd=null;
         String res="";
         try {
+            String st="";
             String username = request.getParameter("username");
             String password = request.getParameter("password");
-            if(username.equals(password) && username==null){
-                res="Guest";
+            if(username.equals(password) && username==""){      //non è null, è una stringa vuota
+                st="Guest";
+                out.flush();
+                out.close();
+                return st;
             }
             else {
                 System.out.println("Username: " + username);
@@ -257,14 +261,18 @@ public class ServletController extends HttpServlet {
                 if (result != null) {
                     res = result.toString();
                     s = request.getSession();
-                    if (s.isNew()) {
+                    if (s.isNew()) {            //isNew è un metodo di librerie gestione utente
                         String account = result.getAccount();
                         s.setAttribute("User", account);
                         int role = result.getRuolo();
                         s.setAttribute("Ruolo", role);
                         System.out.println("LoginEffettuato");
-                        String st = "risposta: Corretto";
+                        st = "utenteRegistrato";
+                        out.flush();
+                        out.close();
                         return st;
+                    } else{
+                        //DEVO METTERE UN ELSE SE L UTENTE NON é ANCORA REGOISTRATOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
                     }
                 } else {
                     String messaggio = "Login errato, Username o password errati";
@@ -276,6 +284,10 @@ public class ServletController extends HttpServlet {
                     // String messaggio="Login errato, Username o password errati";
                     //request.setAttribute("message",messaggio);
                     rd.include(request, response);
+                    st="loginErrato";
+                    out.flush();
+                    out.close();
+                    return st;
                 }
             }
             out.flush();
