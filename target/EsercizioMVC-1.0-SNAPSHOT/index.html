@@ -64,7 +64,7 @@
 
                             type="button" value="login">Sign in
                     </button>
-                    <h3 v-if="loginError=='vero'">Login non effettuato, Username o Password errati</h3>
+                    <h3 v-if="loginError=='vero'">{{message}}</h3>
                     <div v-for="error in errorMessage"><p>{{error.result}}</p></div>
 
                 </form>
@@ -673,6 +673,7 @@
             loginError: '',
             codLogin: 'login',
             codLogout: 'logout',
+            message: 'testttt',
 
         },
 
@@ -687,9 +688,13 @@
                     self.risposta=data;
                     this.risposta=data;
                     console.log('logout = '+self.risposta);
+                    this.message=self.risposta;
+                    self.message=self.risposta;
                     //devo mettere QUA un modo per printare nella schermata di login "LOGOUT EFFETTUATO CON SUCCESSO", e potrei usare la textbox che mi dice login fallito, mettendogli un messaggio generico dentro e cambiandolo
                     this.setVisibleLogin=0;
                     self.setVisibleLogin=0;
+                    self.loginError='vero';
+                    this.loginError='vero';
 
                 });
             },
@@ -713,6 +718,9 @@
                         self.risposta = data;
                         this.risposta=data;
                         //this.risposta=data;
+                        self.loginError='vero';
+                        this.loginError='vero';
+                        this.message=self.risposta;
                         console.log("Risposta1 "+data);
                         console.log("Risposta2 "+self.risposta);
 
@@ -730,9 +738,11 @@
                             console.log("vis0.1 "+this.setVisibleLogin);    //li vedo entrambi, this e self
                             console.log("vis0.2 "+self.setVisibleLogin);
 
-                        }else if(self.risposta==='loginErrato'){
+                        }else if(self.risposta==='Login Errato'){
                             //devo printare sul sito un messaggio di errore
                             //AKA faccio apparire un div rigorosamente rosso
+                            this.message=self.risposta;
+                            self.message=self.risposta;
                             self.loginError='vero';
                             this.loginError='vero';
                         }

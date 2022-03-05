@@ -286,7 +286,7 @@ public class ServletController extends HttpServlet {
                     // String messaggio="Login errato, Username o password errati";
                     //request.setAttribute("message",messaggio);
                     rd.include(request, response);
-                    st="loginErrato";
+                    st="Login Errato";
                     out.flush();
                     out.close();
                     return st;
