@@ -216,7 +216,9 @@ public class ServletController extends HttpServlet {
                     break;
 
                 case "logout":
-                    logout(request, response);
+                    String lout=logout(request, response);
+                    String sLout = gson.toJson(lout);
+                    out.println(sLout);
                     break;
 
             }
@@ -242,12 +244,15 @@ public class ServletController extends HttpServlet {
         ServletContext ctx= request.getServletContext();
         RequestDispatcher rd=null;
         String res="";
-        String st="";
         try {
+            String st="";
             String username = request.getParameter("username");
             String password = request.getParameter("password");
             if(username.equals(password) && username==""){      //non è null, è una stringa vuota
                 st="Guest";
+                out.flush();
+                out.close();
+                return st;
             }
             else {
                 System.out.println("Username: " + username);
@@ -265,6 +270,11 @@ public class ServletController extends HttpServlet {
                         s.setAttribute("Ruolo", role);
                         System.out.println("LoginEffettuato");
                         st = "utenteRegistrato";
+                        out.flush();
+                        out.close();
+                        return st;
+                    } else{
+                        //DEVO METTERE UN ELSE SE L UTENTE NON é ANCORA REGOISTRATOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
                     }
                 } else {
                     String messaggio = "Login errato, Username o password errati";
@@ -277,21 +287,27 @@ public class ServletController extends HttpServlet {
                     //request.setAttribute("message",messaggio);
                     rd.include(request, response);
                     st="loginErrato";
+                    out.flush();
+                    out.close();
+                    return st;
                 }
             }
-
-        }finally {
             out.flush();
             out.close();
-            System.out.println("risposta: sono arrivato alla fine");
-            return st;
+            String end ="risposta: sono arrivato alla fine";
+            return end;
+        }finally {
+            out.close();
+            risTest=res;
         }
     }
 
-    public void logout(HttpServletRequest request, HttpServletResponse response) throws ServletException,
+    public String logout(HttpServletRequest request, HttpServletResponse response) throws ServletException,
             IOException{
         HttpSession s=request.getSession();
         s.invalidate();
+        String st="Logout effettuato con successo";
+        return st;
     }
 
     public String inserimentoDocente(HttpServletRequest request, HttpServletResponse response) throws ServletException,

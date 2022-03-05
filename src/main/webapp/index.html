@@ -28,7 +28,7 @@
         }
 
     </script>
-    <script async src='/cdn-cgi/bm/cv/669835187/api.js'></script></head>
+
 
 <body>
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
@@ -65,7 +65,7 @@
                             type="button" value="login">Sign in
                     </button>
                     <h3 v-if="loginError=='vero'">Login non effettuato, Username o Password errati</h3>
-                    <di v-for="error in errorMessage"><p>{{error.result}}</p></di>
+                    <div v-for="error in errorMessage"><p>{{error.result}}</p></div>
 
                 </form>
                 <p class="mt-5 mb-3 text-muted d-flex justify-content-center">Lasciare vuoto per entrare come Guest
@@ -220,7 +220,7 @@
     <!--  ------------------------------INIZIO SCHERMATA UTENTI REGISTRATI-----------------------------------------  -->
 
     <div v-if="setVisibleLogin=='2'" id="logoutUtenteRegistrato" class="logout">
-        <button type="button" v-on:click=setVisibleLogin='0' class="btn btn-secondary"
+        <button type="button" v-on:click="setVisibleLogin='0'; registeredUserLogout()" class="btn btn-secondary"
                 data-toggle="tooltip" data-placement="top" title="Tooltip on top">
             Logout
         </button>
@@ -550,7 +550,6 @@
                             <button class="btn btn-secondary dropdown-toggle" type="button"
                                     id="dropdownMenuButton2Professore" data-toggle="dropdown" aria-haspopup="true"
                                     aria-expanded="false">
-                                Seleziona Utente (non so se ha senso</br> ma l ho messo lo stesso)
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                 <a class="dropdown-item" href="#">Action</a>
@@ -672,15 +671,36 @@
             errorMessage:[],
             link:'ServletController',
             loginError: '',
-            codice: 'login',
+            codLogin: 'login',
+            codLogout: 'logout',
 
         },
 
 
 
         methods: {
+
+            registeredUserLogout:function(){
+                console.log("sono nel logout");
+                let self = this;
+                $.post("ServletController", { "username": this.username, "password": this.password, "invia":this.codLogout }).then(function (data) {
+                    self.risposta=data;
+                    this.risposta=data;
+                    console.log('logout = '+self.risposta);
+                    //devo mettere QUA un modo per printare nella schermata di login "LOGOUT EFFETTUATO CON SUCCESSO", e potrei usare la textbox che mi dice login fallito, mettendogli un messaggio generico dentro e cambiandolo
+                    this.setVisibleLogin=0;
+                    self.setVisibleLogin=0;
+
+                });
+            },
+
             login:function() {
                 let self = this;
+
+                //fare una funzione che quando schiaccio il pulsante di logout mi richiama dei metodi nella servlet che effettivamente mi fanno fare il logout, cosi posso poi fare il login
+
+
+
 
                 function getRegistUser() {
                     console.log("SONO NEL GETREGIST USER"+self.setVisibleLogin);
@@ -689,7 +709,7 @@
                     //posso usare una get o una post che andra a parlare con la servlet (dovro modificare la servlet per avere nome utente e i vari dati delle richieste)
                 }
 
-                $.post("ServletController", { "username": this.username, "password": this.password, "invia":this.codice }).then(function (data) {
+                $.post("ServletController", { "username": this.username, "password": this.password, "invia":this.codLogin }).then(function (data) {
                         self.risposta = data;
                         this.risposta=data;
                         //this.risposta=data;
