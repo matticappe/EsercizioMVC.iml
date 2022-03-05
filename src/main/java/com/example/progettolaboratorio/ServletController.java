@@ -393,6 +393,7 @@ public class ServletController extends HttpServlet {
         return result;
     }
 
+    //penso prenotazioni prenotabili
     public ArrayList<Prenotazione> viewOwnPrenotations(HttpServletRequest request, HttpServletResponse response) throws ServletException,
             IOException {
         ArrayList<Prenotazione> array = null;
@@ -404,6 +405,7 @@ public class ServletController extends HttpServlet {
         return array;
     }
 
+    //penso prenotazioni mie prenotate effettivamente
     public ArrayList<Prenotazione> viewOwnActPrenotations(HttpServletRequest request, HttpServletResponse response) throws ServletException,
             IOException {
         ArrayList<Prenotazione> array = null;

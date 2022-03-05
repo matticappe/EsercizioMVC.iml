@@ -712,6 +712,11 @@
                     //molto bene, i dati sono aggiornati e questa funzione viene richiamata dopo alla post
                     //riempio il database, poi devo recuperarmi cio che mi serve per le prenotazioni e metterlo nei campi
                     //posso usare una get o una post che andra a parlare con la servlet (dovro modificare la servlet per avere nome utente e i vari dati delle richieste)
+                    //prendo le prenotazioni disponibili e le metto in un array o matrice, che poi procedo a far vedere sul sito.
+                    //devo capire come far vedere cose coi for stile tabella con vue.
+
+                    //punti base Prenotazione: materia, prof, giorno, ora, dispinibile
+                    //il problema è che sono tutte nella superchiave (a parte disponibile), introdurre un codice prenotazione servirebbe probabilmente.
                 }
 
                 $.post("ServletController", { "username": this.username, "password": this.password, "invia":this.codLogin }).then(function (data) {
