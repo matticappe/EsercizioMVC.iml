@@ -716,8 +716,10 @@
                     //devo capire come far vedere cose coi for stile tabella con vue.
 
                     //punti base Prenotazione: materia, prof, giorno, ora, dispinibile
-                    //il problema è che sono tutte nella superchiave (a parte disponibile), introdurre un codice prenotazione servirebbe probabilmente.
+
                 }
+
+                //NB quando sto cercando di vedere se uno slot di un prof e materia è libero io devo controllare anche che il professore che ha quello slot non sia gia impegnato nella stessa ora per un altra materia.
 
                 $.post("ServletController", { "username": this.username, "password": this.password, "invia":this.codLogin }).then(function (data) {
                         self.risposta = data;
@@ -787,3 +789,4 @@
 <script type="text/javascript">(function(){window['__CF$cv$params']={r:'6da386ef8a275a31',m:'3rL.fud4n.f99SrlZN6LTG5AKwOzFwM_MvG6TOdPl4o-1644309353-0-AWNPuc/s9PCbZkzph/V1BQ4DdztvvMfQ5AdBmdz7a3WgXjkPDRc6F7ot2CjvK74lYjAtbc99hus2s38HPXWEdQg6V9KA//FaoGIRigG0dF6MhwVyk702Pl27nn/XkSI6k9TqrL5jAzqf/j8N9vzCMyWPyWJU7nVavay0n5XVac+w4+6NlF76xselqoll8o78DA==',s:[0x072d80e02a,0x6e1dc2f7d6],}})();</script></body>
 
 </html>
+
