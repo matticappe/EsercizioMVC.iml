@@ -242,7 +242,7 @@ public class ServletController extends HttpServlet {
         //response.setContentType("application/json");     //questo non ci va
         //PrintWriter out = response.getWriter();          //anche questo non ci va
         ServletContext ctx= request.getServletContext();
-        RequestDispatcher rd=null;
+        RequestDispatcher rd =null;
         String res="";
         try {
             String st="";
@@ -312,38 +312,38 @@ public class ServletController extends HttpServlet {
 
     public String inserimentoDocente(HttpServletRequest request, HttpServletResponse response) throws ServletException,
             IOException {
-        String result = "";
+        response.setContentType("application/json");
+        Gson gson = new Gson();
+        String result = "Inserimento fallito";
         int ris;
         try {
             HttpSession s=request.getSession();
             if((int)s.getAttribute("ruolo")==1) {
                 System.out.println("Sono nella InsertProf");
-                String nome = request.getParameter("name");
-                System.out.println(nome);
-                String cognome = request.getParameter("surname");
-                System.out.println(cognome);
-                String code = request.getParameter("code");
-                System.out.println(code);
-                String a = request.getParameter("attivo");
-                if(nome == null){
-                    nome = "*";
-                }else if (code == null){
-                    code = "*";
-                }else if(a == null){
-                    a = "*";
+                String account = request.getParameter("account");
+                System.out.println(account);
+                String password = request.getParameter("password");
+                System.out.println(password);
+                String ruolo = request.getParameter("ruolo");
+                System.out.println(ruolo);
+                String nomeCognome = request.getParameter("nomeCognome");
+                System.out.println(nomeCognome);
+                String attivo = request.getParameter("attivo");
+                if(account == null){
+                    account = "*";
+                }else if (password == null){
+                    password = "*";
+                }else if(ruolo == null){
+                    ruolo = "*";
+                }else if(nomeCognome == null){
+                    nomeCognome = "*";
+                }else if(attivo == null){
+                    attivo = "*";
                 }
-                if(cognome == null){
-                    cognome = "*";
-                }
-                ris = DAO.inserimentoDocente(code, nome, cognome, a);
-                response.setContentType("text/plain");
+                ris = DAO.inserimentoDocente(account, password, ruolo, nomeCognome,attivo);
                 if(ris != 0)
-                    result = "Inserimento avvenuto correttamente";
-                else
-                    result = "Inserimento fallito";
+                    result = "L'inserimento del docente " + nomeCognome + "è avvenuto con successo";
                 System.out.println(result);
-                out.flush();
-                out.close();
             }
             else{
                 ServletContext ctx=request.getServletContext();
@@ -354,9 +354,10 @@ public class ServletController extends HttpServlet {
             }
         }
         finally {
+            out.flush();
             out.close();
-            return result;
         }
+        return result;
     }
 
     public ArrayList<Utente> stampaUtenti(HttpServletRequest request, HttpServletResponse response) throws ServletException,
@@ -364,7 +365,6 @@ public class ServletController extends HttpServlet {
         HttpSession s=request.getSession();
         ArrayList<Utente> array = null;
         if((int)s.getAttribute("role")==1) {
-            response.setContentType("text/html");
             array = DAO.ViewAllUsers();
         }
         return array;
@@ -372,24 +372,18 @@ public class ServletController extends HttpServlet {
 
     public String cancellaPrenotazione(HttpServletRequest request, HttpServletResponse response) throws ServletException,
             IOException {
-        String result = "";
+        String result = "Cancellazione fallita";
+        String codice= request.getParameter("codice");
         String utente= request.getParameter("utente");
         String docente= request.getParameter("docente");
         String corso= request.getParameter("corso");
-        if(utente == null){
-            utente = "*";
-        }else if(docente == null){
-            docente = "*";
-        }else if(corso == null)
-            corso = "*";
-        int ris = DAO.cancellazionePrenotazione(utente, docente, corso);
-        response.setContentType("text/plain");
+        String data= request.getParameter("data");
+        String slot_ora= request.getParameter("slot_ora");
+        String attivo = request.getParameter("attivo");
+        int ris = DAO.cancellazionePrenotazione(codice,utente,docente,corso, data,slot_ora,attivo);
         if(ris != 0){
-            result = "Cancellazione avvenuta con successo";
+            result = "La cancellazione della prenotazione dell'utente " + utente + " con il docente " + docente + "per il corso" + corso + " è avvenuta con successo";
         }
-        else
-            result = "Cancellazione fallita";
-        out.close();
         return result;
     }
 
@@ -427,43 +421,41 @@ public class ServletController extends HttpServlet {
     public ArrayList<Prenotazione> filterPrenotations(HttpServletRequest request, HttpServletResponse response) throws ServletException,
             IOException {
         ArrayList<Prenotazione> array = null;
-        String o = request.getParameter("slot_ora");
+        String slot_ora = request.getParameter("slot_ora");
         String data = request.getParameter("data");
         String materia = request.getParameter("materia");
         String docente = request.getParameter("docente");
-        String s = request.getParameter("stato");
+        String stato = request.getParameter("stato");
         if(data==null){
             data="*";
         }else if(materia==null){
             materia="*";
         }else if(docente==null){
             docente="*";
-        }else if(o==null){
-            o="*";
-        }else if(s==null){
-            s="*";
+        }else if(slot_ora==null){
+            slot_ora="*";
+        }else if(stato==null){
+            stato="*";
         }
-        array = DAO.filterPrenotations(o,data,materia,docente,s);
+        array = DAO.filterPrenotations(slot_ora,data,materia,docente,stato);
         return array;
     }
 
     public ArrayList<Docente> filterProf(HttpServletRequest request, HttpServletResponse response) throws ServletException,
             IOException {
         ArrayList<Docente> array = null;
-        String nome = request.getParameter("nome");
-        String cognome = request.getParameter("cognome");
-        String codProf = request.getParameter("codProf");
+        String account = request.getParameter("account");
+        String nomeCognome = request.getParameter("nomeCognome");
         String attivo = request.getParameter("attivo");
-        if(nome == null){
-            nome = "*";
-        }else if(cognome == null){
-            cognome = "*";
-        }else if(codProf == null){
-            codProf = "*";
+
+        if(account == null){
+            account = "*";
+        }else if(nomeCognome == null){
+            nomeCognome = "*";
         }else if(attivo == null){
             attivo = "*";
         }
-        array = DAO.filterProf(nome,cognome,codProf,attivo);
+        array = DAO.filterProf(account,nomeCognome,attivo);
         return array;
     }
 
@@ -480,7 +472,7 @@ public class ServletController extends HttpServlet {
 
     public String inserimentoCorso(HttpServletRequest request, HttpServletResponse response) throws ServletException,
             IOException {
-        String result = "INSERIMENTO FALLITO";
+        String result = "Inserimento fallito";
         try {
             PrintWriter out=response.getWriter();
             HttpSession s=request.getSession();
@@ -492,13 +484,10 @@ public class ServletController extends HttpServlet {
                 }
                 System.out.println(corso);
                 int ris = DAO.inserimentoCorso(corso);
-                response.setContentType("text/plain");
-                if (ris == 0) {
-                    result = "CORSO INSERITO CORRETTAMENTE";
+                if (ris != 0) {
+                    result = "L'inserimento del corso " + corso + " è avvenuta con successo";
                 }
                 System.out.println(result);
-                out.println(result);
-                out.flush();
             }
             else{
                     ServletContext ctx=request.getServletContext();
@@ -509,49 +498,40 @@ public class ServletController extends HttpServlet {
             }
         }
         finally {
+            out.flush();
             out.close();
-            return result;
         }
+        return result;
     }
 
     public String effettuaPrenotazione(HttpServletRequest request, HttpServletResponse response) throws ServletException,
             IOException {
-        String result = "";
+        String result = "Prenotazione fallita";
         try {
             PrintWriter out= response.getWriter();
             System.out.println("Sono nella effettuaPrenotazione");
-            String docente = request.getParameter("docente");
-            String corso = request.getParameter("corso");
-            String utente = request.getParameter("utente");
-            if(docente == null){
-                docente = "*";
-            }else if(corso == null){
-                corso = "*";
-            }else if(utente == null){
-                utente = "*";
-            }
-            int ris = DAO.effettuaPrenotazione(utente,docente,corso);
-            response.setContentType("text/plain");
-            if(ris == 0){
-                result = "PRENOTAZIONE EFFETTUTATA CON SUCCESSO";
-            }
-            else{
-                result = "PRENOTAZIONE FALLITA";
+            String codice= request.getParameter("codice");
+            String slot_ora= request.getParameter("slot_ora");
+            String data= request.getParameter("data");
+            String utente= request.getParameter("utente");
+            String docente= request.getParameter("docente");
+            String corso= request.getParameter("corso");
+            int ris = DAO.effettuaPrenotazione(codice,utente,docente,corso,data,slot_ora);
+            if(ris != 0){
+                result = "La prenotazione dell'utente " + utente + " con il docente " + docente+ " del corso " + corso + " è avvenuta con successo";
             }
             System.out.println(result);
-            //Da rivedere con JS e bootstrap
-            out.println(result);
-            out.flush();
         }
         finally {
+            out.flush();
             out.close();
-            return result;
         }
+        return result;
     }
 
     public String inserimentoInsegna(HttpServletRequest request, HttpServletResponse response) throws ServletException,
             IOException {
-        String result = "";
+        String result = "Inserimento fallito";
         try {
             PrintWriter out=response.getWriter();
             HttpSession s= request.getSession();
@@ -565,15 +545,9 @@ public class ServletController extends HttpServlet {
                     corso = "*";
                 }
                 int ris = DAO.inserimentoInsegna(docente, corso);
-                response.setContentType("text/plain");
-                if (ris == 0) {
-                    result = "INSERIMENTO EFFETTUTATO CON SUCCESSO";
-                } else {
-                    result = "INSERIMENTO FALLITO";
-                }
+                if (ris != 0)
+                    result = "L'inserimento del docente " + docente + " del corso " + corso + " è avvenuta cpm successo";
                 System.out.println(result);
-                out.println(result);
-                out.flush();
             }
             else{
                 ServletContext ctx=request.getServletContext();
@@ -584,9 +558,10 @@ public class ServletController extends HttpServlet {
             }
         }
         finally {
+            out.flush();
             out.close();
-            return result;
         }
+        return result;
     }
 
     public String isAdmin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
@@ -624,9 +599,7 @@ public class ServletController extends HttpServlet {
                     titolo = "*";
                 }
                 result = DAO.updateInsegnaDocente(titolo);
-                response.setContentType("text/plain");
-                out.println(result);
-                out.flush();
+
             }
             else{
                 ServletContext ctx=request.getServletContext();
@@ -637,9 +610,10 @@ public class ServletController extends HttpServlet {
             }
         }
         finally {
+            out.flush();
             out.close();
-            return result;
         }
+        return result;
     }
 
     public String updateInsegnaMateria(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -652,9 +626,7 @@ public class ServletController extends HttpServlet {
                     codDocente = "*";
                 }
                 result = DAO.updateInsegnaMateria(codDocente);
-                response.setContentType("text/plain");
-                out.println(result);
-                out.flush();
+                return result;
             }
             else{
                 ServletContext ctx=request.getServletContext();
@@ -665,8 +637,9 @@ public class ServletController extends HttpServlet {
             }
         }
         finally {
+            out.flush();
             out.close();
-            return result;
         }
+        return result;
     }
 }

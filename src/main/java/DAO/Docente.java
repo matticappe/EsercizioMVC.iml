@@ -1,35 +1,48 @@
 package DAO;
 
 public class Docente {
-        private String nome;
-        private String cognome;
-        private String codDocente;
+        private String account;
+        private String password;
+        private String ruolo;
+        private String nomeCognome;
         private String attivo;
 
+    public Docente(String account, String password, String ruolo, String nomeCognome, String attivo) {
+        this.account = account;
+        this.password = password;
+        this.ruolo = ruolo;
+        this.nomeCognome = nomeCognome;
+        this.attivo = attivo;
+    }
 
-        public Docente(String nome, String cognome, String codDocente, String attivo) {
-            this.nome = nome;
-            this.cognome = cognome;
-            this.codDocente = codDocente;
-            this.attivo=attivo;
-        }
+    public String getAccount() {
+        return account;
+    }
 
+    public String getPassword() {
+        return password;
+    }
 
-        public String getNome() {
-            return nome;
-        }
+    public String getRuolo() {
+        return ruolo;
+    }
 
-        public String getCognome() {
-            return cognome;
-        }
+    public String getNomeCognome() {
+        return nomeCognome;
+    }
 
-        public String getCodDocente() { return codDocente;}
-
-        public String getAttivo() {return  attivo;}
+    public String getAttivo() {
+        return attivo;
+    }
 
     @Override
-        public String toString() {
-            return nome + " " + cognome + " " + codDocente + " " + attivo;
-        }
-
+    public String toString() {
+        return "Docente{" +
+                "account='" + account + '\'' +
+                ", password='" + password + '\'' +
+                ", ruolo='" + ruolo + '\'' +
+                ", nomeCognome='" + nomeCognome + '\'' +
+                ", attivo='" + attivo + '\'' +
+                '}';
+    }
 }

@@ -10,6 +10,9 @@ public class Utente {
         this.account = account;
         this.password = password;
         this.ruolo = ruolo;
+        //ruolo ==1 admin
+        //ruolo ==2
+        //ruolo ==0 to be defined
     }
 
 
@@ -27,6 +30,10 @@ public class Utente {
 
     @Override
     public String toString() {
-        return "Nome utente:"+ account ;
+        return "Utente{" +
+                "account='" + account + '\'' +
+                ", password='" + password + '\'' +
+                ", ruolo=" + ruolo +
+                '}';
     }
 }
