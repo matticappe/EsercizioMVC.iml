@@ -64,9 +64,10 @@
 
                             type="button" value="login">Sign in
                     </button>
+                    <!--
                     <h3 v-if="loginError=='vero'">{{message}}</h3>
                     <div v-for="error in errorMessage"><p>{{error.result}}</p></div>
-
+                    -->
                 </form>
                 <p class="mt-5 mb-3 text-muted d-flex justify-content-center">Lasciare vuoto per entrare come Guest
                 </p>
@@ -674,6 +675,8 @@
             codLogin: 'login',
             codLogout: 'logout',
             message: 'testttt',
+            codPrenotations: 'viewAllPrenotations',
+            allPrenotations: '',
 
         },
 
@@ -715,8 +718,14 @@
                     //prendo le prenotazioni disponibili e le metto in un array o matrice, che poi procedo a far vedere sul sito.
                     //devo capire come far vedere cose coi for stile tabella con vue.
 
-                    //punti base Prenotazione: materia, prof, giorno, ora, dispinibile
+                    //Prenotazione: codice, utente, docente, corso, data, slot_ora
 
+                    $.post("ServletController", { "username": this.username, "password": this.password, "invia": this.codPrenotations }).then(function (data) {
+                        console.log('sono nella post get prenotations');
+                        //self.allPrenotations = data;
+                        //this.allPrenotations = data;
+                        //console.log(self.allPrenotations);
+                    });
                 }
 
                 //NB quando sto cercando di vedere se uno slot di un prof e materia è libero io devo controllare anche che il professore che ha quello slot non sia gia impegnato nella stessa ora per un altra materia.
