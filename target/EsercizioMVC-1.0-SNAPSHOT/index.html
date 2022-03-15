@@ -225,6 +225,7 @@
                 data-toggle="tooltip" data-placement="top" title="Tooltip on top">
             Logout
         </button>
+        {{allPrenotations}}
     </div>
     <div v-if="setVisibleLogin=='2'" id="userScreenUtenteRegistrato" class="row">
         <div class="column1">
@@ -676,11 +677,13 @@
             codLogout: 'logout',
             message: 'testttt',
             codPrenotations: 'viewAllPrenotations',
-            allPrenotations: '',
+            allPrenotations: 'vuoto',
 
         },
 
-
+        mounted: function () {
+            this.getRegistUser();
+        },
 
         methods: {
 
@@ -689,29 +692,19 @@
                 let self = this;
                 $.post("ServletController", { "username": this.username, "password": this.password, "invia":this.codLogout }).then(function (data) {
                     self.risposta=data;
-                    this.risposta=data;
                     console.log('logout = '+self.risposta);
-                    this.message=self.risposta;
                     self.message=self.risposta;
                     //devo mettere QUA un modo per printare nella schermata di login "LOGOUT EFFETTUATO CON SUCCESSO", e potrei usare la textbox che mi dice login fallito, mettendogli un messaggio generico dentro e cambiandolo
-                    this.setVisibleLogin=0;
                     self.setVisibleLogin=0;
                     self.loginError='vero';
-                    this.loginError='vero';
 
                 });
             },
 
-            login:function() {
-                let self = this;
-
-                //fare una funzione che quando schiaccio il pulsante di logout mi richiama dei metodi nella servlet che effettivamente mi fanno fare il logout, cosi posso poi fare il login
-
-
-
-
-                function getRegistUser() {
-                    console.log("SONO NEL GETREGIST USER"+self.setVisibleLogin);
+            /*getRegistUser: function() {
+                console.log('sono nel getregisteredUser');
+                if(this.setVisibleLogin==='2') {
+                    console.log("SONO NEL GETREGIST USER" + self.setVisibleLogin);
                     //molto bene, i dati sono aggiornati e questa funzione viene richiamata dopo alla post
                     //riempio il database, poi devo recuperarmi cio che mi serve per le prenotazioni e metterlo nei campi
                     //posso usare una get o una post che andra a parlare con la servlet (dovro modificare la servlet per avere nome utente e i vari dati delle richieste)
@@ -720,22 +713,34 @@
 
                     //Prenotazione: codice, utente, docente, corso, data, slot_ora
 
-                    $.post("ServletController", { "username": this.username, "password": this.password, "invia": this.codPrenotations }).then(function (data) {
+                    $.post("ServletController", {
+                        "username": this.username,
+                        "password": this.password,
+                        "invia": this.codPrenotations
+                    }).then(function (data) {
                         console.log('sono nella post get prenotations');
                         //self.allPrenotations = data;
                         //this.allPrenotations = data;
                         //console.log(self.allPrenotations);
                     });
                 }
+            },
+            */
+            login:function() {
+                let self = this;
+
+                //fare una funzione che quando schiaccio il pulsante di logout mi richiama dei metodi nella servlet che effettivamente mi fanno fare il logout, cosi posso poi fare il login
+
+
+
+
+
 
                 //NB quando sto cercando di vedere se uno slot di un prof e materia è libero io devo controllare anche che il professore che ha quello slot non sia gia impegnato nella stessa ora per un altra materia.
 
-                $.post("ServletController", { "username": this.username, "password": this.password, "invia":this.codLogin }).then(function (data) {
+                $.post("ServletController", { "username": this.username, "password": this.password, "invia":this.codLogin },function (data) {
                         self.risposta = data;
-                        this.risposta=data;
-                        //this.risposta=data;
                         self.loginError='vero';
-                        this.loginError='vero';
                         this.message=self.risposta;
                         console.log("Risposta1 "+data);
                         console.log("Risposta2 "+self.risposta);
@@ -743,13 +748,11 @@
 
 
                         if(self.risposta==='utenteRegistrato'){
-                            this.setVisibleLogin='2';
                             self.setVisibleLogin='2';
                             console.log("vis0.1 "+this.setVisibleLogin);    //li vedo entrambi, this e self
                             console.log("vis0.2 "+self.setVisibleLogin);
-                            getRegistUser();
+
                         }else if(self.risposta==='Guest'){
-                            this.setVisibleLogin='1';
                             self.setVisibleLogin='1';
                             console.log("vis0.1 "+this.setVisibleLogin);    //li vedo entrambi, this e self
                             console.log("vis0.2 "+self.setVisibleLogin);
@@ -757,13 +760,17 @@
                         }else if(self.risposta==='Login Errato'){
                             //devo printare sul sito un messaggio di errore
                             //AKA faccio apparire un div rigorosamente rosso
-                            this.message=self.risposta;
                             self.message=self.risposta;
                             self.loginError='vero';
-                            this.loginError='vero';
                         }
 
                     });
+
+                $.post("ServletController", {"username": this.username, "password": this.password, "invia": this.codPrenotations},function (data) {
+                    console.log('sono nella post get prenotations');
+                    self.allPrenotations = data;
+                    this.allPrenotations = data;
+                });
 
 
 

@@ -34,7 +34,7 @@ public class ServletController extends HttpServlet {
                 case "login":
                     System.out.println("Sono nel login");
                     String answ=login(request,response);
-                    System.out.println("TRA POCO INVIO CORRETTO"+answ);
+                    System.out.println("TRA POCO INVIO CORRETTO");
                     String s1 = gson.toJson(answ);
                     out.println(s1);
                     break;
@@ -124,6 +124,7 @@ public class ServletController extends HttpServlet {
 
                 case "viewAllPrenotations":
                     System.out.println("Sono in viewAllPrenotations");
+                    /*
                     ArrayList<Prenotazione> array3 = viewAllPrenotations(request, response);
                     if(array3 != null){
                         for (Prenotazione p3 : array3) {
@@ -137,6 +138,12 @@ public class ServletController extends HttpServlet {
                         String s11 = gson.toJson(r11);
                         out.println(s11);
                     }
+
+                     */
+
+                    String testt = "sono in viewAllPrenot";
+                    String test = gson.toJson(testt);
+                    out.println(test);
                     break;
 
                 case "viewOwnActPrenotations":
