@@ -225,7 +225,7 @@
                 data-toggle="tooltip" data-placement="top" title="Tooltip on top">
             Logout
         </button>
-        {{allPrenotations}}
+        <di v-for="element in allPrenotations"><p>{{element}}</p></di>
     </div>
     <div v-if="setVisibleLogin=='2'" id="userScreenUtenteRegistrato" class="row">
         <div class="column1">
@@ -677,13 +677,11 @@
             codLogout: 'logout',
             message: 'testttt',
             codPrenotations: 'viewAllPrenotations',
-            allPrenotations: 'vuoto',
+            allPrenotations: [],
 
         },
 
-        mounted: function () {
-            this.getRegistUser();
-        },
+
 
         methods: {
 
@@ -765,11 +763,11 @@
                         }
 
                     });
+                console.log('FINE PRIMA POST');
 
                 $.post("ServletController", {"username": this.username, "password": this.password, "invia": this.codPrenotations},function (data) {
                     console.log('sono nella post get prenotations');
                     self.allPrenotations = data;
-                    this.allPrenotations = data;
                 });
 
 

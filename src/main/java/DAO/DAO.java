@@ -307,7 +307,7 @@ public class DAO {
                 ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONE ");
                 while (rs.next()) {
                     //forse va rivista con una document.out per scrivere nel div corretto
-                    Prenotazione p = new Prenotazione(rs.getString("codice"),rs.getString("utente"), rs.getString("docente"), rs.getString("corso"), rs.getString("data"), rs.getString("slot_ora"), rs.getString("stato"));
+                    Prenotazione p = new Prenotazione(rs.getString("codice"),rs.getString("utente"), rs.getString("docente"), rs.getString("corso"), rs.getString("data"), rs.getString("slot_ora"));
                     out.add(p);
                 }
             }
@@ -479,4 +479,3 @@ public class DAO {
         return out;
     }
 }
-

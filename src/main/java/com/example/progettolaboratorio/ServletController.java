@@ -501,11 +501,11 @@ public class ServletController extends HttpServlet {
             System.out.println(result);
         }
         else{
-                ServletContext ctx=request.getServletContext();
-                RequestDispatcher rd=ctx.getNamedDispatcher("servletError");
-                String messaggio="Non hai i permessi per utilizzare questa funzione";
-                request.setAttribute("message",messaggio);
-                rd.include(request,response);
+            ServletContext ctx=request.getServletContext();
+            RequestDispatcher rd=ctx.getNamedDispatcher("servletError");
+            String messaggio="Non hai i permessi per utilizzare questa funzione";
+            request.setAttribute("message",messaggio);
+            rd.include(request,response);
         }
         return result;
     }
