@@ -77,7 +77,7 @@ public class DAO {
             if (conn1 != null) {
                 System.out.println("Connected to the database test");
                 Statement st = conn1.createStatement();
-                st.execute("INSERT INTO PRENOTAZIONE(codice,utente,docente,corso,data,slot_ora) " + "VALUES (codice,utente,docente,corso,data,slot_ora)");
+                st.execute("INSERT INTO PRENOTAZIONE(CODICE,UTENTE,DOCENTE,CORSO,DATA,SLOT_ORA) VALUES ('"+codice+"','"+utente+"','"+docente+"','"+corso+"','"+data+"','"+slot_ora+"')");
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
