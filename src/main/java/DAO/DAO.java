@@ -337,7 +337,7 @@ public class DAO {
                 ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONE WHERE UTENTE ="  +account);
                 while (rs.next()) {
                     //forse va rivista con una document.out per scrivere nel div corretto
-                    Prenotazione p = new Prenotazione(rs.getString("docente"),rs.getString("utente"), rs.getString("corso"), rs.getString("stato"), rs.getString("data"), rs.getString("slot_ora"),rs.getString("stato"));
+                    Prenotazione p = new Prenotazione(rs.getString("codice"),rs.getString("utente"), rs.getString("docente"), rs.getString("corso"), rs.getString("data"), rs.getString("slot_ora"));
                     out.add(p);
                 }
             }
@@ -367,7 +367,7 @@ public class DAO {
                 ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONE WHERE UTENTE = '" + account + "'" + "AND STATO = '" + 1 + "'");
                 while (rs.next()) {
                     //forse va rivista con una document.out per scrivere nel div corretto
-                    Prenotazione p = new Prenotazione(rs.getString("docente"),rs.getString("utente"), rs.getString("corso"), rs.getString("stato"), rs.getString("data"), rs.getString("slot_ora"),rs.getString("stato"));
+                    Prenotazione p = new Prenotazione(rs.getString("codice"),rs.getString("utente"), rs.getString("docente"), rs.getString("corso"), rs.getString("data"), rs.getString("slot_ora"));
                     out.add(p);
                 }
             }
@@ -399,7 +399,7 @@ public class DAO {
                 ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONE WHERE SLOT_ORA= '" +slot_ora+"'" +"AND DATA= '"+data+"'"+" AND CORSO= '" +corso+"'"+"AND PROFESSORE= '"+docente+"'"+"AND STATO= '"+stato+"'");
                 while (rs.next()) {
                     //forse va rivista con una document.out per scrivere nel div corretto
-                    Prenotazione p = new Prenotazione(rs.getString("docente"),rs.getString("utente"), rs.getString("corso"), rs.getString("stato"), rs.getString("data"), rs.getString("slot_ora"),rs.getString("stato"));
+                    Prenotazione p = new Prenotazione(rs.getString("codice"),rs.getString("utente"), rs.getString("docente"), rs.getString("corso"), rs.getString("data"), rs.getString("slot_ora"));
                     out.add(p);
                 }
             }

@@ -225,7 +225,7 @@
                 data-toggle="tooltip" data-placement="top" title="Tooltip on top">
             Logout
         </button>
-        <div v-for="element in AllPrenotations"><p>{{element}}</p></div>
+
     </div>
     <div v-if="setVisibleLogin=='2'" id="userScreenUtenteRegistrato" class="row">
         <div class="column1">
@@ -355,6 +355,11 @@
                 </tbody>
             </table>
         </div>
+
+        <li v-for="Prenotazione in allPrenotations">
+            {{Prenotazione}}
+        </li>
+
     </div>
 
 
