@@ -44,7 +44,7 @@ public class DAO {
         return ris;
     }
 
-    public static int cancellazionePrenotazione(String s, String codice, String utente, String docente, String corso, String data, String slot_ora){
+    public static int cancellazionePrenotazione(String codice, String utente, String docente, String corso, String data, String slot_ora){
         Connection conn1 = null;
         int ris = 0;
         try {
@@ -77,7 +77,7 @@ public class DAO {
             if (conn1 != null) {
                 System.out.println("Connected to the database test");
                 Statement st = conn1.createStatement();
-                ris = st.executeUpdate("UPDATE FROM PRENOTAZIONE SET STATO='1' AND  UTENTE='"+utente+"'  WHERE DOCENTE='"+docente+"' AND CORSO='"+corso+"'");
+                st.execute("INSERT INTO PRENOTAZIONE(codice,utente,docente,corso,data,slot_ora) " + "VALUES (codice,utente,docente,corso,data,slot_ora)");
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -304,7 +304,7 @@ public class DAO {
             conn1 = DriverManager.getConnection(url1,user,password);
             if(conn1 != null){
                 Statement st = conn1.createStatement();
-                ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONE ");
+                ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONE WHERE UTENTE != null");
                 while (rs.next()) {
                     //forse va rivista con una document.out per scrivere nel div corretto
                     Prenotazione p = new Prenotazione(rs.getString("codice"),rs.getString("utente"), rs.getString("docente"), rs.getString("corso"), rs.getString("data"), rs.getString("slot_ora"));
@@ -327,14 +327,14 @@ public class DAO {
     }
 
     //storico utente
-    public static ArrayList<Prenotazione> viewOwnPrenotations(String account){
+    public static ArrayList<Prenotazione> viewOwnPrenotations(String utente){
         Connection conn1 = null;
         ArrayList<Prenotazione> out = new ArrayList<>();
         try{
             conn1 = DriverManager.getConnection(url1,user,password);
             if(conn1 != null){
                 Statement st = conn1.createStatement();
-                ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONE WHERE UTENTE ="  +account);
+                ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONE WHERE UTENTE ="  + utente);
                 while (rs.next()) {
                     //forse va rivista con una document.out per scrivere nel div corretto
                     Prenotazione p = new Prenotazione(rs.getString("codice"),rs.getString("utente"), rs.getString("docente"), rs.getString("corso"), rs.getString("data"), rs.getString("slot_ora"));
@@ -389,14 +389,14 @@ public class DAO {
     //filtra per fascia oraria, giorno, materia e professore
     //da gestire nella servlet il controllo dell'input
     //tutto cio' che in input è null va gestito con *
-    public static ArrayList<Prenotazione> filterPrenotations(String slot_ora, String data, String corso, String docente, String stato){
+    public static ArrayList<Prenotazione> filterPrenotations(String slot_ora, String data, String corso, String docente){
         Connection conn1 = null;
         ArrayList<Prenotazione> out = new ArrayList<>();
         try{
             conn1 = DriverManager.getConnection(url1,user,password);
             if(conn1 != null){
                 Statement st = conn1.createStatement();
-                ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONE WHERE SLOT_ORA= '" +slot_ora+"'" +"AND DATA= '"+data+"'"+" AND CORSO= '" +corso+"'"+"AND PROFESSORE= '"+docente+"'"+"AND STATO= '"+stato+"'");
+                ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONE WHERE SLOT_ORA= '" +slot_ora+"'" +"AND DATA= '"+data+"'"+" AND CORSO= '" +corso+"'"+"AND PROFESSORE= '"+docente+"'");
                 while (rs.next()) {
                     //forse va rivista con una document.out per scrivere nel div corretto
                     Prenotazione p = new Prenotazione(rs.getString("codice"),rs.getString("utente"), rs.getString("docente"), rs.getString("corso"), rs.getString("data"), rs.getString("slot_ora"));

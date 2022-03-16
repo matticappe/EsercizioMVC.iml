@@ -369,7 +369,7 @@ public class ServletController extends HttpServlet {
         String data= request.getParameter("data");
         String slot_ora= request.getParameter("slot_ora");
         String attivo = request.getParameter("attivo");
-        int ris = DAO.cancellazionePrenotazione(codice,utente,docente,corso, data,slot_ora,attivo);
+        int ris = DAO.cancellazionePrenotazione(codice,utente,docente,corso, data,slot_ora);
         if(ris != 0){
             result = "La cancellazione della prenotazione dell'utente " + utente + " con il docente " + docente + "per il corso" + corso + " è avvenuta con successo";
         }
@@ -435,10 +435,8 @@ public class ServletController extends HttpServlet {
             docente="*";
         }else if(slot_ora==null){
             slot_ora="*";
-        }else if(stato==null){
-            stato="*";
         }
-        list = DAO.filterPrenotations(slot_ora,data,materia,docente,stato);
+        list = DAO.filterPrenotations(slot_ora,data,materia,docente);
         Prenotazione[] array = new Prenotazione[list.size()];
         for (int i = 0; i < list.size(); i++) {
             array[i] = list.get(i);
