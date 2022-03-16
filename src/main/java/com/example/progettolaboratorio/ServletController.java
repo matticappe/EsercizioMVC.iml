@@ -11,6 +11,8 @@ import javax.servlet.annotation.*;
 import java.io.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+
 import static DAO.DAO.loginUtente;
 import static java.lang.System.out;
 
@@ -29,11 +31,11 @@ public class ServletController extends HttpServlet {
             Gson gson = new Gson();
             String action = request.getParameter("invia");
             System.out.println("Action = " + action); //inserire un controllo per il != da null
-            //out.println(action);
+
             switch (action) {
                 case "login":
                     System.out.println("Sono nel login");
-                    String answ=login(request,response);
+                    String answ =login(request,response);
                     System.out.println("TRA POCO INVIO CORRETTO");
                     String s1 = gson.toJson(answ);
                     out.println(s1);
@@ -90,13 +92,12 @@ public class ServletController extends HttpServlet {
 
                 case "stampaUtenti":
                     System.out.println("Sono in stampaUtenti");
-                    ArrayList<Utente> array1 = stampaUtenti(request, response);
+                    Utente[] array1;
+                    array1 = stampaUtenti(request, response);
                     if(array1 != null) {
-                        for (Utente u : array1) {
-                            String r9 = u.toString();
-                            String s9 = gson.toJson(r9);
-                            out.println(s9);
-                        }
+                        String r9 = Arrays.toString(array1);
+                        String s9 = gson.toJson(r9);
+                        out.println(s9);
                     }
                     else{
                         String r9 = "Nessun utente trovato";
@@ -107,13 +108,11 @@ public class ServletController extends HttpServlet {
 
                 case "viewOwnPrenotations":
                     System.out.println("Sono in viewOwnPrenotations");
-                    ArrayList<Prenotazione> array2 = viewOwnPrenotations(request, response);
+                    Prenotazione[] array2 = viewOwnPrenotations(request, response);
                     if(array2 != null) {
-                        for (Prenotazione p2 : array2) {
-                            String r10 = p2.toString();
-                            String s10 = gson.toJson(r10);
-                            out.println(s10);
-                        }
+                        String r10 = Arrays.toString(array2);
+                        String s10 = gson.toJson(r10);
+                        out.println(s10);
                     }
                     else{
                         String r10 = "Nessuna prenotazione trovata";
@@ -124,37 +123,26 @@ public class ServletController extends HttpServlet {
 
                 case "viewAllPrenotations":
                     System.out.println("Sono in viewAllPrenotations");
-                    /*
-                    ArrayList<Prenotazione> array3 = viewAllPrenotations(request, response);
+                    Prenotazione[] array3 = viewAllPrenotations(request, response);
                     if(array3 != null){
-                        for (Prenotazione p3 : array3) {
-                            String r11 = p3.toString();
-                            String s11 = gson.toJson(r11);
-                            out.println(s11);
-                        }
+                        String r11 = Arrays.toString(array3);
+                        String s11 = gson.toJson(r11);
+                        out.println(s11);
                     }
                     else{
                         String r11 = "Nessuna prenotazione trovata";
                         String s11 = gson.toJson(r11);
                         out.println(s11);
                     }
-
-                     */
-
-                    String testt = "sono in viewAllPrenot";
-                    String test = gson.toJson(testt);
-                    out.println(test);
                     break;
 
                 case "viewOwnActPrenotations":
                     System.out.println("Sono in viewOwnActPrenotations");
-                    ArrayList<Prenotazione> array4 = viewOwnActPrenotations(request, response);
+                    Prenotazione[] array4 = viewOwnActPrenotations(request, response);
                     if (array4 != null){
-                        for (Prenotazione p4: array4){
-                            String r12 = p4.toString();
-                            String s12 = gson.toJson(r12);
-                            out.println(s12);
-                        }
+                        String r12 = Arrays.toString(array4);
+                        String s12 = gson.toJson(r12);
+                        out.println(s12);
                     }
                     else {
                         String r12 = "Nessuna prenotazione disponibile per questo username";
@@ -165,13 +153,11 @@ public class ServletController extends HttpServlet {
 
                 case "filterProf":
                     System.out.println("Sono in filterProf");
-                    ArrayList<Docente> array5 = filterProf(request, response);
+                    Docente[] array5 = filterProf(request, response);
                     if (array5 != null){
-                        for(Docente d1: array5){
-                            String s13 = d1.toString();
-                            String r13 = gson.toJson(s13);
-                            out.println(r13);
-                        }
+                        String s13 = Arrays.toString(array5);
+                        String r13 = gson.toJson(s13);
+                        out.println(r13);
                     }
                     else{
                         String s13 = "Nessun professore trovato";
@@ -182,13 +168,11 @@ public class ServletController extends HttpServlet {
 
                 case "filterPrenotations":
                     System.out.println("Sono in filterPrenotations");
-                    ArrayList<Prenotazione> array6 =  filterPrenotations(request, response);
+                    Prenotazione[] array6 =  filterPrenotations(request, response);
                     if(array6 != null){
-                        for(Prenotazione p5: array6){
-                            String s14 = p5.toString();
-                            String r14 = gson.toJson(s14);
-                            out.println(r14);
-                        }
+                        String s14 = Arrays.toString(array6);
+                        String r14 = gson.toJson(s14);
+                        out.println(r14);
                     }
                     else {
                         String s14 = "Nessuna prenotazione trovata";
@@ -199,13 +183,11 @@ public class ServletController extends HttpServlet {
 
                 case "availableSubjects":
                     System.out.println("Sono in availableSubjects");
-                    ArrayList<Corso> array7 = availableSubjects(request, response);
+                    Corso[] array7 = availableSubjects(request, response);
                     if(array7 != null){
-                        for (Corso c1 : array7){
-                            String s15 = c1.toString();
-                            String r15 = gson.toJson(s15);
-                            out.println(r15);
-                        }
+                        String s15 = Arrays.toString(array7);
+                        String r15 = gson.toJson(s15);
+                        out.println(r15);
                     }
                     else {
                         String s14 = "Nessun corso trovato";
@@ -318,61 +300,59 @@ public class ServletController extends HttpServlet {
     }
 
     public String inserimentoDocente(HttpServletRequest request, HttpServletResponse response) throws ServletException,
-            IOException {
-        response.setContentType("application/json");
-        Gson gson = new Gson();
+            IOException {;
         String result = "Inserimento fallito";
         int ris;
-        try {
-            HttpSession s=request.getSession();
-            if((int)s.getAttribute("ruolo")==1) {
-                System.out.println("Sono nella InsertProf");
-                String account = request.getParameter("account");
-                System.out.println(account);
-                String password = request.getParameter("password");
-                System.out.println(password);
-                String ruolo = request.getParameter("ruolo");
-                System.out.println(ruolo);
-                String nomeCognome = request.getParameter("nomeCognome");
-                System.out.println(nomeCognome);
-                String attivo = request.getParameter("attivo");
-                if(account == null){
-                    account = "*";
-                }else if (password == null){
-                    password = "*";
-                }else if(ruolo == null){
-                    ruolo = "*";
-                }else if(nomeCognome == null){
-                    nomeCognome = "*";
-                }else if(attivo == null){
-                    attivo = "*";
-                }
-                ris = DAO.inserimentoDocente(account, password, ruolo, nomeCognome,attivo);
-                if(ris != 0)
-                    result = "L'inserimento del docente " + nomeCognome + "è avvenuto con successo";
-                System.out.println(result);
+        HttpSession s=request.getSession();
+        if((int)s.getAttribute("ruolo")==1) {
+            System.out.println("Sono nella InsertProf");
+            String account = request.getParameter("account");
+            System.out.println(account);
+            String password = request.getParameter("password");
+            System.out.println(password);
+            String ruolo = request.getParameter("ruolo");
+            System.out.println(ruolo);
+            String nomeCognome = request.getParameter("nomeCognome");
+            System.out.println(nomeCognome);
+            String attivo = request.getParameter("attivo");
+            if(account == null){
+                account = "*";
+            }else if (password == null){
+                password = "*";
+            }else if(ruolo == null){
+                ruolo = "*";
+            }else if(nomeCognome == null){
+                nomeCognome = "*";
+            }else if(attivo == null){
+                attivo = "*";
             }
-            else{
-                ServletContext ctx=request.getServletContext();
-                RequestDispatcher rd=ctx.getNamedDispatcher("servletError");
-                String messaggio="Non hai i permessi per utilizzare questa funzione";
-                request.setAttribute("message",messaggio);
-                rd.include(request,response);
-            }
+            ris = DAO.inserimentoDocente(account, password, ruolo, nomeCognome,attivo);
+            if(ris != 0)
+                result = "L'inserimento del docente " + nomeCognome + "è avvenuto con successo";
+            System.out.println(result);
         }
-        finally {
-            out.flush();
-            out.close();
+        else{
+            ServletContext ctx=request.getServletContext();
+            RequestDispatcher rd=ctx.getNamedDispatcher("servletError");
+            String messaggio="Non hai i permessi per utilizzare questa funzione";
+            request.setAttribute("message",messaggio);
+            rd.include(request,response);
         }
         return result;
     }
 
-    public ArrayList<Utente> stampaUtenti(HttpServletRequest request, HttpServletResponse response) throws ServletException,
+    public Utente[] stampaUtenti(HttpServletRequest request, HttpServletResponse response) throws ServletException,
             IOException {
         HttpSession s=request.getSession();
-        ArrayList<Utente> array = null;
+        ArrayList<Utente> list = null;
         if((int)s.getAttribute("role")==1) {
-            array = DAO.ViewAllUsers();
+            list = DAO.ViewAllUsers();
+        }
+        Utente[] array = null;
+        if(list != null)
+            array = new Utente[list.size()];
+        for (int i = 0; i < list.size(); i++) {
+            array[i] = list.get(i);
         }
         return array;
     }
@@ -395,39 +375,51 @@ public class ServletController extends HttpServlet {
     }
 
     //penso prenotazioni prenotabili
-    public ArrayList<Prenotazione> viewOwnPrenotations(HttpServletRequest request, HttpServletResponse response) throws ServletException,
+    public Prenotazione[] viewOwnPrenotations(HttpServletRequest request, HttpServletResponse response) throws ServletException,
             IOException {
-        ArrayList<Prenotazione> array = null;
+        ArrayList<Prenotazione> list = null;
         String username = request.getParameter("username");
         if(username == null){
             username = "*";
         }
-        array = DAO.viewOwnPrenotations(username);
+        list = DAO.viewOwnPrenotations(username);
+        Prenotazione[] array = new Prenotazione[list.size()];
+        for (int i = 0; i < list.size(); i++) {
+            array[i] = list.get(i);
+        }
         return array;
     }
 
     //penso prenotazioni mie prenotate effettivamente
-    public ArrayList<Prenotazione> viewOwnActPrenotations(HttpServletRequest request, HttpServletResponse response) throws ServletException,
+    public Prenotazione[] viewOwnActPrenotations(HttpServletRequest request, HttpServletResponse response) throws ServletException,
             IOException {
-        ArrayList<Prenotazione> array = null;
+        ArrayList<Prenotazione> list = null;
         String username = request.getParameter("username");
         if(username == null){
             username = "*";
         }
-        array = DAO.viewOwnActPrenotations(username);
+        list = DAO.viewOwnActPrenotations(username);
+        Prenotazione[] array = new Prenotazione[list.size()];
+        for (int i = 0; i < list.size(); i++) {
+            array[i] = list.get(i);
+        }
         return array;
     }
 
-    public ArrayList<Prenotazione> viewAllPrenotations(HttpServletRequest request, HttpServletResponse response) throws ServletException,
+    public Prenotazione[] viewAllPrenotations(HttpServletRequest request, HttpServletResponse response) throws ServletException,
             IOException {
-        ArrayList<Prenotazione> array;
-        array = DAO.viewAllPrenotations();
+        ArrayList<Prenotazione> list;
+        list = DAO.viewAllPrenotations();
+        Prenotazione[] array = new Prenotazione[list.size()];
+        for (int i = 0; i < list.size(); i++) {
+            array[i] = list.get(i);
+        }
         return array;
     }
 
-    public ArrayList<Prenotazione> filterPrenotations(HttpServletRequest request, HttpServletResponse response) throws ServletException,
+    public Prenotazione[] filterPrenotations(HttpServletRequest request, HttpServletResponse response) throws ServletException,
             IOException {
-        ArrayList<Prenotazione> array = null;
+        ArrayList<Prenotazione> list = null;
         String slot_ora = request.getParameter("slot_ora");
         String data = request.getParameter("data");
         String materia = request.getParameter("materia");
@@ -444,13 +436,17 @@ public class ServletController extends HttpServlet {
         }else if(stato==null){
             stato="*";
         }
-        array = DAO.filterPrenotations(slot_ora,data,materia,docente,stato);
+        list = DAO.filterPrenotations(slot_ora,data,materia,docente,stato);
+        Prenotazione[] array = new Prenotazione[list.size()];
+        for (int i = 0; i < list.size(); i++) {
+            array[i] = list.get(i);
+        }
         return array;
     }
 
-    public ArrayList<Docente> filterProf(HttpServletRequest request, HttpServletResponse response) throws ServletException,
+    public Docente[] filterProf(HttpServletRequest request, HttpServletResponse response) throws ServletException,
             IOException {
-        ArrayList<Docente> array = null;
+        ArrayList<Docente> list = null;
         String account = request.getParameter("account");
         String nomeCognome = request.getParameter("nomeCognome");
         String attivo = request.getParameter("attivo");
@@ -462,51 +458,52 @@ public class ServletController extends HttpServlet {
         }else if(attivo == null){
             attivo = "*";
         }
-        array = DAO.filterProf(account,nomeCognome,attivo);
+        list = DAO.filterProf(account,nomeCognome,attivo);
+        Docente[] array = new Docente[list.size()];
+        for (int i = 0; i < list.size(); i++) {
+            array[i] = list.get(i);
+        }
         return array;
     }
 
-    public ArrayList<Corso> availableSubjects(HttpServletRequest request, HttpServletResponse response) throws ServletException,
+    public Corso[] availableSubjects(HttpServletRequest request, HttpServletResponse response) throws ServletException,
             IOException {
-        ArrayList<Corso> array = null;
+        ArrayList<Corso> list = null;
         String titolo = request.getParameter("titlo");
         if(titolo == null){
             titolo = "*";
         }
-        array = DAO.availableSubjects(titolo);
+        list = DAO.availableSubjects(titolo);
+        Corso[] array = new Corso[list.size()];
+        for (int i = 0; i < list.size(); i++) {
+            array[i] = list.get(i);
+        }
         return array;
     }
 
     public String inserimentoCorso(HttpServletRequest request, HttpServletResponse response) throws ServletException,
             IOException {
         String result = "Inserimento fallito";
-        try {
-            PrintWriter out=response.getWriter();
-            HttpSession s=request.getSession();
-            if((int)s.getAttribute("ruolo")==1) {
-                System.out.println("Sono nella inserimentoDocente");
-                String corso = request.getParameter("corso");
-                if(corso == null){
-                    corso = "*";
-                }
-                System.out.println(corso);
-                int ris = DAO.inserimentoCorso(corso);
-                if (ris != 0) {
-                    result = "L'inserimento del corso " + corso + " è avvenuta con successo";
-                }
-                System.out.println(result);
+        HttpSession s=request.getSession();
+        if((int)s.getAttribute("ruolo")==1) {
+            System.out.println("Sono nella inserimentoDocente");
+            String corso = request.getParameter("corso");
+            if(corso == null){
+                corso = "*";
             }
-            else{
-                    ServletContext ctx=request.getServletContext();
-                    RequestDispatcher rd=ctx.getNamedDispatcher("servletError");
-                    String messaggio="Non hai i permessi per utilizzare questa funzione";
-                    request.setAttribute("message",messaggio);
-                    rd.include(request,response);
+            System.out.println(corso);
+            int ris = DAO.inserimentoCorso(corso);
+            if (ris != 0) {
+                result = "L'inserimento del corso " + corso + " è avvenuta con successo";
             }
+            System.out.println(result);
         }
-        finally {
-            out.flush();
-            out.close();
+        else{
+                ServletContext ctx=request.getServletContext();
+                RequestDispatcher rd=ctx.getNamedDispatcher("servletError");
+                String messaggio="Non hai i permessi per utilizzare questa funzione";
+                request.setAttribute("message",messaggio);
+                rd.include(request,response);
         }
         return result;
     }
@@ -514,138 +511,105 @@ public class ServletController extends HttpServlet {
     public String effettuaPrenotazione(HttpServletRequest request, HttpServletResponse response) throws ServletException,
             IOException {
         String result = "Prenotazione fallita";
-        try {
-            PrintWriter out= response.getWriter();
-            System.out.println("Sono nella effettuaPrenotazione");
-            String codice= request.getParameter("codice");
-            String slot_ora= request.getParameter("slot_ora");
-            String data= request.getParameter("data");
-            String utente= request.getParameter("utente");
-            String docente= request.getParameter("docente");
-            String corso= request.getParameter("corso");
-            int ris = DAO.effettuaPrenotazione(codice,utente,docente,corso,data,slot_ora);
-            if(ris != 0){
-                result = "La prenotazione dell'utente " + utente + " con il docente " + docente+ " del corso " + corso + " è avvenuta con successo";
-            }
-            System.out.println(result);
+        System.out.println("Sono nella effettuaPrenotazione");
+        String codice= request.getParameter("codice");
+        String slot_ora= request.getParameter("slot_ora");
+        String data= request.getParameter("data");
+        String utente= request.getParameter("utente");
+        String docente= request.getParameter("docente");
+        String corso= request.getParameter("corso");
+        int ris = DAO.effettuaPrenotazione(codice,utente,docente,corso,data,slot_ora);
+        if(ris != 0){
+            result = "La prenotazione dell'utente " + utente + " con il docente " + docente+ " del corso " + corso + " è avvenuta con successo";
         }
-        finally {
-            out.flush();
-            out.close();
-        }
+        System.out.println(result);
         return result;
     }
 
     public String inserimentoInsegna(HttpServletRequest request, HttpServletResponse response) throws ServletException,
             IOException {
         String result = "Inserimento fallito";
-        try {
-            PrintWriter out=response.getWriter();
-            HttpSession s= request.getSession();
-            if((int)s.getAttribute("ruolo")==1) {
-                System.out.println("Sono nella effettuaPrenotazione");
-                String docente = request.getParameter("docente");
-                String corso = request.getParameter("corso");
-                if(docente == null){
-                    docente = "*";
-                }else if(corso == null){
-                    corso = "*";
-                }
-                int ris = DAO.inserimentoInsegna(docente, corso);
-                if (ris != 0)
-                    result = "L'inserimento del docente " + docente + " del corso " + corso + " è avvenuta cpm successo";
-                System.out.println(result);
+        HttpSession s= request.getSession();
+        if((int)s.getAttribute("ruolo")==1) {
+            System.out.println("Sono nella effettuaPrenotazione");
+            String docente = request.getParameter("docente");
+            String corso = request.getParameter("corso");
+            if(docente == null){
+                docente = "*";
+            }else if(corso == null){
+                corso = "*";
             }
-            else{
-                ServletContext ctx=request.getServletContext();
-                RequestDispatcher rd=ctx.getNamedDispatcher("servletError");
-                String messaggio="Non hai i permessi per utilizzare questa funzione";
-                request.setAttribute("message",messaggio);
-                rd.include(request,response);
-            }
+            int ris = DAO.inserimentoInsegna(docente, corso);
+            if (ris != 0)
+                result = "L'inserimento del docente " + docente + " del corso " + corso + " è avvenuta con successo";
+            System.out.println(result);
         }
-        finally {
-            out.flush();
-            out.close();
+        else{
+            ServletContext ctx=request.getServletContext();
+            RequestDispatcher rd=ctx.getNamedDispatcher("servletError");
+            String messaggio="Non hai i permessi per utilizzare questa funzione";
+            request.setAttribute("message",messaggio);
+            rd.include(request,response);
         }
         return result;
     }
 
     public String isAdmin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
         String result = "";
-        try(PrintWriter out = response.getWriter()) {
-            String username = request.getParameter("username");
-            if(username == null){
-                username = "*";
-            }
-            boolean flag;
-            flag = DAO.isAdmin(username);
-            response.setContentType("text/plain");
-            if(flag){
-                result = "E' un amministratore";
-            }
-            else{
-                result = "Non è un amministratore";
-            }
-            out.println(result);
-            out.flush();
+        String username = request.getParameter("username");
+        if(username == null){
+            username = "*";
         }
-        finally {
-            out.close();
-            return result;
+        boolean flag;
+        flag = DAO.isAdmin(username);
+        response.setContentType("text/plain");
+        if(flag){
+            result = "E' un amministratore";
         }
+        else{
+            result = "Non è un amministratore";
+        }
+        return result;
     }
 
     public String updateInsegnaDocente(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String result = "";
-        try (PrintWriter out = response.getWriter()) {
-            HttpSession s= request.getSession();
-            if((int)s.getAttribute("ruolo")==1) {
-                String titolo = request.getParameter("titolo");
-                if(titolo == null){
-                    titolo = "*";
-                }
-                result = DAO.updateInsegnaDocente(titolo);
+        HttpSession s= request.getSession();
+        if((int)s.getAttribute("ruolo")==1) {
+            String titolo = request.getParameter("titolo");
+            if(titolo == null){
+                titolo = "*";
+            }
+            result = DAO.updateInsegnaDocente(titolo);
 
-            }
-            else{
-                ServletContext ctx=request.getServletContext();
-                RequestDispatcher rd=ctx.getNamedDispatcher("servletError");
-                String messaggio="Non hai i permessi per utilizzare questa funzione";
-                request.setAttribute("message",messaggio);
-                rd.include(request,response);
-            }
         }
-        finally {
-            out.flush();
-            out.close();
+        else{
+            ServletContext ctx=request.getServletContext();
+            RequestDispatcher rd=ctx.getNamedDispatcher("servletError");
+            String messaggio="Non hai i permessi per utilizzare questa funzione";
+            request.setAttribute("message",messaggio);
+            rd.include(request,response);
         }
         return result;
     }
 
     public String updateInsegnaMateria(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String result = "";
-        try (PrintWriter out = response.getWriter()) {
-            HttpSession s= request.getSession();
-            if((int) s.getAttribute("ruolo")==1) {
-                String codDocente = request.getParameter("codDocente");
-                if(codDocente == null){
-                    codDocente = "*";
-                }
-                result = DAO.updateInsegnaMateria(codDocente);
-                return result;
+        HttpSession s= request.getSession();
+        if((int) s.getAttribute("ruolo")==1) {
+            String codDocente = request.getParameter("codDocente");
+            if(codDocente == null){
+                codDocente = "*";
             }
-            else{
-                ServletContext ctx=request.getServletContext();
-                RequestDispatcher rd=ctx.getNamedDispatcher("servletError");
-                String messaggio="Non hai i permessi per utilizzare questa funzione";
-                request.setAttribute("message",messaggio);
-                rd.include(request,response);
-            }
+            result = DAO.updateInsegnaMateria(codDocente);
+            return result;
         }
-        finally {
-            out.flush();
-            out.close();
+        else{
+            ServletContext ctx=request.getServletContext();
+            RequestDispatcher rd=ctx.getNamedDispatcher("servletError");
+            String messaggio="Non hai i permessi per utilizzare questa funzione";
+            request.setAttribute("message",messaggio);
+            rd.include(request,response);
         }
         return result;
     }
