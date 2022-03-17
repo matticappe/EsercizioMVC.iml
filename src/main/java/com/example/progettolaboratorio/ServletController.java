@@ -508,6 +508,7 @@ public class ServletController extends HttpServlet {
         return result;
     }
 
+    // Commento inutile
     public String effettuaPrenotazione(HttpServletRequest request, HttpServletResponse response) throws ServletException,
             IOException {
         String result = "Prenotazione fallita";
