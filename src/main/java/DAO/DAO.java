@@ -1,6 +1,7 @@
 package DAO;
 
 import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -297,7 +298,7 @@ public class DAO {
         return out;
     }
 
-    public static /*ArrayList<Prenotazione>*/ String viewAllPrenotations(){
+    public static String viewAllPrenotations(){
         System.out.println("sono in viewAllPrenotations");
         Connection conn1 = null;
         //ArrayList<Prenotazione> out = new ArrayList<>();
@@ -315,8 +316,8 @@ public class DAO {
                     System.out.println(i+" "+p.getCodice()+p.getUtente()+p.getDocente()+p.getCorso()+p.getData()+p.getSlot_ora());
                     //out.add(p);
                     if(i!=0)
-                        out = out+",\n";
-                    out = out+"{\n pCodice: '"+p.getCodice()+"',\n pUtente: '"+p.getUtente()+"',\n pDocente: '"+p.getDocente()+"',\n pCorso: '"+p.getCorso()+"',\n pData: '"+p.getData()+"',\n pSlot_ora: '"+p.getSlot_ora()+"',\n}";
+                        out = out + ",\n";
+                    out = out + "{\n pCodice: '"+p.getCodice()+"',\n pUtente: '"+p.getUtente()+"',\n pDocente: '"+p.getDocente()+"',\n pCorso: '"+p.getCorso()+"',\n pData: '"+p.getData()+"',\n pSlot_ora: '"+p.getSlot_ora()+"',\n}";
                     i++;
                 }
             }
@@ -336,18 +337,23 @@ public class DAO {
     }
 
     //storico utente
-    public static ArrayList<Prenotazione> viewOwnPrenotations(String utente){
+    public static String viewOwnPrenotations(String utente){
         Connection conn1 = null;
-        ArrayList<Prenotazione> out = new ArrayList<>();
+        String out = "";
         try{
             conn1 = DriverManager.getConnection(url1,user,password);
             if(conn1 != null){
                 Statement st = conn1.createStatement();
                 ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONE WHERE UTENTE ="  + utente);
+                int i = 0;
                 while (rs.next()) {
                     //forse va rivista con una document.out per scrivere nel div corretto
                     Prenotazione p = new Prenotazione(rs.getString("codice"),rs.getString("utente"), rs.getString("docente"), rs.getString("corso"), rs.getString("data"), rs.getString("slot_ora"));
-                    out.add(p);
+                    System.out.println(i + " " + p.getCodice() + p.getUtente() + p.getDocente() + p.getCorso() + p.getData() + p.getSlot_ora());
+                    if(i != 0)
+                        out = out + ",\n";
+                    out = out + "{\n Codice prenotazione: '"+p.getCodice()+"',\n Utente: '"+p.getUtente()+"',\n Docente: '"+p.getDocente()+"',\n Corso: '"+p.getCorso()+"',\n Data: '"+p.getData()+"',\n Slot Ora: '"+p.getSlot_ora()+"',\n}";
+                    i++;
                 }
             }
 
@@ -366,18 +372,22 @@ public class DAO {
     }
 
     //prenotazioni attive
-    public static ArrayList<Prenotazione> viewOwnActPrenotations(String account){
+    public static String viewOwnActPrenotations(String account){
         Connection conn1 = null;
-        ArrayList<Prenotazione> out = new ArrayList<>();
+       String out = "";
         try{
             conn1 = DriverManager.getConnection(url1,user,password);
             if(conn1 != null){
                 Statement st = conn1.createStatement();
-                ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONE WHERE UTENTE = '" + account + "'" + "AND STATO = '" + 1 + "'");
+                ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONE WHERE UTENTE = '" + account + "'");
+                int i = 0;
                 while (rs.next()) {
-                    //forse va rivista con una document.out per scrivere nel div corretto
                     Prenotazione p = new Prenotazione(rs.getString("codice"),rs.getString("utente"), rs.getString("docente"), rs.getString("corso"), rs.getString("data"), rs.getString("slot_ora"));
-                    out.add(p);
+                    System.out.println(i + " " + p.getCodice() + p.getUtente() + p.getDocente() + p.getCorso() + p.getData() + p.getSlot_ora());
+                    if(i != 0)
+                        out = out + ",\n";
+                    out = out + "{\n Codice prenotazione: '"+p.getCodice()+"',\n Utente: '"+p.getUtente()+"',\n Docente: '" +p.getDocente() + "',\n Corso: '" +p.getCorso()+ "',\n Data: '"+ p.getData()+ "',\n Slot Ora: '" + p.getSlot_ora()+"',\n}";
+                    i++;
                 }
             }
 
@@ -398,18 +408,23 @@ public class DAO {
     //filtra per fascia oraria, giorno, materia e professore
     //da gestire nella servlet il controllo dell'input
     //tutto cio' che in input è null va gestito con *
-    public static ArrayList<Prenotazione> filterPrenotations(String slot_ora, String data, String corso, String docente){
+    public static String filterPrenotations(String slot_ora, String data, String corso, String docente){
         Connection conn1 = null;
-        ArrayList<Prenotazione> out = new ArrayList<>();
+        String out = " ";
         try{
             conn1 = DriverManager.getConnection(url1,user,password);
             if(conn1 != null){
                 Statement st = conn1.createStatement();
                 ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONE WHERE SLOT_ORA= '" +slot_ora+"'" +"AND DATA= '"+data+"'"+" AND CORSO= '" +corso+"'"+"AND PROFESSORE= '"+docente+"'");
+                int i = 0;
                 while (rs.next()) {
                     //forse va rivista con una document.out per scrivere nel div corretto
                     Prenotazione p = new Prenotazione(rs.getString("codice"),rs.getString("utente"), rs.getString("docente"), rs.getString("corso"), rs.getString("data"), rs.getString("slot_ora"));
-                    out.add(p);
+                    System.out.println(i + " " + p.getCodice() + p.getUtente() + p.getDocente() + p.getCorso() + p.getData() + p.getSlot_ora());
+                    if(i != 0)
+                        out = out + ",\n";
+                    out = out + "{\n Codice prenotazione: '" + p.getCodice() + "',\n Utente: '" + p.getUtente() + "',\n Docente: '" + p.getDocente() + "',\n Corso: '" + p.getCorso() + "',\n Data: '" + p.getData()+"',\n pSlot_ora: '"+ p.getSlot_ora() + "',\n}";
+                    i++;
                 }
             }
 
@@ -430,18 +445,23 @@ public class DAO {
     //filtra per nome,cognome,codiceProf e se attivo
     //da gestire nella servlet il controllo dell'input
     //tutto cio' che in input è null va gestito con *
-    public static ArrayList<Docente> filterProf(String account, String nomeCognome, String attivo){
+    public static String filterProf(String account, String nomeCognome, String attivo){
         Connection conn1 = null;
-        ArrayList<Docente> out = new ArrayList<>();
+        String out = "";
         try{
             conn1 = DriverManager.getConnection(url1,user,password);
             if(conn1 != null){
                 Statement st = conn1.createStatement();
                 ResultSet rs = st.executeQuery("SELECT * FROM DOCENTE WHERE ACCOUNT= '" +account+"'" +"AND NOMECOGNOME= '"+nomeCognome+"'"+ "AND ATTIVO= '"+attivo+"'");
+                int i = 0;
                 while (rs.next()) {
                     //forse va rivista con una document.out per scrivere nel div corretto
-                    Docente p = new Docente(rs.getString("account"),rs.getString("password"), rs.getString("ruolo"), rs.getString("nomecognome"),rs.getString("attivo"));
-                    out.add(p);
+                    Docente d = new Docente(rs.getString("account"),rs.getString("password"), rs.getString("ruolo"), rs.getString("nomeCognome"),rs.getString("attivo"));
+                    System.out.println(i + " " + d.getAccount() + d.getRuolo() + d.getNomeCognome() + d.getAttivo());
+                    if(i != 0)
+                        out = out + ",\n";
+                    out = out + "{\n Account docente: '" + d.getAccount() + "',\n Ruolo docente: '"+d.getRuolo()+"',\n Nome Cognome: '"+d.getNomeCognome()+"',\n Attivo: '"+d.getAttivo()+"'\n}";
+                    i++;
                 }
             }
 
@@ -459,18 +479,22 @@ public class DAO {
         return out;
     }
 
-    public static ArrayList<Corso> availableSubjects(String titolo){
+    public static String availableSubjects(String titolo){
         Connection conn1 = null;
-        ArrayList<Corso> out = new ArrayList<>();
+        String out = "";
         try{
             conn1 = DriverManager.getConnection(url1,user,password);
             if(conn1 != null){
                 Statement st = conn1.createStatement();
                 ResultSet rs = st.executeQuery("SELECT * FROM CORSO WHERE TITOLO= '" +titolo+"'");
+                int i = 0;
                 while (rs.next()) {
                     //forse va rivista con una document.out per scrivere nel div corretto
-                    Corso p = new Corso(rs.getString("Titolo"));
-                    out.add(p);
+                    Corso c = new Corso(rs.getString("Titolo"));
+                    if(i != 0)
+                        out = out + ",\n";
+                    out = out + "{\n Corso: '" + c.getTitolo();
+                    i++;
                 }
             }
 

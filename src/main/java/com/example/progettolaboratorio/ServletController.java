@@ -110,10 +110,9 @@ public class ServletController extends HttpServlet {
 
                 case "viewOwnPrenotations":
                     System.out.println("Sono in viewOwnPrenotations");
-                    Prenotazione[] array2 = viewOwnPrenotations(request, response);
-                    if(array2 != null) {
-                        String r10 = Arrays.toString(array2);
-                        String s10 = gson.toJson(r10);
+                    String out2 = viewOwnPrenotations(request, response);
+                    if(out2 != null) {
+                        String s10 = gson.toJson(out2);
                         out.println(s10);
                     }
                     else{
@@ -158,10 +157,9 @@ public class ServletController extends HttpServlet {
 
                 case "viewOwnActPrenotations":
                     System.out.println("Sono in viewOwnActPrenotations");
-                    Prenotazione[] array4 = viewOwnActPrenotations(request, response);
-                    if (array4 != null){
-                        String r12 = Arrays.toString(array4);
-                        String s12 = gson.toJson(r12);
+                    String out4 = viewOwnActPrenotations(request, response);
+                    if (out4 != null){
+                        String s12 = gson.toJson(out4);
                         out.println(s12);
                     }
                     else {
@@ -173,10 +171,9 @@ public class ServletController extends HttpServlet {
 
                 case "filterProf":
                     System.out.println("Sono in filterProf");
-                    Docente[] array5 = filterProf(request, response);
-                    if (array5 != null){
-                        String s13 = Arrays.toString(array5);
-                        String r13 = gson.toJson(s13);
+                    String out5 = filterProf(request, response);
+                    if (out5 != null){
+                        String r13 = gson.toJson(out5);
                         out.println(r13);
                     }
                     else{
@@ -188,10 +185,9 @@ public class ServletController extends HttpServlet {
 
                 case "filterPrenotations":
                     System.out.println("Sono in filterPrenotations");
-                    Prenotazione[] array6 =  filterPrenotations(request, response);
-                    if(array6 != null){
-                        String s14 = Arrays.toString(array6);
-                        String r14 = gson.toJson(s14);
+                    String out6 =  filterPrenotations(request, response);
+                    if(out6 != null){
+                        String r14 = gson.toJson(out6);
                         out.println(r14);
                     }
                     else {
@@ -203,10 +199,9 @@ public class ServletController extends HttpServlet {
 
                 case "availableSubjects":
                     System.out.println("Sono in availableSubjects");
-                    Corso[] array7 = availableSubjects(request, response);
-                    if(array7 != null){
-                        String s15 = Arrays.toString(array7);
-                        String r15 = gson.toJson(s15);
+                    String out7 = availableSubjects(request, response);
+                    if(out7 != null){
+                        String r15 = gson.toJson(out7);
                         out.println(r15);
                     }
                     else {
@@ -395,35 +390,27 @@ public class ServletController extends HttpServlet {
     }
 
     //penso prenotazioni prenotabili
-    public Prenotazione[] viewOwnPrenotations(HttpServletRequest request, HttpServletResponse response) throws ServletException,
+    public String viewOwnPrenotations(HttpServletRequest request, HttpServletResponse response) throws ServletException,
             IOException {
-        ArrayList<Prenotazione> list = null;
+       String list = null;
         String username = request.getParameter("username");
         if(username == null){
             username = "*";
         }
         list = DAO.viewOwnPrenotations(username);
-        Prenotazione[] array = new Prenotazione[list.size()];
-        for (int i = 0; i < list.size(); i++) {
-            array[i] = list.get(i);
-        }
-        return array;
+        return list;
     }
 
     //penso prenotazioni mie prenotate effettivamente
-    public Prenotazione[] viewOwnActPrenotations(HttpServletRequest request, HttpServletResponse response) throws ServletException,
+    public String viewOwnActPrenotations(HttpServletRequest request, HttpServletResponse response) throws ServletException,
             IOException {
-        ArrayList<Prenotazione> list = null;
+        String list = null;
         String username = request.getParameter("username");
         if(username == null){
             username = "*";
         }
         list = DAO.viewOwnActPrenotations(username);
-        Prenotazione[] array = new Prenotazione[list.size()];
-        for (int i = 0; i < list.size(); i++) {
-            array[i] = list.get(i);
-        }
-        return array;
+        return list;
     }
 
     public /*Prenotazione[]*/ String viewAllPrenotations(HttpServletRequest request, HttpServletResponse response) throws ServletException,
@@ -431,23 +418,16 @@ public class ServletController extends HttpServlet {
         //ArrayList<Prenotazione> list;
         String list;
         list = DAO.viewAllPrenotations();
-        /*Prenotazione[] array = new Prenotazione[list.size()];
-        for (int i = 0; i < list.size(); i++) {
-            array[i] = list.get(i);
-        }
-        return array;
-         */
         return list;
     }
 
-    public Prenotazione[] filterPrenotations(HttpServletRequest request, HttpServletResponse response) throws ServletException,
+    public String filterPrenotations(HttpServletRequest request, HttpServletResponse response) throws ServletException,
             IOException {
-        ArrayList<Prenotazione> list = null;
+        String list = null;
         String slot_ora = request.getParameter("slot_ora");
         String data = request.getParameter("data");
         String materia = request.getParameter("materia");
         String docente = request.getParameter("docente");
-        String stato = request.getParameter("stato");
         if(data==null){
             data="*";
         }else if(materia==null){
@@ -458,16 +438,12 @@ public class ServletController extends HttpServlet {
             slot_ora="*";
         }
         list = DAO.filterPrenotations(slot_ora,data,materia,docente);
-        Prenotazione[] array = new Prenotazione[list.size()];
-        for (int i = 0; i < list.size(); i++) {
-            array[i] = list.get(i);
-        }
-        return array;
+        return list;
     }
 
-    public Docente[] filterProf(HttpServletRequest request, HttpServletResponse response) throws ServletException,
+    public String filterProf(HttpServletRequest request, HttpServletResponse response) throws ServletException,
             IOException {
-        ArrayList<Docente> list = null;
+        String list = null;
         String account = request.getParameter("account");
         String nomeCognome = request.getParameter("nomeCognome");
         String attivo = request.getParameter("attivo");
@@ -480,26 +456,18 @@ public class ServletController extends HttpServlet {
             attivo = "*";
         }
         list = DAO.filterProf(account,nomeCognome,attivo);
-        Docente[] array = new Docente[list.size()];
-        for (int i = 0; i < list.size(); i++) {
-            array[i] = list.get(i);
-        }
-        return array;
+        return list;
     }
 
-    public Corso[] availableSubjects(HttpServletRequest request, HttpServletResponse response) throws ServletException,
+    public String availableSubjects(HttpServletRequest request, HttpServletResponse response) throws ServletException,
             IOException {
-        ArrayList<Corso> list = null;
+        String list = null;
         String titolo = request.getParameter("titlo");
         if(titolo == null){
             titolo = "*";
         }
         list = DAO.availableSubjects(titolo);
-        Corso[] array = new Corso[list.size()];
-        for (int i = 0; i < list.size(); i++) {
-            array[i] = list.get(i);
-        }
-        return array;
+        return list;
     }
 
     public String inserimentoCorso(HttpServletRequest request, HttpServletResponse response) throws ServletException,
