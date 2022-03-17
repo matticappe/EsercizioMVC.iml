@@ -356,10 +356,9 @@
             </table>
         </div>
 
-        <li v-for="Prenotazione in allPrenotations">
-            {{Prenotazione}}
+        <li v-for="pCodice in allPrenotations">
+            {{pCodice, pUtente, pDocente, pCorso, pData, pSlot_ora}}
         </li>
-
     </div>
 
 
