@@ -298,16 +298,21 @@ public class DAO {
     }
 
     public static ArrayList<Prenotazione> viewAllPrenotations(){
+        System.out.println("sono in viewAllPrenotations");
         Connection conn1 = null;
         ArrayList<Prenotazione> out = new ArrayList<>();
         try{
             conn1 = DriverManager.getConnection(url1,user,password);
             if(conn1 != null){
+                System.out.println("connessione riuscita");
                 Statement st = conn1.createStatement();
-                ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONE WHERE UTENTE != null");
+                ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONE");
+                int i = 0;
                 while (rs.next()) {
                     //forse va rivista con una document.out per scrivere nel div corretto
                     Prenotazione p = new Prenotazione(rs.getString("codice"),rs.getString("utente"), rs.getString("docente"), rs.getString("corso"), rs.getString("data"), rs.getString("slot_ora"));
+                    System.out.println(i+" "+p.getCodice()+p.getUtente()+p.getDocente()+p.getCorso()+p.getData()+p.getSlot_ora());
+                    i++;
                     out.add(p);
                 }
             }
