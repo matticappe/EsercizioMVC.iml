@@ -325,12 +325,12 @@
                     <th scope="col">Prenotazione</th>
                 </tr>
                 </thead>
-                <tbody v-for="p in testPrenotations">
+                <tbody v-for="p in allPrenotations">
                 <tr>
-                    <td><div>{{p.pCorso}}</div></td>
-                    <td><div>{{p.pDocente}}</div></td>
-                    <td><div>{{p.pData}}</div></td>
-                    <td><div>{{p.pSlot_ora}}</div></td>
+                    <td><div>{{p.corso}}</div></td>
+                    <td><div>{{p.docente}}</div></td>
+                    <td><div>{{p.data}}</div></td>
+                    <td><div>{{p.slot_ora}}</div></td>
                     <td><button type="button" class="btn btn-primary" onclick="prenota(this)">Prenota</button>
                     </td>
                 </tr>
@@ -378,13 +378,17 @@
         </tr>
         </tbody>
         -->
-
         <!--
-        <div v-for="p in testPrenotations">
+        <div>
+            PRENOTAZIONE{{allPrenotations}}
+        </div>
         -->
-            <!-- questo funziona -->
-            <!--Codice: {{p.pCodice}} - Utente: {{p.pUtente}} - Docente: {{p.pDocente}} -Data: {{p.pData}} - Ora: {{p.pSlot_ora}}  -->
-            <!--
+
+        <div v-for="p in allPrenotations">
+            TEST{{p.codice}}
+        </div>
+        <!--
+        <div v-for="p in allPrenotations">
             <tr>
                 <td><div>{{p.pCorso}}</div></td>
                 <td><div>{{p.pDocente}}</div></td>
@@ -731,7 +735,7 @@
             codLogout: 'logout',
             message: 'testttt',
             codPrenotations: 'viewAllPrenotations',
-            allPrenotations: [],
+            allPrenotations:[],
             testPrenotations: [
                 {
                     pCodice: '001',
@@ -1301,7 +1305,7 @@
                     });
                 console.log('FINE PRIMA POST');
 
-                $.post("ServletController", {"username": this.username, "password": this.password, "invia": this.codPrenotations},function (data) {
+                $.get("ServletController", {"username": this.username, "password": this.password, "invia": this.codPrenotations},function (data) {
                     console.log('sono nella post get prenotations');
                     self.allPrenotations = data;
                 });
@@ -1334,7 +1338,7 @@
             }
             */
         }
-    })
+    });
 </script>
 <script type="text/javascript">(function(){window['__CF$cv$params']={r:'6da386ef8a275a31',m:'3rL.fud4n.f99SrlZN6LTG5AKwOzFwM_MvG6TOdPl4o-1644309353-0-AWNPuc/s9PCbZkzph/V1BQ4DdztvvMfQ5AdBmdz7a3WgXjkPDRc6F7ot2CjvK74lYjAtbc99hus2s38HPXWEdQg6V9KA//FaoGIRigG0dF6MhwVyk702Pl27nn/XkSI6k9TqrL5jAzqf/j8N9vzCMyWPyWJU7nVavay0n5XVac+w4+6NlF76xselqoll8o78DA==',s:[0x072d80e02a,0x6e1dc2f7d6],}})();</script></body>
 

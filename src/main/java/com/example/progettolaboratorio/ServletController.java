@@ -26,7 +26,7 @@ public class ServletController extends HttpServlet {
     }
     public String risTest;
 
-    private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException,
+    public void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException,
             IOException {
         try(PrintWriter out = response.getWriter()) {
             response.setContentType("application/json");
@@ -125,7 +125,7 @@ public class ServletController extends HttpServlet {
                 case "viewAllPrenotations":
                     System.out.println("Sono in viewAllPrenotations");
                     //Prenotazione[] array3 = viewAllPrenotations(request, response);
-                    String string3 = viewAllPrenotations(request, response);
+                    /*String*/ ArrayList<Prenotazione> string3 = viewAllPrenotations(request, response);
                     /*System.out.println("test array3[]");
                     for(int i = 0; i<array3.length; i++){
                         System.out.println(i+" "+array3[i].getCodice()+array3[i].getUtente()+array3[i].getDocente()+array3[i].getData()+array3[i].getSlot_ora()+array3[i].getCorso());
@@ -144,6 +144,9 @@ public class ServletController extends HttpServlet {
                         System.out.println("sono nell if viewAllPrenotations");
                         //String r11 = Arrays.copyOf(array3, array3.length, String[].class);
                         System.out.println(string3);
+                        for(Prenotazione str: string3){
+                            System.out.println(str.getCodice()+str.getUtente()+str.getDocente()+str.getCorso()+str.getData()+str.getSlot_ora()+"\n");
+                        }
                         System.out.println("test Stringa");
                         String s11 = gson.toJson(string3);
                         out.println(s11);
@@ -413,10 +416,10 @@ public class ServletController extends HttpServlet {
         return list;
     }
 
-    public /*Prenotazione[]*/ String viewAllPrenotations(HttpServletRequest request, HttpServletResponse response) throws ServletException,
+    public /*Prenotazione[]*/ /*String*/ ArrayList<Prenotazione> viewAllPrenotations(HttpServletRequest request, HttpServletResponse response) throws ServletException,
             IOException {
-        //ArrayList<Prenotazione> list;
-        String list;
+        ArrayList<Prenotazione> list;
+        //String list;
         list = DAO.viewAllPrenotations();
         return list;
     }
