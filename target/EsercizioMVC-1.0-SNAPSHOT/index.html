@@ -221,11 +221,11 @@
     <!--  ------------------------------INIZIO SCHERMATA UTENTI REGISTRATI-----------------------------------------  -->
 
     <div v-if="setVisibleLogin=='2'" id="logoutUtenteRegistrato" class="logout">
+        {{setVisiblePrenotations}}
         <button type="button" v-on:click="setVisibleLogin='0'; registeredUserLogout()" class="btn btn-secondary"
                 data-toggle="tooltip" data-placement="top" title="Tooltip on top">
             Logout
         </button>
-
     </div>
     <div v-if="setVisibleLogin=='2'" id="userScreenUtenteRegistrato" class="row">
         <div class="column1">
@@ -313,7 +313,7 @@
 
 
 
-        <div class="column2">
+        <div class="column2" v-if="getRegisteredPrenotations()">
             <table class="table">
                 <thead class="thead-light">
                 <tr>
@@ -666,6 +666,7 @@
         el: '#loginScreen',
         data: {
             setVisibleLogin: '0',         //0 = login, 1=non registrati, 2=registrati, 3=docenti, 4=admin
+            setVisiblePrenotations: '9999',
             username: '',
             password: '',
             risposta: 'falso',
@@ -697,6 +698,20 @@
                 });
             },
 
+            /*
+            viewPrenotazioniRegistered: function(){
+                let self = this;
+                this.messaggione = 'porcoddio';
+                self.messaggione = 'porcoddio';
+                $.get("ServletController", {"username": this.username, "password": this.password, "invia": this.codPrenotations},function (data2) {
+                    console.log('sono nella post get prenotations');
+                    this.allPrenotations = data2;
+                    self.allPrenotations = data2;
+                });
+            },
+            */
+
+
             /*getRegistUser: function() {
                 console.log('sono nel getregisteredUser');
                 if(this.setVisibleLogin==='2') {
@@ -706,9 +721,7 @@
                     //posso usare una get o una post che andra a parlare con la servlet (dovro modificare la servlet per avere nome utente e i vari dati delle richieste)
                     //prendo le prenotazioni disponibili e le metto in un array o matrice, che poi procedo a far vedere sul sito.
                     //devo capire come far vedere cose coi for stile tabella con vue.
-
                     //Prenotazione: codice, utente, docente, corso, data, slot_ora
-
                     $.post("ServletController", {
                         "username": this.username,
                         "password": this.password,
@@ -735,51 +748,74 @@
                 //NB quando sto cercando di vedere se uno slot di un prof e materia è libero io devo controllare anche che il professore che ha quello slot non sia gia impegnato nella stessa ora per un altra materia.
 
                 $.post("ServletController", { "username": this.username, "password": this.password, "invia":this.codLogin },function (data) {
-                        self.risposta = data;
+                    self.risposta = data;
+                    console.log("Risposta1 "+data);
+                    console.log("Risposta2 "+self.risposta);
+                    console.log("Risposta2 "+this.risposta);
+                    console.log('FINE PRIMA POST');
+
+                    if(self.risposta==='utenteRegistrato'){
+                        self.setVisibleLogin='2';
+                        console.log("vis0.1 "+this.setVisibleLogin);    //li vedo entrambi, this e self
+                        console.log("vis0.2 "+self.setVisibleLogin);
+
+                    }else if(self.risposta==='Guest'){
+                        self.setVisibleLogin='1';
+                        console.log("vis0.3 "+this.setVisibleLogin);    //li vedo entrambi, this e self
+                        console.log("vis0.4 "+self.setVisibleLogin);
+
+                    }else /*if(self.risposta==='Login Errato')*/{
+                        //devo printare sul sito un messaggio di errore
+                        //AKA faccio apparire un div rigorosamente rosso
+                        self.message=self.risposta;
                         self.loginError='vero';
-                        this.message=self.risposta;
-                        console.log("Risposta1 "+data);
-                        console.log("Risposta2 "+self.risposta);
+                    }
 
-
-
-                        if(self.risposta==='utenteRegistrato'){
-                            self.setVisibleLogin='2';
-                            console.log("vis0.1 "+this.setVisibleLogin);    //li vedo entrambi, this e self
-                            console.log("vis0.2 "+self.setVisibleLogin);
-
-                        }else if(self.risposta==='Guest'){
-                            self.setVisibleLogin='1';
-                            console.log("vis0.1 "+this.setVisibleLogin);    //li vedo entrambi, this e self
-                            console.log("vis0.2 "+self.setVisibleLogin);
-
-                        }else if(self.risposta==='Login Errato'){
-                            //devo printare sul sito un messaggio di errore
-                            //AKA faccio apparire un div rigorosamente rosso
-                            self.message=self.risposta;
-                            self.loginError='vero';
-                        }
-
-                    });
-                console.log('FINE PRIMA POST');
-
-                $.get("ServletController", {"username": this.username, "password": this.password, "invia": this.codPrenotations},function (data) {
-                    console.log('sono nella post get prenotations');
-                    self.allPrenotations = data;
                 });
 
+                /*.then(
+                    this.registeredUser(function(){
+                    })
+                );*/
 
 
                 //i dati vengono modificati in anticipo dentro alla post, e troppo tardi qual fuori.
                 // nella post devo fare dei richiami ai metodi  e passargli i dati aggiornati.
                 //essi funzioneranno se modifico i this oltre ai self (non posso pero ditchare i this, perche a ogni richiamo possono servirmi risposte e messaggi diversi e magari piu di uno)
 
-                console.log("vis1 "+this.setVisibleLogin);      //li vede entrambi a 0 perche esegue subito dopo la post e data non è ancora arrivato nella post e quindi non sono ancora stati aggiornati
-                console.log("vis2 "+self.setVisibleLogin);
+
+                //DEVO IN QUALCHE MODO ASPETTARE CHE LA POST SIA FINITA.
 
 
             },
 
+            getRegisteredPrenotations:function(){
+                let self = this;
+                $.get("ServletController", {"username": this.username, "password": this.password, "invia": this.codPrenotations},function (data2) {
+                    console.log('sono nella post get prenotations');
+                    self.allPrenotations = data2;
+                });
+                return 1;
+            },
+
+            /*
+            registeredUser:function() {
+                let self=this;
+
+                console.log("sono nella registeredUsers");
+
+                console.log("this.risposta= "+this.risposta);
+                if(this.risposta === 'utenteRegistrato'){
+                    $.post("ServletController", {"username": this.username, "password": this.password, "invia": this.codPrenotations},function (data) {
+                        console.log('sono nella post get prenotations');
+                        self.allPrenotations = data;
+                    });
+                }
+
+
+
+            },
+            */
 
 
 
@@ -801,4 +837,3 @@
 <script type="text/javascript">(function(){window['__CF$cv$params']={r:'6da386ef8a275a31',m:'3rL.fud4n.f99SrlZN6LTG5AKwOzFwM_MvG6TOdPl4o-1644309353-0-AWNPuc/s9PCbZkzph/V1BQ4DdztvvMfQ5AdBmdz7a3WgXjkPDRc6F7ot2CjvK74lYjAtbc99hus2s38HPXWEdQg6V9KA//FaoGIRigG0dF6MhwVyk702Pl27nn/XkSI6k9TqrL5jAzqf/j8N9vzCMyWPyWJU7nVavay0n5XVac+w4+6NlF76xselqoll8o78DA==',s:[0x072d80e02a,0x6e1dc2f7d6],}})();</script></body>
 
 </html>
-
