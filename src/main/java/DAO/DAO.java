@@ -300,17 +300,16 @@ public class DAO {
         return out;
     }
 
-    public static /*String*/ ArrayList<Prenotazione> viewAllPrenotations(){
+    public static ArrayList<Prenotazione> viewAllPrenotations(){
         System.out.println("sono in viewAllPrenotations");
         Connection conn1 = null;
         ArrayList<Prenotazione> out = new ArrayList<>();
-        //String out = "[ ";
         try{
             conn1 = DriverManager.getConnection(url1,user,password);
             if(conn1 != null){
                 System.out.println("connessione riuscita");
                 Statement st = conn1.createStatement();
-                ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONE");
+                ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONE WHERE UTENTE =="+null);
                 int i = 0;
                 Prenotazione p;
                 while (rs.next()) {
@@ -318,13 +317,6 @@ public class DAO {
                     p = new Prenotazione(rs.getString("codice"),rs.getString("utente"), rs.getString("docente"), rs.getString("corso"), rs.getString("data"), rs.getString("slot_ora"));
                     System.out.println(i+" "+p.getCodice()+p.getUtente()+p.getDocente()+p.getCorso()+p.getData()+p.getSlot_ora());
                     out.add(p);
-                    /*
-                    if(i!=0)
-                        out = out + ", ";
-                    out = out + "{ \"pCodice\": \""+p.getCodice()+"\", \"pUtente\": \""+p.getUtente()+"\", \"pDocente\": \""+p.getDocente()+"\", \"pCorso\": \""+p.getCorso()+"\", \"pData\": \""+p.getData()+"\", \"pSlot_ora\": \""+p.getSlot_ora()+"\"}";
-                    i++;
-
-                */
                 }
             }
 
@@ -339,7 +331,6 @@ public class DAO {
                 throwables.printStackTrace();
             }
         }
-        //out = out+"\n]";
         return out;
     }
 

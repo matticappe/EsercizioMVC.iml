@@ -211,7 +211,6 @@ public class ServletController extends HttpServlet {
                         String s14 = "Nessun corso trovato";
                         String r14 = gson.toJson(s14);
                         out.println(r14);
-
                     }
                     break;
 
@@ -223,6 +222,7 @@ public class ServletController extends HttpServlet {
                     break;
 
                 case "logout":
+                    System.out.println("Sono in logout");
                     String lout=logout(request, response);
                     String sLout = gson.toJson(lout);
                     out.println(sLout);
