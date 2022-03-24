@@ -221,7 +221,7 @@
     <!--  ------------------------------INIZIO SCHERMATA UTENTI REGISTRATI-----------------------------------------  -->
 
     <div v-if="setVisibleLogin=='2'" id="logoutUtenteRegistrato" class="logout">
-        {{setVisiblePrenotations}}
+        {{viewElencoPrenotazioni}}
         <button type="button" v-on:click="setVisibleLogin='0'; registeredUserLogout()" class="btn btn-secondary"
                 data-toggle="tooltip" data-placement="top" title="Tooltip on top">
             Logout
@@ -239,15 +239,13 @@
                 <tr>
                     <td>
                         <div class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle" type="button"
+                            <button v-on:click="getAllSubjects()" class="btn btn-secondary dropdown-toggle" type="button"
                                     id="dropdownMenuButton1UtenteRegistrato" data-toggle="dropdown"
                                     aria-haspopup="true" aria-expanded="false">
                                 Seleziona materia
                             </button>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" href="#">Action</a>
-                                <a class="dropdown-item" href="#">Another action</a>
-                                <a class="dropdown-item" href="#">Something else here</a>
+                            <div v-for="s in allSubjects" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="#">{{s.titolo}}</a>
                             </div>
                         </div>
                     </td>
@@ -313,7 +311,7 @@
 
 
 
-        <div class="column2" v-if="getRegisteredPrenotations()">
+        <div class="column2">
             <table class="table">
                 <thead class="thead-light">
                 <tr>
@@ -325,8 +323,8 @@
                     <th scope="col">Prenotazione</th>
                 </tr>
                 </thead>
-                <tbody v-for="p in allPrenotations">
-                <tr>
+                <tbody>
+                <tr v-for="p in allPrenotations">
                     <td><div>{{p.corso}}</div></td>
                     <td><div>{{p.docente}}</div></td>
                     <td><div>{{p.data}}</div></td>
@@ -675,9 +673,15 @@
             loginError: '',
             codLogin: 'login',
             codLogout: 'logout',
-            message: 'testttt',
+            codSubjects: 'availableSubjects',
             codPrenotations: 'viewAllPrenotations',
-            allPrenotations:[]
+            allPrenotations:[],
+            allSubjects: [],
+            viewElencoPrenotazioni: false
+        },
+
+        mounted:function(){
+            this.getRegisteredPrenotations();
         },
 
 
@@ -698,43 +702,6 @@
                 });
             },
 
-            /*
-            viewPrenotazioniRegistered: function(){
-                let self = this;
-                this.messaggione = 'porcoddio';
-                self.messaggione = 'porcoddio';
-                $.get("ServletController", {"username": this.username, "password": this.password, "invia": this.codPrenotations},function (data2) {
-                    console.log('sono nella post get prenotations');
-                    this.allPrenotations = data2;
-                    self.allPrenotations = data2;
-                });
-            },
-            */
-
-
-            /*getRegistUser: function() {
-                console.log('sono nel getregisteredUser');
-                if(this.setVisibleLogin==='2') {
-                    console.log("SONO NEL GETREGIST USER" + self.setVisibleLogin);
-                    //molto bene, i dati sono aggiornati e questa funzione viene richiamata dopo alla post
-                    //riempio il database, poi devo recuperarmi cio che mi serve per le prenotazioni e metterlo nei campi
-                    //posso usare una get o una post che andra a parlare con la servlet (dovro modificare la servlet per avere nome utente e i vari dati delle richieste)
-                    //prendo le prenotazioni disponibili e le metto in un array o matrice, che poi procedo a far vedere sul sito.
-                    //devo capire come far vedere cose coi for stile tabella con vue.
-                    //Prenotazione: codice, utente, docente, corso, data, slot_ora
-                    $.post("ServletController", {
-                        "username": this.username,
-                        "password": this.password,
-                        "invia": this.codPrenotations
-                    }).then(function (data) {
-                        console.log('sono nella post get prenotations');
-                        //self.allPrenotations = data;
-                        //this.allPrenotations = data;
-                        //console.log(self.allPrenotations);
-                    });
-                }
-            },
-            */
             login:function() {
                 let self = this;
 
@@ -773,49 +740,27 @@
 
                 });
 
-                /*.then(
-                    this.registeredUser(function(){
-                    })
-                );*/
-
-
-                //i dati vengono modificati in anticipo dentro alla post, e troppo tardi qual fuori.
-                // nella post devo fare dei richiami ai metodi  e passargli i dati aggiornati.
-                //essi funzioneranno se modifico i this oltre ai self (non posso pero ditchare i this, perche a ogni richiamo possono servirmi risposte e messaggi diversi e magari piu di uno)
-
-
-                //DEVO IN QUALCHE MODO ASPETTARE CHE LA POST SIA FINITA.
-
-
             },
 
             getRegisteredPrenotations:function(){
                 let self = this;
+                console.log("sono in get registered prenotations");
                 $.get("ServletController", {"username": this.username, "password": this.password, "invia": this.codPrenotations},function (data2) {
                     console.log('sono nella post get prenotations');
                     self.allPrenotations = data2;
+                }).then(
+                self.viewElencoPrenotazioni = true);
+            },
+
+            getAllSubjects:function(){
+                let self = this;
+                $.get("ServletController", {"invia": this.codSubjects},function (data3) {
+                    self.allSubjects = data3;
                 });
-                return 1;
-            },
-
-            /*
-            registeredUser:function() {
-                let self=this;
-
-                console.log("sono nella registeredUsers");
-
-                console.log("this.risposta= "+this.risposta);
-                if(this.risposta === 'utenteRegistrato'){
-                    $.post("ServletController", {"username": this.username, "password": this.password, "invia": this.codPrenotations},function (data) {
-                        console.log('sono nella post get prenotations');
-                        self.allPrenotations = data;
-                    });
-                }
+                console.log("sono in get all subjects");
+            }
 
 
-
-            },
-            */
 
 
 

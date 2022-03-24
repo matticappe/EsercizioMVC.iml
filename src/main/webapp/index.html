@@ -221,7 +221,7 @@
     <!--  ------------------------------INIZIO SCHERMATA UTENTI REGISTRATI-----------------------------------------  -->
 
     <div v-if="setVisibleLogin=='2'" id="logoutUtenteRegistrato" class="logout">
-        {{setVisiblePrenotations}}
+        {{viewElencoPrenotazioni}}
         <button type="button" v-on:click="setVisibleLogin='0'; registeredUserLogout()" class="btn btn-secondary"
                 data-toggle="tooltip" data-placement="top" title="Tooltip on top">
             Logout
@@ -239,15 +239,13 @@
                 <tr>
                     <td>
                         <div class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle" type="button"
+                            <button v-on:click="getAllSubjects()" class="btn btn-secondary dropdown-toggle" type="button"
                                     id="dropdownMenuButton1UtenteRegistrato" data-toggle="dropdown"
                                     aria-haspopup="true" aria-expanded="false">
                                 Seleziona materia
                             </button>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" href="#">Action</a>
-                                <a class="dropdown-item" href="#">Another action</a>
-                                <a class="dropdown-item" href="#">Something else here</a>
+                            <div v-for="s in allSubjects" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="#">{{s.titolo}}</a>
                             </div>
                         </div>
                     </td>
@@ -313,7 +311,7 @@
 
 
 
-        <div class="column2" v-if="getRegisteredPrenotations()">
+        <div class="column2">
             <table class="table">
                 <thead class="thead-light">
                 <tr>
@@ -325,8 +323,8 @@
                     <th scope="col">Prenotazione</th>
                 </tr>
                 </thead>
-                <tbody v-for="p in allPrenotations">
-                <tr>
+                <tbody>
+                <tr v-for="p in allPrenotations">
                     <td><div>{{p.corso}}</div></td>
                     <td><div>{{p.docente}}</div></td>
                     <td><div>{{p.data}}</div></td>
@@ -675,9 +673,15 @@
             loginError: '',
             codLogin: 'login',
             codLogout: 'logout',
-            message: 'testttt',
+            codSubjects: 'availableSubjects',
             codPrenotations: 'viewAllPrenotations',
-            allPrenotations:[]
+            allPrenotations:[],
+            allSubjects: [],
+            viewElencoPrenotazioni: false
+        },
+
+        mounted:function(){
+            this.getRegisteredPrenotations();
         },
 
 
@@ -697,7 +701,7 @@
 
                 });
             },
-            
+
             login:function() {
                 let self = this;
 
@@ -740,12 +744,21 @@
 
             getRegisteredPrenotations:function(){
                 let self = this;
+                console.log("sono in get registered prenotations");
                 $.get("ServletController", {"username": this.username, "password": this.password, "invia": this.codPrenotations},function (data2) {
                     console.log('sono nella post get prenotations');
                     self.allPrenotations = data2;
-                });
-                return 1;
+                }).then(
+                self.viewElencoPrenotazioni = true);
             },
+
+            getAllSubjects:function(){
+                let self = this;
+                $.get("ServletController", {"invia": this.codSubjects},function (data3) {
+                    self.allSubjects = data3;
+                });
+                console.log("sono in get all subjects");
+            }
 
 
 
