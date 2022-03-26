@@ -486,7 +486,7 @@ public class DAO {
         return out;
     }
 
-    public static ArrayList<Corso> availableSubjects(String titolo){
+    public static ArrayList<Corso> availableSubjects(){
         Connection conn1 = null;
         //String out = "";
         ArrayList<Corso> out = new ArrayList<>();
@@ -494,7 +494,7 @@ public class DAO {
             conn1 = DriverManager.getConnection(url1,user,password);
             if(conn1 != null){
                 Statement st = conn1.createStatement();
-                ResultSet rs = st.executeQuery("SELECT * FROM CORSO WHERE TITOLO= '" +titolo+"'");
+                ResultSet rs = st.executeQuery("SELECT * FROM CORSO");
                 int i = 0;
                 while (rs.next()) {
                     //forse va rivista con una document.out per scrivere nel div corretto

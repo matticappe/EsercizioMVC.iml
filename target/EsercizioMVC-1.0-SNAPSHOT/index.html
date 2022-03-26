@@ -239,13 +239,15 @@
                 <tr>
                     <td>
                         <div class="dropdown">
-                            <button v-on:click="getAllSubjects()" class="btn btn-secondary dropdown-toggle" type="button"
+                            <button v-on:click="getAllSubjects" class="btn btn-secondary dropdown-toggle" type="button"
                                     id="dropdownMenuButton1UtenteRegistrato" data-toggle="dropdown"
                                     aria-haspopup="true" aria-expanded="false">
                                 Seleziona materia
                             </button>
+                            <div v-if="allSubjectsComplete">
                             <div v-for="s in allSubjects" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" href="#">{{s.titolo}}</a>
+                                <div><a class="dropdown-item" href="#">{{s.titolo}}</a></div>
+                            </div>
                             </div>
                         </div>
                     </td>
@@ -677,8 +679,8 @@
             codSubjects: 'availableSubjects',
             codPrenotations: 'viewAllPrenotations',
             allPrenotations:[],
-            allSubjects: [],
-            viewElencoPrenotazioni: []
+            allSubjects:[],
+            allSubjectsComplete: false
         },
 
         mounted:function(){
@@ -750,6 +752,7 @@
                     console.log('sono nella post get prenotations');
                     self.allPrenotations = data2;
                 });
+
             },
 
             getAllSubjects:function(){
@@ -759,6 +762,7 @@
                     self.viewElencoPrenotazioni = data3;
                     console.log(data3);
                 });
+                self.allSubjectsComplete = !self.allSubjectsComplete;
                 console.log("sono in get all subjects");
             }
 

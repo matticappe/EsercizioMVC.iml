@@ -465,11 +465,12 @@ public class ServletController extends HttpServlet {
     public ArrayList<Corso> availableSubjects(HttpServletRequest request, HttpServletResponse response) throws ServletException,
             IOException {
         ArrayList<Corso> list;
-        String titolo = request.getParameter("titlo");
-        if(titolo == null){
-            titolo = "*";
-        }
-        list = DAO.availableSubjects(titolo);
+        //String titolo = request.getParameter("titlo");
+        //System.out.println(titolo);
+        //if(titolo == null){
+        //    titolo = "*";
+        //}
+        list = DAO.availableSubjects();
         return list;
     }
 
