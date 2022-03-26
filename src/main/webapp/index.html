@@ -221,7 +221,7 @@
     <!--  ------------------------------INIZIO SCHERMATA UTENTI REGISTRATI-----------------------------------------  -->
 
     <div v-if="setVisibleLogin=='2'" id="logoutUtenteRegistrato" class="logout">
-        {{viewElencoPrenotazioni}}
+        {{username}}
         <button type="button" v-on:click="setVisibleLogin='0'; registeredUserLogout()" class="btn btn-secondary"
                 data-toggle="tooltip" data-placement="top" title="Tooltip on top">
             Logout
@@ -329,7 +329,8 @@
                     <td><div>{{p.docente}}</div></td>
                     <td><div>{{p.data}}</div></td>
                     <td><div>{{p.slot_ora}}</div></td>
-                    <td><button type="button" class="btn btn-primary" onclick="prenota(this)">Prenota</button>
+                    <td><button type="button" class="btn btn-primary" v-if="p.utente !== username" onclick="prenota(this)">Prenota</button>
+                    <button type="button" class="btn btn-primary" v-if="p.utente === username" onclick="prenota(this)">Disdici prenotazione</button>
                     </td>
                 </tr>
 
@@ -677,7 +678,7 @@
             codPrenotations: 'viewAllPrenotations',
             allPrenotations:[],
             allSubjects: [],
-            viewElencoPrenotazioni: false
+            viewElencoPrenotazioni: []
         },
 
         mounted:function(){
@@ -748,14 +749,15 @@
                 $.get("ServletController", {"username": this.username, "password": this.password, "invia": this.codPrenotations},function (data2) {
                     console.log('sono nella post get prenotations');
                     self.allPrenotations = data2;
-                }).then(
-                self.viewElencoPrenotazioni = true);
+                });
             },
 
             getAllSubjects:function(){
                 let self = this;
                 $.get("ServletController", {"invia": this.codSubjects},function (data3) {
                     self.allSubjects = data3;
+                    self.viewElencoPrenotazioni = data3;
+                    console.log(data3);
                 });
                 console.log("sono in get all subjects");
             }
