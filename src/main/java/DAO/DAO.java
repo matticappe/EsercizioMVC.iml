@@ -300,11 +300,10 @@ public class DAO {
         return out;
     }
 
-    public static /*String*/ ArrayList<Prenotazione> viewAllPrenotations(){
+    public static ArrayList<Prenotazione> viewAllPrenotations(){
         System.out.println("sono in viewAllPrenotations");
         Connection conn1 = null;
         ArrayList<Prenotazione> out = new ArrayList<>();
-        //String out = "[ ";
         try{
             conn1 = DriverManager.getConnection(url1,user,password);
             if(conn1 != null){
@@ -318,13 +317,6 @@ public class DAO {
                     p = new Prenotazione(rs.getString("codice"),rs.getString("utente"), rs.getString("docente"), rs.getString("corso"), rs.getString("data"), rs.getString("slot_ora"));
                     System.out.println(i+" "+p.getCodice()+p.getUtente()+p.getDocente()+p.getCorso()+p.getData()+p.getSlot_ora());
                     out.add(p);
-                    /*
-                    if(i!=0)
-                        out = out + ", ";
-                    out = out + "{ \"pCodice\": \""+p.getCodice()+"\", \"pUtente\": \""+p.getUtente()+"\", \"pDocente\": \""+p.getDocente()+"\", \"pCorso\": \""+p.getCorso()+"\", \"pData\": \""+p.getData()+"\", \"pSlot_ora\": \""+p.getSlot_ora()+"\"}";
-                    i++;
-
-                */
                 }
             }
 
@@ -339,14 +331,12 @@ public class DAO {
                 throwables.printStackTrace();
             }
         }
-        //out = out+"\n]";
         return out;
     }
 
     //storico utente
     public static ArrayList<Prenotazione> viewOwnPrenotations(String utente){
         Connection conn1 = null;
-        //String out = "";
         ArrayList<Prenotazione> out = new ArrayList<>();
         try{
             conn1 = DriverManager.getConnection(url1,user,password);
@@ -355,7 +345,6 @@ public class DAO {
                 ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONE WHERE UTENTE ="  + utente);
                 int i = 0;
                 while (rs.next()) {
-                    //forse va rivista con una document.out per scrivere nel div corretto
                     Prenotazione p = new Prenotazione(rs.getString("codice"),rs.getString("utente"), rs.getString("docente"), rs.getString("corso"), rs.getString("data"), rs.getString("slot_ora"));
                     System.out.println(i + " " + p.getCodice() + p.getUtente() + p.getDocente() + p.getCorso() + p.getData() + p.getSlot_ora());
                     out.add(p);
@@ -468,8 +457,7 @@ public class DAO {
     //tutto cio' che in input è null va gestito con *
     public static ArrayList<Docente> filterProf(String account, String nomeCognome, String attivo){
         Connection conn1 = null;
-        ArrayList<Docente> out = new ArrayList<>();
-        //String out = "";
+        ArrayList<Docente> out = new ArrayList<>();;
         try{
             conn1 = DriverManager.getConnection(url1,user,password);
             if(conn1 != null){
@@ -481,12 +469,6 @@ public class DAO {
                     Docente d = new Docente(rs.getString("account"),rs.getString("password"), rs.getString("ruolo"), rs.getString("nomeCognome"),rs.getString("attivo"));
                     System.out.println(i + " " + d.getAccount() + d.getRuolo() + d.getNomeCognome() + d.getAttivo());
                     out.add(d);
-                    /*
-                    if(i != 0)
-                        out = out + ",\n";
-                    out = out + "{\n Account docente: '" + d.getAccount() + "',\n Ruolo docente: '"+d.getRuolo()+"',\n Nome Cognome: '"+d.getNomeCognome()+"',\n Attivo: '"+d.getAttivo()+"'\n}";
-                    i++;
-                     */
                 }
             }
 
@@ -518,14 +500,6 @@ public class DAO {
                     //forse va rivista con una document.out per scrivere nel div corretto
                     Corso c = new Corso(rs.getString("Titolo"));
                     out.add(c);
-
-                    /*
-                    if(i != 0)
-                        out = out + ",\n";
-                    out = out + "{\n Corso: '" + c.getTitolo();
-                    i++;
-
-                     */
                 }
             }
 
