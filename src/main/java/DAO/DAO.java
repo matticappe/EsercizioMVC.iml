@@ -414,7 +414,7 @@ public class DAO {
     //filtra per fascia oraria, giorno, materia e professore
     //da gestire nella servlet il controllo dell'input
     //tutto cio' che in input è null va gestito con *
-    public static ArrayList<Prenotazione> filterPrenotations(String slot_ora, String data, String corso, String docente){
+    public static ArrayList<Prenotazione> filterPrenotations(String slot_ora, String data, String corso, String docente, String utente){
         Connection conn1 = null;
         ArrayList<Prenotazione> out = new ArrayList<>();
         //String out = " ";
@@ -422,20 +422,20 @@ public class DAO {
             conn1 = DriverManager.getConnection(url1,user,password);
             if(conn1 != null){
                 Statement st = conn1.createStatement();
-                ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONE WHERE SLOT_ORA= '" +slot_ora+"'" +"AND DATA= '"+data+"'"+" AND CORSO= '" +corso+"'"+"AND PROFESSORE= '"+docente+"'");
+                ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONE WHERE DATA = '*'" );   //CONTROLLA LE VIRGOLETTE DOVE CI SONO TUTTI I +...+...+...+
+/*
+                ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONE WHERE DOCENTE = '"+docente+"' AND CORSO ='"+corso+"' AND DATA ='"+data+"' AND SLOT_ORA ='"+slot_ora+"'" );   //CONTROLLA LE VIRGOLETTE DOVE CI SONO TUTTI I +...+...+...+
+      */
                 int i = 0;
                 while (rs.next()) {
                     //forse va rivista con una document.out per scrivere nel div corretto
                     Prenotazione p = new Prenotazione(rs.getString("codice"),rs.getString("utente"), rs.getString("docente"), rs.getString("corso"), rs.getString("data"), rs.getString("slot_ora"));
                     System.out.println(i + " " + p.getCodice() + p.getUtente() + p.getDocente() + p.getCorso() + p.getData() + p.getSlot_ora());
                     out.add(p);
-                    /*
-                    if(i != 0)
-                        out = out + ",\n";
-                    out = out + "{\n Codice prenotazione: '" + p.getCodice() + "',\n Utente: '" + p.getUtente() + "',\n Docente: '" + p.getDocente() + "',\n Corso: '" + p.getCorso() + "',\n Data: '" + p.getData()+"',\n pSlot_ora: '"+ p.getSlot_ora() + "',\n}";
-                    i++;
-                     */
+
                 }
+                //Prenotazione p = new Prenotazione("impestata", "dio", "cane", "e", "la", "madonna");
+                //out.add(p);
             }
 
         } catch (SQLException e){
@@ -455,14 +455,16 @@ public class DAO {
     //filtra per nome,cognome,codiceProf e se attivo
     //da gestire nella servlet il controllo dell'input
     //tutto cio' che in input è null va gestito con *
-    public static ArrayList<Docente> filterProf(String account, String nomeCognome, String attivo){
+
+    //modifica cappe, filtra tutti i docenti attivi per l user, che allo stronzo normale servono solo loro
+    public static ArrayList<Docente> filterProf(){
         Connection conn1 = null;
-        ArrayList<Docente> out = new ArrayList<>();;
+        ArrayList<Docente> out = new ArrayList<>();
         try{
             conn1 = DriverManager.getConnection(url1,user,password);
             if(conn1 != null){
                 Statement st = conn1.createStatement();
-                ResultSet rs = st.executeQuery("SELECT * FROM DOCENTE WHERE ACCOUNT= '" +account+"'" +"AND NOMECOGNOME= '"+nomeCognome+"'"+ "AND ATTIVO= '"+attivo+"'");
+                ResultSet rs = st.executeQuery("SELECT * FROM DOCENTE WHERE ATTIVO= '1'");
                 int i = 0;
                 while (rs.next()) {
                     //forse va rivista con una document.out per scrivere nel div corretto
@@ -485,6 +487,8 @@ public class DAO {
         }
         return out;
     }
+
+
 
     public static ArrayList<Corso> availableSubjects(){
         Connection conn1 = null;

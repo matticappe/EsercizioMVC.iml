@@ -64,8 +64,9 @@
 
                             type="button" value="login">Sign in
                     </button>
-                    <!--
+
                     <h3 v-if="loginError=='vero'">{{message}}</h3>
+                    <!--
                     <div v-for="error in errorMessage"><p>{{error.result}}</p></div>
                     -->
                 </form>
@@ -221,7 +222,7 @@
     <!--  ------------------------------INIZIO SCHERMATA UTENTI REGISTRATI-----------------------------------------  -->
 
     <div v-if="setVisibleLogin=='2'" id="logoutUtenteRegistrato" class="logout">
-        {{username}}
+        {{allPrenotations}}
         <button type="button" v-on:click="setVisibleLogin='0'; registeredUserLogout()" class="btn btn-secondary"
                 data-toggle="tooltip" data-placement="top" title="Tooltip on top">
             Logout
@@ -239,15 +240,13 @@
                 <tr>
                     <td>
                         <div class="dropdown">
-                            <button v-on:click="getAllSubjects" class="btn btn-secondary dropdown-toggle" type="button"
+                            <button class="btn btn-secondary dropdown-toggle" type="button"
                                     id="dropdownMenuButton1UtenteRegistrato" data-toggle="dropdown"
                                     aria-haspopup="true" aria-expanded="false">
                                 Seleziona materia
                             </button>
-                            <div v-if="allSubjectsComplete">
-                            <div v-for="s in allSubjects" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <div><a class="dropdown-item" href="#">{{s.titolo}}</a></div>
-                            </div>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" v-for="s in allSubjects">{{s.titolo}}</a>
                             </div>
                         </div>
                     </td>
@@ -261,9 +260,7 @@
                                 Seleziona professore
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" href="#">Action</a>
-                                <a class="dropdown-item" href="#">Another action</a>
-                                <a class="dropdown-item" href="#">Something else here</a>
+                                <a class="dropdown-item" v-for="p in allProfs">{{p.nomeCognome}}</a>
                             </div>
                         </div>
                     </td>
@@ -277,9 +274,11 @@
                                 Seleziona giorno
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" href="#">Action</a>
-                                <a class="dropdown-item" href="#">Another action</a>
-                                <a class="dropdown-item" href="#">Something else here</a>
+                                <a v-on:click="filterPrenotations(), dataPren='07/03/2022'" class="dropdown-item" href="#">07/03/2022</a>
+                                <a class="dropdown-item" href="#">08/03/2022</a>
+                                <a class="dropdown-item" href="#">09/03/2022</a>
+                                <a class="dropdown-item" href="#">10/03/2022</a>
+                                <a class="dropdown-item" href="#">11/03/2022</a>
                             </div>
                         </div>
                     </td>
@@ -293,9 +292,10 @@
                                 Seleziona orario
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" href="#">Action</a>
-                                <a class="dropdown-item" href="#">Another action</a>
-                                <a class="dropdown-item" href="#">Something else here</a>
+                                <a class="dropdown-item" href="#">15:00-16:00</a>
+                                <a class="dropdown-item" href="#">16:00-17:00</a>
+                                <a class="dropdown-item" href="#">17:00-18:00</a>
+                                <a class="dropdown-item" href="#">18:00-19:00</a>
                             </div>
                         </div>
                     </td>
@@ -308,7 +308,6 @@
                 </tr>
                 </tbody>
             </table>
-
         </div>
 
 
@@ -663,7 +662,7 @@
 
 <script>
 
-    var app=new Vue({
+    app=new Vue({
         el: '#loginScreen',
         data: {
             setVisibleLogin: '0',         //0 = login, 1=non registrati, 2=registrati, 3=docenti, 4=admin
@@ -673,19 +672,28 @@
             risposta: 'falso',
             errorMessage:[],
             link:'ServletController',
-            loginError: '',
+            loginError:'',
+            message: '',
             codLogin: 'login',
             codLogout: 'logout',
             codSubjects: 'availableSubjects',
             codPrenotations: 'viewAllPrenotations',
             allPrenotations:[],
             allSubjects:[],
-            allSubjectsComplete: false
+            codProfs: 'filterProf',
+            allProfs:[],
+            dataPren:'',
+            oraPren:'',
+            materiaPren:'',
+            professorePren:'',
+            filterPrenCode:'filterPrenotations',
         },
-
+        /*
         mounted:function(){
             this.getRegisteredPrenotations();
         },
+        */
+
 
 
 
@@ -725,9 +733,11 @@
                     console.log('FINE PRIMA POST');
 
                     if(self.risposta==='utenteRegistrato'){
-                        self.setVisibleLogin='2';
                         console.log("vis0.1 "+this.setVisibleLogin);    //li vedo entrambi, this e self
                         console.log("vis0.2 "+self.setVisibleLogin);
+                        setTimeout(function () { self.getRegisteredPrenotations() }.bind(this), 1000);
+                        setTimeout(function () { self.getAllSubjects(), self.getAllProfs() }.bind(this), 1000);
+                        setTimeout(function () { self.setVisibleLogin='2'}, 1000);
 
                     }else if(self.risposta==='Guest'){
                         self.setVisibleLogin='1';
@@ -757,14 +767,44 @@
 
             getAllSubjects:function(){
                 let self = this;
-                $.get("ServletController", {"invia": this.codSubjects},function (data3) {
+                $.get("ServletController", {"username": this.username, "password": this.password, "invia": this.codSubjects},function (data3) {
                     self.allSubjects = data3;
-                    self.viewElencoPrenotazioni = data3;
                     console.log(data3);
                 });
-                self.allSubjectsComplete = !self.allSubjectsComplete;
+                //setTimeout(function () { this.fetchHole() }.bind(this), 1000);
                 console.log("sono in get all subjects");
+            },
+
+            getAllProfs:function(){
+                let self = this;
+                $.get("ServletController", {"username": this.username, "password": this.password, "invia": this.codProfs},function (data4) {
+                    self.allProfs = data4;
+                    console.log(data4);
+                });
+                //setTimeout(function () { this.fetchHole() }.bind(this), 1000);
+                console.log("sono in get all profs");
+            },
+
+            filterPrenotations:function(){
+                let self = this;
+                console.log("sono in filterPrenotations");
+                if(self.dataPren==='')
+                    self.dataPren='*';
+                if(self.oraPren==='')
+                    self.oraPren='*';
+                if(self.materiaPren==='')
+                    self.materiaPren='*';
+                if(self.professorePren==='')
+                    self.professorePren='*';
+
+                $.get("ServletController", {"username": this.username, "password": this.password, "materia":this.materiaPren, "docente":this.professorePren, "data":this.dataPren, "slot_ora":this.oraPren, "invia": this.filterPrenCode},function (data5) {
+                    self.allPrenotations = data5;
+                    console.log("finita la getFilteredPrenotations");
+                    console.log(data5);
+                });
+
             }
+
 
 
 

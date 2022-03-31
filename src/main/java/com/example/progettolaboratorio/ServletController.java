@@ -189,6 +189,7 @@ public class ServletController extends HttpServlet {
                 case "filterPrenotations":
                     System.out.println("Sono in filterPrenotations");
                     ArrayList<Prenotazione> out6 =  filterPrenotations(request, response);
+                    System.out.println("FILTRATE"+out6);
                     if(out6 != null){
                         String r14 = gson.toJson(out6);
                         out.println(r14);
@@ -431,16 +432,17 @@ public class ServletController extends HttpServlet {
         String data = request.getParameter("data");
         String materia = request.getParameter("materia");
         String docente = request.getParameter("docente");
+        String utente = request.getParameter("username");
         if(data==null){
             data="*";
-        }else if(materia==null){
+        }if(materia==null){
             materia="*";
-        }else if(docente==null){
+        }if(docente==null){
             docente="*";
-        }else if(slot_ora==null){
+        }if(slot_ora==null){
             slot_ora="*";
         }
-        list = DAO.filterPrenotations(slot_ora,data,materia,docente);
+        list = DAO.filterPrenotations(slot_ora,data,materia,docente,utente);
         return list;
     }
 
@@ -458,9 +460,10 @@ public class ServletController extends HttpServlet {
         }else if(attivo == null){
             attivo = "*";
         }
-        list = DAO.filterProf(account,nomeCognome,attivo);
+        list = DAO.filterProf();
         return list;
     }
+
 
     public ArrayList<Corso> availableSubjects(HttpServletRequest request, HttpServletResponse response) throws ServletException,
             IOException {
