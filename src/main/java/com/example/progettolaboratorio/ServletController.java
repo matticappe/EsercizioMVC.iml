@@ -334,17 +334,6 @@ public class ServletController extends HttpServlet {
             String nomeCognome = request.getParameter("nomeCognome");
             System.out.println(nomeCognome);
             String attivo = request.getParameter("attivo");
-            if(account == null){
-                account = "*";
-            }else if (password == null){
-                password = "*";
-            }else if(ruolo == null){
-                ruolo = "*";
-            }else if(nomeCognome == null){
-                nomeCognome = "*";
-            }else if(attivo == null){
-                attivo = "*";
-            }
             ris = DAO.inserimentoDocente(account, password, ruolo, nomeCognome,attivo);
             if(ris != 0)
                 result = "L'inserimento del docente " + nomeCognome + "è avvenuto con successo";
