@@ -435,12 +435,20 @@ public class ServletController extends HttpServlet {
         String utente = request.getParameter("username");
         if(data==null){
             data="*";
+        }else{
+            data = " AND DATA = '"+data+"'";
         }if(materia==null){
             materia="*";
+        }else{
+            data = " AND CORSO = '"+materia+"'";
         }if(docente==null){
             docente="*";
+        }else{
+            data = " AND DOCENTE = '"+docente+"'";
         }if(slot_ora==null){
             slot_ora="*";
+        }else{
+            data = " AND SLOT_ORA = '"+slot_ora+"'";
         }
         list = DAO.filterPrenotations(slot_ora,data,materia,docente,utente);
         return list;

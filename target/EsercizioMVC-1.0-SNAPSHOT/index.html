@@ -274,7 +274,7 @@
                                 Seleziona giorno
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a v-on:click="filterPrenotations(), dataPren='07/03/2022'" class="dropdown-item" href="#">07/03/2022</a>
+                                <a v-on:click="filterPrenotations('07/03/2022')" class="dropdown-item" href="#">07/03/2022</a>
                                 <a class="dropdown-item" href="#">08/03/2022</a>
                                 <a class="dropdown-item" href="#">09/03/2022</a>
                                 <a class="dropdown-item" href="#">10/03/2022</a>
@@ -785,19 +785,12 @@
                 console.log("sono in get all profs");
             },
 
-            filterPrenotations:function(){
+            filterPrenotations:function(dataaaa){
                 let self = this;
                 console.log("sono in filterPrenotations");
-                if(self.dataPren==='')
-                    self.dataPren='*';
-                if(self.oraPren==='')
-                    self.oraPren='*';
-                if(self.materiaPren==='')
-                    self.materiaPren='*';
-                if(self.professorePren==='')
-                    self.professorePren='*';
+                console.log("datapren = "+dataaaa);
 
-                $.get("ServletController", {"username": this.username, "password": this.password, "materia":this.materiaPren, "docente":this.professorePren, "data":this.dataPren, "slot_ora":this.oraPren, "invia": this.filterPrenCode},function (data5) {
+                $.get("ServletController", {"username": this.username, "password": this.password, "materia":this.materiaPren, "docente":this.professorePren, "data":dataaaa, "slot_ora":this.oraPren, "invia": this.filterPrenCode},function (data5) {
                     self.allPrenotations = data5;
                     console.log("finita la getFilteredPrenotations");
                     console.log(data5);

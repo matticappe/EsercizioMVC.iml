@@ -422,10 +422,10 @@ public class DAO {
             conn1 = DriverManager.getConnection(url1,user,password);
             if(conn1 != null){
                 Statement st = conn1.createStatement();
-                ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONE WHERE DATA = '*'" );   //CONTROLLA LE VIRGOLETTE DOVE CI SONO TUTTI I +...+...+...+
-/*
-                ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONE WHERE DOCENTE = '"+docente+"' AND CORSO ='"+corso+"' AND DATA ='"+data+"' AND SLOT_ORA ='"+slot_ora+"'" );   //CONTROLLA LE VIRGOLETTE DOVE CI SONO TUTTI I +...+...+...+
-      */
+                //ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONE WHERE DATA = '"+data+"'" );   //CONTROLLA LE VIRGOLETTE DOVE CI SONO TUTTI I +...+...+...+
+
+                ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONE WHERE "+data+" " );   //CONTROLLA LE VIRGOLETTE DOVE CI SONO TUTTI I +...+...+...+
+                //                ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONE WHERE (UTENTE = null or UTENTE = '"+utente+"' ) "+data+" "+corso+" "+slot_ora+" "+docente+" " );   //CONTROLLA LE VIRGOLETTE DOVE CI SONO TUTTI I +...+...+...+
                 int i = 0;
                 while (rs.next()) {
                     //forse va rivista con una document.out per scrivere nel div corretto
