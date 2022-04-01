@@ -424,7 +424,7 @@ public class DAO {
                 Statement st = conn1.createStatement();
                 //ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONE WHERE DATA = '"+data+"'" );   //CONTROLLA LE VIRGOLETTE DOVE CI SONO TUTTI I +...+...+...+
 
-                ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONE WHERE "+data+" " );   //CONTROLLA LE VIRGOLETTE DOVE CI SONO TUTTI I +...+...+...+
+                ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONE WHERE (UTENTE IS NULL OR UTENTE = '"+utente+"') "+data+" " );   //CONTROLLA LE VIRGOLETTE DOVE CI SONO TUTTI I +...+...+...+
                 //                ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONE WHERE (UTENTE = null or UTENTE = '"+utente+"' ) "+data+" "+corso+" "+slot_ora+" "+docente+" " );   //CONTROLLA LE VIRGOLETTE DOVE CI SONO TUTTI I +...+...+...+
                 int i = 0;
                 while (rs.next()) {

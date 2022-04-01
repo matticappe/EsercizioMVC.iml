@@ -433,24 +433,32 @@ public class ServletController extends HttpServlet {
         String materia = request.getParameter("materia");
         String docente = request.getParameter("docente");
         String utente = request.getParameter("username");
+
+        String data1;
+        String materia1;
+        String docente1;
+        String slot_ora1;
         if(data==null){
-            data="*";
+            data1="";
         }else{
-            data = " AND DATA = '"+data+"'";
-        }if(materia==null){
-            materia="*";
-        }else{
-            data = " AND CORSO = '"+materia+"'";
-        }if(docente==null){
-            docente="*";
-        }else{
-            data = " AND DOCENTE = '"+docente+"'";
-        }if(slot_ora==null){
-            slot_ora="*";
-        }else{
-            data = " AND SLOT_ORA = '"+slot_ora+"'";
+            data1 = " AND DATA = '"+data+"'";
         }
-        list = DAO.filterPrenotations(slot_ora,data,materia,docente,utente);
+        if(materia==null){
+            materia1="";
+        }else{
+            materia1 = " AND CORSO = '"+materia+"'";
+        }
+        if(docente==null){
+            docente1="";
+        }else{
+            docente1 = " AND DOCENTE = '"+docente+"'";
+        }
+        if(slot_ora==null){
+            slot_ora1="";
+        }else{
+            slot_ora1 = " AND SLOT_ORA = '"+slot_ora+"'";
+        }
+        list = DAO.filterPrenotations(slot_ora1,data1,materia1,docente1,utente);
         return list;
     }
 

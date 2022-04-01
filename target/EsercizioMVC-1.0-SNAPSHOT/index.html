@@ -274,11 +274,11 @@
                                 Seleziona giorno
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a v-on:click="filterPrenotations('07/03/2022')" class="dropdown-item" href="#">07/03/2022</a>
-                                <a class="dropdown-item" href="#">08/03/2022</a>
-                                <a class="dropdown-item" href="#">09/03/2022</a>
-                                <a class="dropdown-item" href="#">10/03/2022</a>
-                                <a class="dropdown-item" href="#">11/03/2022</a>
+                                <a v-on:click="filterData('07/03/2022')" class="dropdown-item" href="#">07/03/2022</a>
+                                <a v-on:click="filterData('08/03/2022')" class="dropdown-item" href="#">08/03/2022</a>
+                                <a v-on:click="filterData('09/03/2022')" class="dropdown-item" href="#">09/03/2022</a>
+                                <a v-on:click="filterData('10/03/2022')" class="dropdown-item" href="#">10/03/2022</a>
+                                <a v-on:click="filterData('11/03/2022')" class="dropdown-item" href="#">11/03/2022</a>
                             </div>
                         </div>
                     </td>
@@ -785,20 +785,25 @@
                 console.log("sono in get all profs");
             },
 
-            filterPrenotations:function(dataaaa){
+            filterPrenotations:function(){
                 let self = this;
                 console.log("sono in filterPrenotations");
-                console.log("datapren = "+dataaaa);
+                console.log("datapren = "+self.data);
 
-                $.get("ServletController", {"username": this.username, "password": this.password, "materia":this.materiaPren, "docente":this.professorePren, "data":dataaaa, "slot_ora":this.oraPren, "invia": this.filterPrenCode},function (data5) {
+                $.get("ServletController", {"username": this.username, "password": this.password, "materia":this.materiaPren, "docente":this.professorePren, "data":self.data, "slot_ora":this.oraPren, "invia": this.filterPrenCode},function (data5) {
                     self.allPrenotations = data5;
                     console.log("finita la getFilteredPrenotations");
                     console.log(data5);
                 });
 
-            }
+            },
 
-
+            filterData:function(dataa){
+                let self = this;
+                self.data = dataa;
+                console.log("sono in filterData");
+                this.filterPrenotations();
+            },
 
 
 
