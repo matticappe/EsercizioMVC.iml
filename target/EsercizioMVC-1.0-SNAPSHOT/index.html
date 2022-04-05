@@ -246,7 +246,8 @@
                                 Seleziona materia
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" v-for="s in allSubjects">{{s.titolo}}</a>
+                                <a v-on:click="filterMateria()" class="dropdown-item" href="#">Azzera materia</a>
+                                <a v-on:click="filterMateria(s.titolo)" class="dropdown-item" v-for="s in allSubjects">{{s.titolo}}</a>
                             </div>
                         </div>
                     </td>
@@ -260,7 +261,8 @@
                                 Seleziona professore
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" v-for="p in allProfs">{{p.nomeCognome}}</a>
+                                <a v-on:click="filterProf()" class="dropdown-item" href="#">Azzera professore</a>
+                                <a v-on:click="filterProf(p.account)" class="dropdown-item" href="#" v-for="p in allProfs">{{p.nomeCognome}}</a>
                             </div>
                         </div>
                     </td>
@@ -274,6 +276,7 @@
                                 Seleziona giorno
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a v-on:click="filterData('')" class="dropdown-item" href="#">Azzera data</a>
                                 <a v-on:click="filterData('07/03/2022')" class="dropdown-item" href="#">07/03/2022</a>
                                 <a v-on:click="filterData('08/03/2022')" class="dropdown-item" href="#">08/03/2022</a>
                                 <a v-on:click="filterData('09/03/2022')" class="dropdown-item" href="#">09/03/2022</a>
@@ -292,10 +295,11 @@
                                 Seleziona orario
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" href="#">15:00-16:00</a>
-                                <a class="dropdown-item" href="#">16:00-17:00</a>
-                                <a class="dropdown-item" href="#">17:00-18:00</a>
-                                <a class="dropdown-item" href="#">18:00-19:00</a>
+                                <a v-on:click="filterSlot('')" class="dropdown-item" href="#">Azzera orario</a>
+                                <a v-on:click="filterSlot('15:00-16:00')" class="dropdown-item" href="#">15:00-16:00</a>
+                                <a v-on:click="filterSlot('16:00-17:00')" class="dropdown-item" href="#">16:00-17:00</a>
+                                <a v-on:click="filterSlot('17:00-18:00')" class="dropdown-item" href="#">17:00-18:00</a>
+                                <a v-on:click="filterSlot('18:00-19:00')" class="dropdown-item" href="#">18:00-19:00</a>
                             </div>
                         </div>
                     </td>
@@ -685,7 +689,7 @@
             dataPren:'',
             oraPren:'',
             materiaPren:'',
-            professorePren:'',
+            profPren:'',
             filterPrenCode:'filterPrenotations',
         },
         /*
@@ -789,8 +793,10 @@
                 let self = this;
                 console.log("sono in filterPrenotations");
                 console.log("datapren = "+self.data);
+                console.log("orapren = "+self.oraPren);
+                console.log("profpren = "+self.profPren);
 
-                $.get("ServletController", {"username": this.username, "password": this.password, "materia":this.materiaPren, "docente":this.professorePren, "data":self.data, "slot_ora":this.oraPren, "invia": this.filterPrenCode},function (data5) {
+                $.get("ServletController", {"username": this.username, "password": this.password, "materia":self.materiaPren, "docente":self.profPren, "data":self.data, "slot_ora":self.oraPren, "invia": this.filterPrenCode},function (data5) {
                     self.allPrenotations = data5;
                     console.log("finita la getFilteredPrenotations");
                     console.log(data5);
@@ -805,6 +811,26 @@
                 this.filterPrenotations();
             },
 
+            filterSlot:function(slott){
+                let self = this;
+                self.oraPren = slott;
+                console.log("sono in filterSlot");
+                this.filterPrenotations();
+            },
+
+            filterProf:function(proff){
+                let self = this;
+                self.profPren = proff;
+                console.log("sono in filterProf = "+self.profPren);
+                this.filterPrenotations();
+            },
+
+            filterMateria:function(materiaa){
+                let self = this;
+                self.materiaPren=materiaa;
+                console.log("sono in filterProf = "+self.materiaPren);
+                this.filterPrenotations();
+            }
 
 
 

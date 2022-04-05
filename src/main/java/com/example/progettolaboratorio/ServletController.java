@@ -438,22 +438,22 @@ public class ServletController extends HttpServlet {
         String materia1;
         String docente1;
         String slot_ora1;
-        if(data==null){
+        if(data==null || data==""){
             data1="";
         }else{
             data1 = " AND DATA = '"+data+"'";
         }
-        if(materia==null){
+        if(materia==null || materia == ""){
             materia1="";
         }else{
             materia1 = " AND CORSO = '"+materia+"'";
         }
-        if(docente==null){
+        if(docente==null || docente == ""){
             docente1="";
         }else{
             docente1 = " AND DOCENTE = '"+docente+"'";
         }
-        if(slot_ora==null){
+        if(slot_ora==null || slot_ora == ""){
             slot_ora1="";
         }else{
             slot_ora1 = " AND SLOT_ORA = '"+slot_ora+"'";
