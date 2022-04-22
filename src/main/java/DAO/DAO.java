@@ -342,7 +342,7 @@ public class DAO {
             conn1 = DriverManager.getConnection(url1,user,password);
             if(conn1 != null){
                 Statement st = conn1.createStatement();
-                ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONE WHERE UTENTE ="  + utente);
+                ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONE WHERE "  + utente);
                 int i = 0;
                 while (rs.next()) {
                     Prenotazione p = new Prenotazione(rs.getString("codice"),rs.getString("utente"), rs.getString("docente"), rs.getString("corso"), rs.getString("data"), rs.getString("slot_ora"));
@@ -381,7 +381,7 @@ public class DAO {
             conn1 = DriverManager.getConnection(url1,user,password);
             if(conn1 != null){
                 Statement st = conn1.createStatement();
-                ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONE WHERE UTENTE = '" + account + "'");
+                ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONE WHERE UTENE IS NULL OR UTENTE = '" + account + "'");
                 int i = 0;
                 while (rs.next()) {
                     Prenotazione p = new Prenotazione(rs.getString("codice"),rs.getString("utente"), rs.getString("docente"), rs.getString("corso"), rs.getString("data"), rs.getString("slot_ora"));

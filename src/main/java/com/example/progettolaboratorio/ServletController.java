@@ -398,10 +398,13 @@ public class ServletController extends HttpServlet {
             IOException {
         ArrayList<Prenotazione> list;
         String username = request.getParameter("username");
-        if(username == null){
-            username = "*";
+        String username1;
+        if(username==null || username==""){
+            username1="";
+        }else{
+            username1 = "  UTENTE = '"+username+"'";
         }
-        list = DAO.viewOwnPrenotations(username);
+        list = DAO.viewOwnPrenotations(username1);
         return list;
     }
 
@@ -410,10 +413,14 @@ public class ServletController extends HttpServlet {
             IOException {
         ArrayList<Prenotazione> list;
         String username = request.getParameter("username");
-        if(username == null){
-            username = "*";
+
+        String username1;
+        if(username==null || username==""){
+            username1="";
+        }else{
+            username1 = " AND USERNAME = '"+username+"'";
         }
-        list = DAO.viewOwnActPrenotations(username);
+        list = DAO.viewOwnActPrenotations(username1);
         return list;
     }
 

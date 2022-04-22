@@ -228,8 +228,9 @@
             Logout
         </button>
     </div>
+
     <div v-if="setVisibleLogin=='2'" id="userScreenUtenteRegistrato" class="row">
-        <div class="column1">
+        <div v-if="setVisibleStorico=='1'" class="column1">
             <table class="table">
                 <thead>
                 <tr>
@@ -306,7 +307,7 @@
                 </tr>
                 <tr>
                     <td>
-                        <button type="button" id="StoricoUtenteRegistrato" class="btn btn-primary">Storico
+                        <button v-on:click="setVisibleStorico='2' ; getOwnPrenotations()" type="button" id="StoricoUtenteRegistrato" class="btn btn-primary">Storico
                             Prenotazioni</button>
                     </td>
                 </tr>
@@ -316,7 +317,7 @@
 
 
 
-        <div class="column2">
+        <div v-if="setVisibleStorico=='1'" class="column2">
             <table class="table">
                 <thead class="thead-light">
                 <tr>
@@ -334,13 +335,68 @@
                     <td><div>{{p.docente}}</div></td>
                     <td><div>{{p.data}}</div></td>
                     <td><div>{{p.slot_ora}}</div></td>
-                    <td><button type="button" class="btn btn-primary" v-if="p.utente !== username" onclick="prenota(this)">Prenota</button>
-                    <button type="button" class="btn btn-primary" v-if="p.utente === username" onclick="prenota(this)">Disdici prenotazione</button>
+                    <td><button type="button" class="btn btn-primary" v-if="p.utente === null || p.utente==='' || p.utente === undefined" onclick="prenota(this)">Prenota</button>
+                        <button type="button" class="btn btn-primary" v-if="p.utente === username" onclick="prenota(this)">Disdici prenotazione</button>
+                        <button type="button" class="btn btn-primary" v-if="p.utente !== username && p.utente !== null && p.utente !== '' && p.utente !== undefined" disabled>Prenotato</button>
+
                     </td>
                 </tr>
 
                 </tbody>
             </table>
+        </div>
+
+
+        <!-- inizio schermata storico prenotazioni utenti registrati -->
+
+        <div  v-if="setVisibleStorico=='2'" id="userScreenUtenteRegistratoStorico" class="row">
+            <div class="column1">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Seleziona</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <button v-on:click="setVisibleStorico='1'; getRegisteredPrenotations() " type="button" id="StoricoUtenteRegistratoStorico" class="btn btn-primary">Tutte le prenotazioni</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div v-if="setVisibleStorico=='2'" class="column2">
+                <table class="table">
+                    <thead class="thead-light">
+                    <tr>
+                        <!--  titoli della tabella  -->
+                        <th scope="col">Materia</th>
+                        <th scope="col">Professore</th>
+                        <th scope="col">Giorno</th>
+                        <th scope="col">Ora</th>
+                        <th scope="col">Prenotazione</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="p in allPrenotations">
+                        <td><div>{{p.corso}}</div></td>
+                        <td><div>{{p.docente}}</div></td>
+                        <td><div>{{p.data}}</div></td>
+                        <td><div>{{p.slot_ora}}</div></td>
+                        <td><button type="button" class="btn btn-primary" v-if="p.utente === null || p.utente==='' || p.utente === undefined" onclick="prenota(this)">Prenota</button>
+                            <button type="button" class="btn btn-primary" v-if="p.utente === username" onclick="prenota(this)">Disdici prenotazione</button>
+                            <button type="button" class="btn btn-primary" v-if="p.utente !== username && p.utente !== null && p.utente !== '' && p.utente !== undefined" disabled>Prenotato</button>
+
+                        </td>
+                    </tr>
+
+                    </tbody>
+                </table>
+            </div>
+
+
         </div>
 
         <!--
@@ -355,7 +411,6 @@
         </div>
         -->
 
-
     </div>
 
 
@@ -369,6 +424,8 @@
             Logout
         </button>
     </div>
+
+
     <div v-if="setVisibleLogin=='4'" id="userScreenAmministratore" class="row">
         <div class="column1">
             <table class="table">
@@ -510,7 +567,9 @@
                 </tbody>
             </table>
         </div>
+
     </div>
+
 
 
     <!--  --  ---------------------------------INIZIO SCHERMATA PROFESSORI--------------------------  -------------  -->
@@ -691,6 +750,8 @@
             materiaPren:'',
             profPren:'',
             filterPrenCode:'filterPrenotations',
+            codOwnPrenotations:'viewOwnPrenotations',
+            setVisibleStorico:'1',
         },
         /*
         mounted:function(){
@@ -830,6 +891,15 @@
                 self.materiaPren=materiaa;
                 console.log("sono in filterProf = "+self.materiaPren);
                 this.filterPrenotations();
+            },
+
+            getOwnPrenotations:function(){
+                let self = this;
+                console.log("sono in get OWN registered prenotations");
+                $.get("ServletController", {"username": this.username, "password": this.password, "invia": this.codOwnPrenotations},function (data2) {
+                    console.log('sono nella post get OWN prenotations');
+                    self.allPrenotations = data2;
+                });
             }
 
 
