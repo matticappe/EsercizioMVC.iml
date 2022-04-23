@@ -396,6 +396,7 @@ public class ServletController extends HttpServlet {
     //penso prenotazioni prenotabili
     public ArrayList<Prenotazione> viewOwnPrenotations(HttpServletRequest request, HttpServletResponse response) throws ServletException,
             IOException {
+        System.out.println("ViewOwnPrenot");
         ArrayList<Prenotazione> list;
         String username = request.getParameter("username");
         String username1;

@@ -47,6 +47,7 @@ public class DAO {
         return ris;
     }
 
+    //TODO:va riscritta
     public static int cancellazionePrenotazione(String codice, String utente, String docente, String corso, String data, String slot_ora){
         Connection conn1 = null;
         int ris = 0;
@@ -72,6 +73,7 @@ public class DAO {
         }
         return ris;
     }
+    //TODO: va riscritta pure questa
     public static int effettuaPrenotazione(String codice, String utente, String docente, String corso, String data, String slot_ora){
         Connection conn1 = null;
         int ris = 0;
@@ -338,6 +340,7 @@ public class DAO {
     public static ArrayList<Prenotazione> viewOwnPrenotations(String utente){
         Connection conn1 = null;
         ArrayList<Prenotazione> out = new ArrayList<>();
+        System.out.println("debugvireOwnPrenot");
         try{
             conn1 = DriverManager.getConnection(url1,user,password);
             if(conn1 != null){
