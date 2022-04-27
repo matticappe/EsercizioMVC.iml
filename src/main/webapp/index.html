@@ -802,6 +802,11 @@
                         setTimeout(function () { self.getAllSubjects(), self.getAllProfs() }.bind(this), 1000);
                         setTimeout(function () { self.setVisibleLogin='2'}, 1000);
 
+                    }else if(self.risposta==='admin'){
+                        self.setVisibleLogin='4';
+                        console.log("vis0.3 "+this.setVisibleLogin);    //li vedo entrambi, this e self
+                        console.log("vis0.4 "+self.setVisibleLogin);
+
                     }else if(self.risposta==='Guest'){
                         self.setVisibleLogin='1';
                         console.log("vis0.3 "+this.setVisibleLogin);    //li vedo entrambi, this e self
