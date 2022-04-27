@@ -349,8 +349,7 @@
 
         <!-- inizio schermata storico prenotazioni utenti registrati -->
 
-        <div  v-if="setVisibleStorico=='2'" id="userScreenUtenteRegistratoStorico" class="row">
-            <div class="column1">
+        <div  v-if="setVisibleStorico=='2'" class="column1" >
                 <table class="table">
                     <thead>
                     <tr>
@@ -365,9 +364,9 @@
                         </tr>
                     </tbody>
                 </table>
-            </div>
+        </div>
 
-            <div v-if="setVisibleStorico=='2'" class="column2">
+        <div v-if="setVisibleStorico=='2'" class="column2">
                 <table class="table">
                     <thead class="thead-light">
                     <tr>
@@ -397,7 +396,6 @@
             </div>
 
 
-        </div>
 
         <!--
         <div>
