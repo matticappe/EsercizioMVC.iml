@@ -385,12 +385,16 @@ public class ServletController extends HttpServlet {
     //penso prenotazioni prenotabili
     public ArrayList<Prenotazione> viewOwnPrenotations(HttpServletRequest request, HttpServletResponse response) throws ServletException,
             IOException {
+        System.out.println("ViewOwnPrenot");
         ArrayList<Prenotazione> list;
         String username = request.getParameter("username");
-        if(username == null){
-            username = "*";
+        String username1;
+        if(username==null || username==""){
+            username1="";
+        }else{
+            username1 = "  UTENTE = '"+username+"'";
         }
-        list = DAO.viewOwnPrenotations(username);
+        list = DAO.viewOwnPrenotations(username1);
         return list;
     }
 
@@ -399,10 +403,14 @@ public class ServletController extends HttpServlet {
             IOException {
         ArrayList<Prenotazione> list;
         String username = request.getParameter("username");
-        if(username == null){
-            username = "*";
+
+        String username1;
+        if(username==null || username==""){
+            username1="";
+        }else{
+            username1 = " AND USERNAME = '"+username+"'";
         }
-        list = DAO.viewOwnActPrenotations(username);
+        list = DAO.viewOwnActPrenotations(username1);
         return list;
     }
 
@@ -422,16 +430,32 @@ public class ServletController extends HttpServlet {
         String materia = request.getParameter("materia");
         String docente = request.getParameter("docente");
         String utente = request.getParameter("username");
-        if(data==null){
-            data="*";
-        }if(materia==null){
-            materia="*";
-        }if(docente==null){
-            docente="*";
-        }if(slot_ora==null){
-            slot_ora="*";
+
+        String data1;
+        String materia1;
+        String docente1;
+        String slot_ora1;
+        if(data==null || data==""){
+            data1="";
+        }else{
+            data1 = " AND DATA = '"+data+"'";
         }
-        list = DAO.filterPrenotations(slot_ora,data,materia,docente,utente);
+        if(materia==null || materia == ""){
+            materia1="";
+        }else{
+            materia1 = " AND CORSO = '"+materia+"'";
+        }
+        if(docente==null || docente == ""){
+            docente1="";
+        }else{
+            docente1 = " AND DOCENTE = '"+docente+"'";
+        }
+        if(slot_ora==null || slot_ora == ""){
+            slot_ora1="";
+        }else{
+            slot_ora1 = " AND SLOT_ORA = '"+slot_ora+"'";
+        }
+        list = DAO.filterPrenotations(slot_ora1,data1,materia1,docente1,utente);
         return list;
     }
 

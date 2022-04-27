@@ -228,8 +228,9 @@
             Logout
         </button>
     </div>
+
     <div v-if="setVisibleLogin=='2'" id="userScreenUtenteRegistrato" class="row">
-        <div class="column1">
+        <div v-if="setVisibleStorico=='1'" class="column1">
             <table class="table">
                 <thead>
                 <tr>
@@ -246,7 +247,8 @@
                                 Seleziona materia
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" v-for="s in allSubjects">{{s.titolo}}</a>
+                                <a v-on:click="filterMateria()" class="dropdown-item" href="#">Azzera materia</a>
+                                <a v-on:click="filterMateria(s.titolo)" class="dropdown-item" v-for="s in allSubjects">{{s.titolo}}</a>
                             </div>
                         </div>
                     </td>
@@ -260,7 +262,8 @@
                                 Seleziona professore
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" v-for="p in allProfs">{{p.nomeCognome}}</a>
+                                <a v-on:click="filterProf()" class="dropdown-item" href="#">Azzera professore</a>
+                                <a v-on:click="filterProf(p.account)" class="dropdown-item" href="#" v-for="p in allProfs">{{p.nomeCognome}}</a>
                             </div>
                         </div>
                     </td>
@@ -274,11 +277,12 @@
                                 Seleziona giorno
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a v-on:click="filterPrenotations(), dataPren='07/03/2022'" class="dropdown-item" href="#">07/03/2022</a>
-                                <a class="dropdown-item" href="#">08/03/2022</a>
-                                <a class="dropdown-item" href="#">09/03/2022</a>
-                                <a class="dropdown-item" href="#">10/03/2022</a>
-                                <a class="dropdown-item" href="#">11/03/2022</a>
+                                <a v-on:click="filterData('')" class="dropdown-item" href="#">Azzera data</a>
+                                <a v-on:click="filterData('07/03/2022')" class="dropdown-item" href="#">07/03/2022</a>
+                                <a v-on:click="filterData('08/03/2022')" class="dropdown-item" href="#">08/03/2022</a>
+                                <a v-on:click="filterData('09/03/2022')" class="dropdown-item" href="#">09/03/2022</a>
+                                <a v-on:click="filterData('10/03/2022')" class="dropdown-item" href="#">10/03/2022</a>
+                                <a v-on:click="filterData('11/03/2022')" class="dropdown-item" href="#">11/03/2022</a>
                             </div>
                         </div>
                     </td>
@@ -292,17 +296,18 @@
                                 Seleziona orario
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" href="#">15:00-16:00</a>
-                                <a class="dropdown-item" href="#">16:00-17:00</a>
-                                <a class="dropdown-item" href="#">17:00-18:00</a>
-                                <a class="dropdown-item" href="#">18:00-19:00</a>
+                                <a v-on:click="filterSlot('')" class="dropdown-item" href="#">Azzera orario</a>
+                                <a v-on:click="filterSlot('15:00-16:00')" class="dropdown-item" href="#">15:00-16:00</a>
+                                <a v-on:click="filterSlot('16:00-17:00')" class="dropdown-item" href="#">16:00-17:00</a>
+                                <a v-on:click="filterSlot('17:00-18:00')" class="dropdown-item" href="#">17:00-18:00</a>
+                                <a v-on:click="filterSlot('18:00-19:00')" class="dropdown-item" href="#">18:00-19:00</a>
                             </div>
                         </div>
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <button type="button" id="StoricoUtenteRegistrato" class="btn btn-primary">Storico
+                        <button v-on:click="setVisibleStorico='2' ; getOwnPrenotations()" type="button" id="StoricoUtenteRegistrato" class="btn btn-primary">Storico
                             Prenotazioni</button>
                     </td>
                 </tr>
@@ -312,7 +317,7 @@
 
 
 
-        <div class="column2">
+        <div v-if="setVisibleStorico=='1'" class="column2">
             <table class="table">
                 <thead class="thead-light">
                 <tr>
@@ -330,13 +335,68 @@
                     <td><div>{{p.docente}}</div></td>
                     <td><div>{{p.data}}</div></td>
                     <td><div>{{p.slot_ora}}</div></td>
-                    <td><button type="button" class="btn btn-primary" v-if="p.utente !== username" onclick="prenota(this)">Prenota</button>
-                    <button type="button" class="btn btn-primary" v-if="p.utente === username" onclick="prenota(this)">Disdici prenotazione</button>
+                    <td><button type="button" class="btn btn-primary" v-if="p.utente === null || p.utente==='' || p.utente === undefined" onclick="prenota(this)">Prenota</button>
+                        <button type="button" class="btn btn-primary" v-if="p.utente === username" onclick="prenota(this)">Disdici prenotazione</button>
+                        <button type="button" class="btn btn-primary" v-if="p.utente !== username && p.utente !== null && p.utente !== '' && p.utente !== undefined" disabled>Prenotato</button>
+
                     </td>
                 </tr>
 
                 </tbody>
             </table>
+        </div>
+
+
+        <!-- inizio schermata storico prenotazioni utenti registrati -->
+
+        <div  v-if="setVisibleStorico=='2'" id="userScreenUtenteRegistratoStorico" class="row">
+            <div class="column1">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Seleziona</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <button v-on:click="setVisibleStorico='1'; getRegisteredPrenotations() " type="button" id="StoricoUtenteRegistratoStorico" class="btn btn-primary">Tutte le prenotazioni</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div v-if="setVisibleStorico=='2'" class="column2">
+                <table class="table">
+                    <thead class="thead-light">
+                    <tr>
+                        <!--  titoli della tabella  -->
+                        <th scope="col">Materia</th>
+                        <th scope="col">Professore</th>
+                        <th scope="col">Giorno</th>
+                        <th scope="col">Ora</th>
+                        <th scope="col">Prenotazione</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="p in allPrenotations">
+                        <td><div>{{p.corso}}</div></td>
+                        <td><div>{{p.docente}}</div></td>
+                        <td><div>{{p.data}}</div></td>
+                        <td><div>{{p.slot_ora}}</div></td>
+                        <td><button type="button" class="btn btn-primary" v-if="p.utente === null || p.utente==='' || p.utente === undefined" onclick="prenota(this)">Prenota</button>
+                            <button type="button" class="btn btn-primary" v-if="p.utente === username" onclick="prenota(this)">Disdici prenotazione</button>
+                            <button type="button" class="btn btn-primary" v-if="p.utente !== username && p.utente !== null && p.utente !== '' && p.utente !== undefined" disabled>Prenotato</button>
+
+                        </td>
+                    </tr>
+
+                    </tbody>
+                </table>
+            </div>
+
+
         </div>
 
         <!--
@@ -351,7 +411,6 @@
         </div>
         -->
 
-
     </div>
 
 
@@ -365,6 +424,8 @@
             Logout
         </button>
     </div>
+
+
     <div v-if="setVisibleLogin=='4'" id="userScreenAmministratore" class="row">
         <div class="column1">
             <table class="table">
@@ -506,7 +567,9 @@
                 </tbody>
             </table>
         </div>
+
     </div>
+
 
 
     <!--  --  ---------------------------------INIZIO SCHERMATA PROFESSORI--------------------------  -------------  -->
@@ -685,8 +748,10 @@
             dataPren:'',
             oraPren:'',
             materiaPren:'',
-            professorePren:'',
+            profPren:'',
             filterPrenCode:'filterPrenotations',
+            codOwnPrenotations:'viewOwnPrenotations',
+            setVisibleStorico:'1',
         },
         /*
         mounted:function(){
@@ -788,25 +853,54 @@
             filterPrenotations:function(){
                 let self = this;
                 console.log("sono in filterPrenotations");
-                if(self.dataPren==='')
-                    self.dataPren='*';
-                if(self.oraPren==='')
-                    self.oraPren='*';
-                if(self.materiaPren==='')
-                    self.materiaPren='*';
-                if(self.professorePren==='')
-                    self.professorePren='*';
+                console.log("datapren = "+self.data);
+                console.log("orapren = "+self.oraPren);
+                console.log("profpren = "+self.profPren);
 
-                $.get("ServletController", {"username": this.username, "password": this.password, "materia":this.materiaPren, "docente":this.professorePren, "data":this.dataPren, "slot_ora":this.oraPren, "invia": this.filterPrenCode},function (data5) {
+                $.get("ServletController", {"username": this.username, "password": this.password, "materia":self.materiaPren, "docente":self.profPren, "data":self.data, "slot_ora":self.oraPren, "invia": this.filterPrenCode},function (data5) {
                     self.allPrenotations = data5;
                     console.log("finita la getFilteredPrenotations");
                     console.log(data5);
                 });
 
+            },
+
+            filterData:function(dataa){
+                let self = this;
+                self.data = dataa;
+                console.log("sono in filterData");
+                this.filterPrenotations();
+            },
+
+            filterSlot:function(slott){
+                let self = this;
+                self.oraPren = slott;
+                console.log("sono in filterSlot");
+                this.filterPrenotations();
+            },
+
+            filterProf:function(proff){
+                let self = this;
+                self.profPren = proff;
+                console.log("sono in filterProf = "+self.profPren);
+                this.filterPrenotations();
+            },
+
+            filterMateria:function(materiaa){
+                let self = this;
+                self.materiaPren=materiaa;
+                console.log("sono in filterProf = "+self.materiaPren);
+                this.filterPrenotations();
+            },
+
+            getOwnPrenotations:function(){
+                let self = this;
+                console.log("sono in get OWN registered prenotations");
+                $.get("ServletController", {"username": this.username, "password": this.password, "invia": this.codOwnPrenotations},function (data2) {
+                    console.log('sono nella post get OWN prenotations');
+                    self.allPrenotations = data2;
+                });
             }
-
-
-
 
 
 
