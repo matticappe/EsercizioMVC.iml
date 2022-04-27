@@ -798,9 +798,10 @@
                     if(self.risposta==='utenteRegistrato'){
                         console.log("vis0.1 "+this.setVisibleLogin);    //li vedo entrambi, this e self
                         console.log("vis0.2 "+self.setVisibleLogin);
-                        setTimeout(function () { self.getRegisteredPrenotations() }.bind(this), 1000);
-                        setTimeout(function () { self.getAllSubjects(), self.getAllProfs() }.bind(this), 1000);
-                        setTimeout(function () { self.setVisibleLogin='2'}, 1000);
+                        self.getRegisteredPrenotations();
+                        self.getAllSubjects();
+                        self.getAllProfs() ;
+                        self.setVisibleLogin='2';
 
                     }else if(self.risposta==='admin'){
                         self.setVisibleLogin='4';
