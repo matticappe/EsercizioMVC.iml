@@ -425,7 +425,7 @@
 
 
     <div v-if="setVisibleLogin=='4'" id="userScreenAmministratore" class="row">
-        <div class="column1">
+        <div v-if="setVisibleStorico=='1'" class="column1">
             <table class="table">
                 <thead>
                 <tr>
@@ -437,14 +437,13 @@
                     <td>
                         <div class="dropdown">
                             <button class="btn btn-secondary dropdown-toggle" type="button"
-                                    id="dropdownMenuButton1Amministratore" data-toggle="dropdown"
+                                    id="dropdownMenuButton1Admin" data-toggle="dropdown"
                                     aria-haspopup="true" aria-expanded="false">
                                 Seleziona materia
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" href="#">Action</a>
-                                <a class="dropdown-item" href="#">Another action</a>
-                                <a class="dropdown-item" href="#">Something else here</a>
+                                <a v-on:click="filterAdminMateria()" class="dropdown-item" href="#">Azzera materia</a>
+                                <a v-on:click="filterAdminMateria(s.titolo)" class="dropdown-item" v-for="s in allSubjects">{{s.titolo}}</a>
                             </div>
                         </div>
                     </td>
@@ -453,14 +452,13 @@
                     <td>
                         <div class="dropdown">
                             <button class="btn btn-secondary dropdown-toggle" type="button"
-                                    id="dropdownMenuButton2Amministratore" data-toggle="dropdown"
+                                    id="dropdownMenuButton2Admin" data-toggle="dropdown"
                                     aria-haspopup="true" aria-expanded="false">
                                 Seleziona professore
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" href="#">Action</a>
-                                <a class="dropdown-item" href="#">Another action</a>
-                                <a class="dropdown-item" href="#">Something else here</a>
+                                <a v-on:click="filterAdminProf()" class="dropdown-item" href="#">Azzera professore</a>
+                                <a v-on:click="filterAdminProf(p.account)" class="dropdown-item" href="#" v-for="p in allProfs">{{p.nomeCognome}}</a>
                             </div>
                         </div>
                     </td>
@@ -469,14 +467,17 @@
                     <td>
                         <div class="dropdown">
                             <button class="btn btn-secondary dropdown-toggle" type="button"
-                                    id="dropdownMenuButton3Amministratore" data-toggle="dropdown"
+                                    id="dropdownMenuButton3Admin" data-toggle="dropdown"
                                     aria-haspopup="true" aria-expanded="false">
                                 Seleziona giorno
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" href="#">Action</a>
-                                <a class="dropdown-item" href="#">Another action</a>
-                                <a class="dropdown-item" href="#">Something else here</a>
+                                <a v-on:click="filterAdminData('')" class="dropdown-item" href="#">Azzera data</a>
+                                <a v-on:click="filterAdminData('07/03/2022')" class="dropdown-item" href="#">07/03/2022</a>
+                                <a v-on:click="filterAdminData('08/03/2022')" class="dropdown-item" href="#">08/03/2022</a>
+                                <a v-on:click="filterAdminData('09/03/2022')" class="dropdown-item" href="#">09/03/2022</a>
+                                <a v-on:click="filterAdminData('10/03/2022')" class="dropdown-item" href="#">10/03/2022</a>
+                                <a v-on:click="filterAdminData('11/03/2022')" class="dropdown-item" href="#">11/03/2022</a>
                             </div>
                         </div>
                     </td>
@@ -485,37 +486,28 @@
                     <td>
                         <div class="dropdown">
                             <button class="btn btn-secondary dropdown-toggle" type="button"
-                                    id="dropdownMenuButton4Amministratore" data-toggle="dropdown"
+                                    id="dropdownMenuButton4Admin" data-toggle="dropdown"
                                     aria-haspopup="true" aria-expanded="false">
                                 Seleziona orario
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" href="#">Action</a>
-                                <a class="dropdown-item" href="#">Another action</a>
-                                <a class="dropdown-item" href="#">Something else here</a>
+                                <a v-on:click="filterAdminSlot('')" class="dropdown-item" href="#">Azzera orario</a>
+                                <a v-on:click="filterAdminSlot('15:00-16:00')" class="dropdown-item" href="#">15:00-16:00</a>
+                                <a v-on:click="filterAdminSlot('16:00-17:00')" class="dropdown-item" href="#">16:00-17:00</a>
+                                <a v-on:click="filterAdminSlot('17:00-18:00')" class="dropdown-item" href="#">17:00-18:00</a>
+                                <a v-on:click="filterAdminSlot('18:00-19:00')" class="dropdown-item" href="#">18:00-19:00</a>
                             </div>
                         </div>
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <div class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle" type="button"
-                                    id="dropdownMenuButton5Amministratore" data-toggle="dropdown"
-                                    aria-haspopup="true" aria-expanded="false">
-                                Seleziona Utente
-                            </button>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" href="#">Action</a>
-                                <a class="dropdown-item" href="#">Another action</a>
-                                <a class="dropdown-item" href="#">Something else here</a>
-                            </div>
-                        </div>
+                        <button v-on:click="setVisibleStorico='2' ; getOwnPrenotations()" type="button" id="StoricoAdmin" class="btn btn-primary">Storico
+                            Prenotazioni</button>
                     </td>
                 </tr>
                 </tbody>
             </table>
-
         </div>
 
 
@@ -526,196 +518,28 @@
                     <!--  titoli della tabella  -->
                     <th scope="col">Materia</th>
                     <th scope="col">Professore</th>
-                    <th scope="col">Matricola</th>
                     <th scope="col">Giorno</th>
                     <th scope="col">Ora</th>
                     <th scope="col">Prenotazione</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <!--  questi sono tutti i campi della singola riga della tabella  -->
-                    <td>Ium-Tweb 2</td>
-                    <td>Liliana Ardissono</td>
-                    <td>123456</td>
-                    <td>29/12/2021</td>
-                    <td>15:00 - 16:00</td>
-                    <td><button type="button" class="btn btn-primary" onclick="prenota(this)">Disdici
-                        Prenotazione</button></td>
-                </tr>
-                <tr>
-                    <td>Reti 1</td>
-                    <td>Marco Botta</td>
-                    <td>234567</td>
-                    <td>29/12/2021</td>
-                    <td>14:00 - 15:00</td>
-                    <td><button type="button" class="btn btn-primary" onclick="prenota(this)">Disdici
-                        Prenotazione</button></td>
-                </tr>
-                <tr>
-                    <td>Programmazione 3</td>
-                    <td>Liliana Ardissono</td>
-                    <td>345678</td>
-                    <td>29/12/2021</td>
-                    <td>16:00 - 17:00</td>
-                    <td><button type="button" class="btn btn-primary" onclick="prenota(this)">Disdici
-                        Prenotazione</button></td>
+                <tr v-for="p in allPrenotations">
+                    <td><div>{{p.corso}}</div></td>
+                    <td><div>{{p.docente}}</div></td>
+                    <td><div>{{p.data}}</div></td>
+                    <td><div>{{p.slot_ora}}</div></td>
+                    <td><button type="button" class="btn btn-primary" v-if="p.utente === null || p.utente==='' || p.utente === undefined" onclick="prenota(this)">Prenota</button>
+                        <button type="button" class="btn btn-primary" v-if="p.utente === username" onclick="prenota(this)">Disdici prenotazione</button>
+                        <button type="button" class="btn btn-primary" v-if="p.utente !== username && p.utente !== null && p.utente !== '' && p.utente !== undefined">Prenotato da {{p.utente}}</button>
 
+                    </td>
                 </tr>
+
                 </tbody>
             </table>
         </div>
 
-    </div>
-
-
-
-    <!--  --  ---------------------------------INIZIO SCHERMATA PROFESSORI--------------------------  -------------  -->
-
-
-    <div v-if="setVisibleLogin=='3'" id="logoutProfessore" class="logout">
-        <button type="button" v-on:click=setVisibleLogin='0' class="btn btn-secondary"
-                data-toggle="tooltip" data-placement="top" title="Tooltip on top">
-            Logout
-        </button>
-    </div>
-    <div v-if="setVisibleLogin=='3'" id="userScreenProfessore" class="row">
-        <div class="column1">
-            <table class="table">
-                <thead>
-                <tr>
-                    <th scope="col">Seleziona</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>
-                        <div class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle" type="button"
-                                    id="dropdownMenuButton1Professore" data-toggle="dropdown" aria-haspopup="true"
-                                    aria-expanded="false">
-                                Seleziona materia
-                            </button>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" href="#">Action</a>
-                                <a class="dropdown-item" href="#">Another action</a>
-                                <a class="dropdown-item" href="#">Something else here</a>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle" type="button"
-                                    id="dropdownMenuButton2Professore" data-toggle="dropdown" aria-haspopup="true"
-                                    aria-expanded="false">
-                            </button>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" href="#">Action</a>
-                                <a class="dropdown-item" href="#">Another action</a>
-                                <a class="dropdown-item" href="#">Something else here</a>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle" type="button"
-                                    id="dropdownMenuButton3Professore" data-toggle="dropdown" aria-haspopup="true"
-                                    aria-expanded="false">
-                                Seleziona giorno
-                            </button>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" href="#">Action</a>
-                                <a class="dropdown-item" href="#">Another action</a>
-                                <a class="dropdown-item" href="#">Something else here</a>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle" type="button"
-                                    id="dropdownMenuButton4Professore" data-toggle="dropdown" aria-haspopup="true"
-                                    aria-expanded="false">
-                                Seleziona orario
-                            </button>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" href="#">Action</a>
-                                <a class="dropdown-item" href="#">Another action</a>
-                                <a class="dropdown-item" href="#">Something else here</a>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle" type="button"
-                                    id="dropdownMenuButton5Professore" data-toggle="dropdown" aria-haspopup="true"
-                                    aria-expanded="false">
-                                Seleziona Utente
-                            </button>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" href="#">Action</a>
-                                <a class="dropdown-item" href="#">Another action</a>
-                                <a class="dropdown-item" href="#">Something else here</a>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-
-        </div>
-
-
-
-        <div class="column2">
-            <table class="table">
-                <thead class="thead-light">
-                <tr>
-                    <!--  titoli della tabella  -->
-                    <th scope="col">Materia</th>
-                    <th scope="col">Matricola</th>
-                    <th scope="col">Giorno</th>
-                    <th scope="col">Ora</th>
-                    <th scope="col">Prenotazione</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <!--  questi sono tutti i campi della singola riga della tabella  -->
-                    <td>Ium-Tweb 2</td>
-                    <td>123456</td>
-                    <td>29/12/2021</td>
-                    <td>15:00 - 16:00</td>
-                    <td><button type="button" class="btn btn-primary" onclick="prenota(this)">Disdici
-                        Prenotazione</button></td>
-                </tr>
-                <tr>
-                    <td>Reti 1</td>
-                    <td>234567</td>
-                    <td>29/12/2021</td>
-                    <td>14:00 - 15:00</td>
-                    <td><button type="button" class="btn btn-primary" onclick="prenota(this)">Disdici
-                        Prenotazione</button></td>
-                </tr>
-                <tr>
-                    <td>Programmazione 3</td>
-                    <td>345678</td>
-                    <td>29/12/2021</td>
-                    <td>16:00 - 17:00</td>
-                    <td><button type="button" class="btn btn-primary" onclick="prenota(this)">Disdici
-                        Prenotazione</button></td>
-
-                </tr>
-                </tbody>
-            </table>
-        </div>
     </div>
 
 </div>
@@ -748,6 +572,7 @@
             materiaPren:'',
             profPren:'',
             filterPrenCode:'filterPrenotations',
+            filterAdminPrenCode:'filterAdminPrenotations',
             codOwnPrenotations:'viewOwnPrenotations',
             setVisibleStorico:'1',
         },
@@ -807,6 +632,9 @@
                         self.setVisibleLogin='4';
                         console.log("vis0.3 "+this.setVisibleLogin);    //li vedo entrambi, this e self
                         console.log("vis0.4 "+self.setVisibleLogin);
+                        self.getRegisteredPrenotations();
+                        self.getAllSubjects();
+                        self.getAllProfs() ;
 
                     }else if(self.risposta==='Guest'){
                         self.setVisibleLogin='1';
@@ -869,6 +697,21 @@
 
             },
 
+            filterAdminPrenotations:function(){
+                let self = this;
+                console.log("sono in filterPrenotations");
+                console.log("datapren = "+self.data);
+                console.log("orapren = "+self.oraPren);
+                console.log("profpren = "+self.profPren);
+
+                $.get("ServletController", {"username": this.username, "password": this.password, "materia":self.materiaPren, "docente":self.profPren, "data":self.data, "slot_ora":self.oraPren, "invia": this.filterAdminPrenCode},function (data5) {
+                    self.allPrenotations = data5;
+                    console.log("finita la getFilteredPrenotations");
+                    console.log(data5);
+                });
+
+            },
+
             filterData:function(dataa){
                 let self = this;
                 self.data = dataa;
@@ -897,6 +740,35 @@
                 this.filterPrenotations();
             },
 
+            filterAdminData:function(dataa){
+                let self = this;
+                self.data = dataa;
+                console.log("sono in filterData");
+                this.filterPrenotations();
+            },
+
+            filterAdminSlot:function(slott){
+                let self = this;
+                self.oraPren = slott;
+                console.log("sono in filterSlot");
+                this.filterPrenotations();
+            },
+
+            filterAdminProf:function(proff){
+                let self = this;
+                self.profPren = proff;
+                console.log("sono in filterProf = "+self.profPren);
+                this.filterPrenotations();
+            },
+
+            filterAdminMateria:function(materiaa){
+                let self = this;
+                self.materiaPren=materiaa;
+                console.log("sono in filterProf = "+self.materiaPren);
+                this.filterPrenotations();
+            },
+
+
             getOwnPrenotations:function(){
                 let self = this;
                 console.log("sono in get OWN registered prenotations");
@@ -904,7 +776,9 @@
                     console.log('sono nella post get OWN prenotations');
                     self.allPrenotations = data2;
                 });
-            }
+            },
+
+
 
 
 

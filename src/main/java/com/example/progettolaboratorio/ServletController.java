@@ -201,6 +201,21 @@ public class ServletController extends HttpServlet {
                     }
                     break;
 
+                case "filterAdminPrenotations":
+                    System.out.println("Sono in filterAdminPrenotations");
+                    ArrayList<Prenotazione> out61 =  filterAdminPrenotations(request, response);
+                    System.out.println("FILTRATE"+out61);
+                    if(out61 != null){
+                        String r14 = gson.toJson(out61);
+                        out.println(r14);
+                    }
+                    else {
+                        String s14 = "Nessuna prenotazione trovata";
+                        String r14 = gson.toJson(s14);
+                        out.println(r14);
+                    }
+                    break;
+
                 case "availableSubjects":
                     System.out.println("Sono in availableSubjects");
                     ArrayList<Corso> out7 = availableSubjects(request, response);
@@ -432,6 +447,43 @@ public class ServletController extends HttpServlet {
         ArrayList<Prenotazione> list;
         //String list;
         list = DAO.viewAllPrenotations();
+        return list;
+    }
+
+    public ArrayList<Prenotazione> filterAdminPrenotations(HttpServletRequest request, HttpServletResponse response) throws ServletException,
+            IOException {
+        ArrayList<Prenotazione> list;
+        String slot_ora = request.getParameter("slot_ora");
+        String data = request.getParameter("data");
+        String materia = request.getParameter("materia");
+        String docente = request.getParameter("docente");
+        String utente = request.getParameter("username");
+
+        String data1;
+        String materia1;
+        String docente1;
+        String slot_ora1;
+        if(data==null || data==""){
+            data1="";
+        }else{
+            data1 = " AND DATA = '"+data+"'";
+        }
+        if(materia==null || materia == ""){
+            materia1="";
+        }else{
+            materia1 = " AND CORSO = '"+materia+"'";
+        }
+        if(docente==null || docente == ""){
+            docente1="";
+        }else{
+            docente1 = " AND DOCENTE = '"+docente+"'";
+        }
+        if(slot_ora==null || slot_ora == ""){
+            slot_ora1="";
+        }else{
+            slot_ora1 = " AND SLOT_ORA = '"+slot_ora+"'";
+        }
+        list = DAO.filterAdminPrenotations(slot_ora1,data1,materia1,docente1,utente);
         return list;
     }
 

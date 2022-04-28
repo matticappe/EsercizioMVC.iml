@@ -457,6 +457,44 @@ public class DAO {
     //da gestire nella servlet il controllo dell'input
     //tutto cio' che in input è null va gestito con *
 
+    public static ArrayList<Prenotazione> filterAdminPrenotations(String slot_ora, String data, String corso, String docente, String utente){
+        Connection conn1 = null;
+        ArrayList<Prenotazione> out = new ArrayList<>();
+        //String out = " ";
+        try{
+            conn1 = DriverManager.getConnection(url1,user,password);
+            if(conn1 != null){
+                Statement st = conn1.createStatement();
+                //ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONE WHERE DATA = '"+data+"'" );   //CONTROLLA LE VIRGOLETTE DOVE CI SONO TUTTI I +...+...+...+
+
+                ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONE WHERE (UTENTE IS NULL OR UTENTE IS NOT NULL) "+data+" "+corso+" "+slot_ora+" "+docente+" " );   //CONTROLLA LE VIRGOLETTE DOVE CI SONO TUTTI I +...+...+...+
+                //                ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONE WHERE (UTENTE = null or UTENTE = '"+utente+"' ) "+data+" "+corso+" "+slot_ora+" "+docente+" " );   //CONTROLLA LE VIRGOLETTE DOVE CI SONO TUTTI I +...+...+...+
+                int i = 0;
+                while (rs.next()) {
+                    //forse va rivista con una document.out per scrivere nel div corretto
+                    Prenotazione p = new Prenotazione(rs.getString("codice"),rs.getString("utente"), rs.getString("docente"), rs.getString("corso"), rs.getString("data"), rs.getString("slot_ora"));
+                    System.out.println(i + " " + p.getCodice() + p.getUtente() + p.getDocente() + p.getCorso() + p.getData() + p.getSlot_ora());
+                    out.add(p);
+
+                }
+                //Prenotazione p = new Prenotazione("impestata", "dio", "cane", "e", "la", "madonna");
+                //out.add(p);
+            }
+
+        } catch (SQLException e){
+            System.out.println("SONO NELLA CATCH SQL " + e.getMessage());
+        }
+        finally {
+            try {
+                if (conn1 != null)
+                    conn1.close();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        }
+        return out;
+    }
+
     //modifica cappe, filtra tutti i docenti attivi per l user, che allo stronzo normale servono solo loro
     public static ArrayList<Docente> filterProf(){
         Connection conn1 = null;
