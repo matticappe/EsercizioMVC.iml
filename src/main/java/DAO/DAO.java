@@ -99,7 +99,7 @@ public class DAO {
         return ris;
     }
 
-
+    //TODO modificare
     public static int inserimentoDocente(String account, String password, String ruolo, String nomeCognome, String attivo){
         Connection conn1 = null;
         int ris = 0;
@@ -562,4 +562,107 @@ public class DAO {
         }
         return out;
     }
+
+    //viewAllProf
+    public static ArrayList<Docente> viewAllProf() {
+        System.out.println("Sono in viewAllProf");
+        Connection conn1 = null;
+        ArrayList<Docente> out = new ArrayList<>();
+        try {
+            conn1 = DriverManager.getConnection(url1,user,password);
+            if(conn1 != null){
+                System.out.println("Connessione riuscita");
+                Statement st = conn1.createStatement();
+                ResultSet rs = st.executeQuery("SELECT * FROM DOCENTE");
+                int i = 0;
+                Docente d;
+                while (rs.next()){
+                    d = new Docente(rs.getString("account"),rs.getString("password"),rs.getString("ruolo"),rs.getString("nomeCognome"),rs.getString("attivo"));
+                    System.out.println(i + " " + d.getAccount() + d.getPassword() + d.getRuolo() + d.getNomeCognome() + d.getAttivo());
+                    out.add(d);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Sono nella catch sql " + e.getMessage());
+        }
+        finally {
+            try {
+                if(conn1 != null)
+                    conn1.close();
+            }catch (SQLException throwables){
+                throwables.printStackTrace();
+            }
+        }
+        return out;
+    }
+
+    //eliminaDocente
+    public static String eliminaDocente(String account){
+        Connection conn1 = null;
+        String out = "";
+        try {
+            conn1 = DriverManager.getConnection(url1,user,password);
+            if(conn1 != null){
+                Statement st = conn1.createStatement();
+                int rs = st.executeUpdate("DELETE * FROM DOCENTE WHERE ACCOUNT = '" + account +"'");
+                if(rs != 0){
+                    out = out + "Eliminazione docente avvenuta con successo";
+                }
+                else{
+                    out = out + "Eliminazione docente fallita";
+                }
+                System.out.println(out);
+            }
+        }catch (SQLException e){
+            System.out.println("Sono nella catch sql " + e.getMessage());
+        }
+        finally {
+            try {
+                if(conn1 != null)
+                    conn1.close();
+            }catch (SQLException e){
+                e.printStackTrace();
+            }
+        }
+        return out;
+    }
+
+    //eliminaCorso
+    public static String eliminaCorso(String titolo){
+        Connection conn1 = null;
+        String out = "";
+        try {
+            conn1 = DriverManager.getConnection(url1,user,password);
+            if(conn1 != null){
+                Statement st = conn1.createStatement();
+                int rs = st.executeUpdate("DELETE * FROM CORSO WHERE TITOLO = '" + titolo +"'");
+                if(rs != 0){
+                    out = out + "Eliminazione corso avvenuta con successo";
+                }
+                else{
+                    out = out + "Eliminazione corso fallita";
+                }
+                System.out.println(out);
+            }
+        }catch (SQLException e){
+            System.out.println("Sono nella catch sql " + e.getMessage());
+        }
+        finally {
+            try {
+                if(conn1 != null)
+                    conn1.close();
+            }catch (SQLException e){
+                e.printStackTrace();
+            }
+        }
+        return out;
+    }
+
+    //disdici
+
+
 }
+
+
+//TODO: disdici
+//      prenota
