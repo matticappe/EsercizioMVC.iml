@@ -599,17 +599,15 @@ public class DAO {
     //eliminaDocente
     public static String eliminaDocente(String account){
         Connection conn1 = null;
-        String out = "";
+        String out = "Eliminazione docente fallita";
         try {
             conn1 = DriverManager.getConnection(url1,user,password);
             if(conn1 != null){
                 Statement st = conn1.createStatement();
                 int rs = st.executeUpdate("DELETE * FROM DOCENTE WHERE ACCOUNT = '" + account +"'");
                 if(rs != 0){
+                    out = "";
                     out = out + "Eliminazione docente avvenuta con successo";
-                }
-                else{
-                    out = out + "Eliminazione docente fallita";
                 }
                 System.out.println(out);
             }
@@ -630,17 +628,15 @@ public class DAO {
     //eliminaCorso
     public static String eliminaCorso(String titolo){
         Connection conn1 = null;
-        String out = "";
+        String out = "Eliminazione corso fallita";
         try {
             conn1 = DriverManager.getConnection(url1,user,password);
             if(conn1 != null){
                 Statement st = conn1.createStatement();
                 int rs = st.executeUpdate("DELETE * FROM CORSO WHERE TITOLO = '" + titolo +"'");
                 if(rs != 0){
+                    out = "";
                     out = out + "Eliminazione corso avvenuta con successo";
-                }
-                else{
-                    out = out + "Eliminazione corso fallita";
                 }
                 System.out.println(out);
             }
@@ -659,10 +655,36 @@ public class DAO {
     }
 
     //disdici
+    public static String disdiciPrenotazione(String Codice){
+        Connection conn1 = null;
+        String out = "La prenotazione non è stata disdetta";
+        try{
+            conn1 = DriverManager.getConnection(url1,user,password);
+            if(conn1 != null){
+                Statement st = conn1.createStatement();
+                int rs = st.executeUpdate("UPDATE PRENOTAZIONE SET CODICE = -, UTENTE = -, DOCENTE = -, CORSO = -, DATA = -, SLOT_ORA = -");
+                if(rs != 0){
+                    out = "";
+                    out = out + "La prenotazione è stata disdetta con successo";
+                }
+                System.out.println(out);
+            }
+        }catch (SQLException e){
+            System.out.println("Sono nella catch sql " + e.getMessage());
+        }
+        finally {
+            try {
+                if(conn1 != null)
+                    conn1.close();
+            }catch (SQLException e){
+                e.printStackTrace();
+            }
+        }
+        return out;
+    }
 
 
 }
 
 
-//TODO: disdici
-//      prenota
+//TODO: prenota
