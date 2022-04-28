@@ -223,12 +223,13 @@ public class DAO {
             if(conn1 != null) {
                 System.out.println("Connected to the database test");
                 Statement st = conn1.createStatement();
-                ResultSet rs = st.executeQuery("SELECT * FROM UTENTE WHERE ACCOUNT = "  +account);
+                ResultSet rs = st.executeQuery("SELECT * FROM UTENTE WHERE ACCOUNT = '"  +account+"' AND RUOLO = 2");
                 if(rs.next()){
-                    if(rs.getInt("ruolo") == 1)
+                    if(rs.getString("ruolo") == "2" && rs.getString("account") == account);
                         res=true;
                 }
             }
+            System.out.println("admin = "+res);
         } catch (SQLException e){
             System.out.println("SONO NELLA CATCH SQL " + e.getMessage());
         } finally {

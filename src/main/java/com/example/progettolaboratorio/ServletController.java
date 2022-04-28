@@ -277,7 +277,10 @@ public class ServletController extends HttpServlet {
                         int role = result.getRuolo();
                         s.setAttribute("Ruolo", role);
                         System.out.println("LoginEffettuato");
-                        st = "utenteRegistrato";
+                        if(isAdmin(request, response) == "yes")
+                            st = "admin";
+                        else
+                            st = "utenteRegistrato";
                         out.flush();
                         out.close();
                         return st;
@@ -572,12 +575,11 @@ public class ServletController extends HttpServlet {
         }
         boolean flag;
         flag = DAO.isAdmin(username);
-        response.setContentType("text/plain");
         if(flag){
-            result = "E' un amministratore";
+            result = "yes";         //è un admin
         }
         else{
-            result = "Non è un amministratore";
+            result = "no";          //non è un admin
         }
         return result;
     }
