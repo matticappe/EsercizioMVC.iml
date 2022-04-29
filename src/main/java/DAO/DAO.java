@@ -607,7 +607,7 @@ public class DAO {
                 int rs = st.executeUpdate("DELETE * FROM DOCENTE WHERE ACCOUNT = '" + account +"'");
                 if(rs != 0){
                     out = "";
-                    out = out + "Eliminazione docente avvenuta con successo";
+                    out = out + "Eliminazione del docente" + account + " avvenuta con successo";
                 }
                 System.out.println(out);
             }
@@ -636,7 +636,7 @@ public class DAO {
                 int rs = st.executeUpdate("DELETE * FROM CORSO WHERE TITOLO = '" + titolo +"'");
                 if(rs != 0){
                     out = "";
-                    out = out + "Eliminazione corso avvenuta con successo";
+                    out = out + "Eliminazione corso " + titolo + " avvenuta con successo";
                 }
                 System.out.println(out);
             }
@@ -655,17 +655,17 @@ public class DAO {
     }
 
     //disdici
-    public static String disdiciPrenotazione(String Codice){
+    public static String disdiciPrenotazione(String codice){
         Connection conn1 = null;
         String out = "La prenotazione non è stata disdetta";
         try{
             conn1 = DriverManager.getConnection(url1,user,password);
             if(conn1 != null){
                 Statement st = conn1.createStatement();
-                int rs = st.executeUpdate("UPDATE PRENOTAZIONE SET CODICE = -, UTENTE = -, DOCENTE = -, CORSO = -, DATA = -, SLOT_ORA = -");
+                int rs = st.executeUpdate("UPDATE PRENOTAZIONE SET CODICE = -, UTENTE = -, DOCENTE = -, CORSO = -, DATA = -, SLOT_ORA = - WHERE CODICE =" + codice);
                 if(rs != 0){
                     out = "";
-                    out = out + "La prenotazione è stata disdetta con successo";
+                    out = out + "La prenotazione con il codice " + codice + " è stata disdetta con successo";
                 }
                 System.out.println(out);
             }

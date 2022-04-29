@@ -4,6 +4,7 @@ import DAO.*;
 import com.google.gson.Gson;
 //import sun.java2d.marlin.DPathConsumer2D;
 
+import javax.print.Doc;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
@@ -123,23 +124,8 @@ public class ServletController extends HttpServlet {
                     break;
 
                 case "viewAllPrenotations":
-                    System.out.println("Sono in viewAllPrenotations");
-                    //Prenotazione[] array3 = viewAllPrenotations(request, response);
-                    /*String*/ ArrayList<Prenotazione> string3 = viewAllPrenotations(request, response);
-                    /*System.out.println("test array3[]");
-                    for(int i = 0; i<array3.length; i++){
-                        System.out.println(i+" "+array3[i].getCodice()+array3[i].getUtente()+array3[i].getDocente()+array3[i].getData()+array3[i].getSlot_ora()+array3[i].getCorso());
-                    }
-                    if(array3 != null){
-                        System.out.println("sono nell if viewAllPrenotations");
-                        String r11 = Arrays.toString(array3);
-                        //String r11 = Arrays.copyOf(array3, array3.length, String[].class);
-                        System.out.println("test Stringa");
-                        System.out.println(r11);
-                        String s11 = gson.toJson(r11);
-                        out.println(s11);
-                    }
-                     */
+                    System.out.println("Sono in viewAllPrenotations");;
+                    ArrayList<Prenotazione> string3 = viewAllPrenotations(request, response);
                     if(string3!=null){
                         System.out.println("sono nell if viewAllPrenotations");
                         //String r11 = Arrays.copyOf(array3, array3.length, String[].class);
@@ -244,6 +230,45 @@ public class ServletController extends HttpServlet {
                     out.println(sLout);
                     break;
 
+                case "viewAllProf":
+                    System.out.println("Sono in viewAllProf");
+                    ArrayList<Docente> list16 = viewAllDocente(request,response);
+                    if(list16 != null){
+                        System.out.println("Sono nell if viewAllProf");
+                        System.out.println(list16);
+                        for (Docente d : list16) {
+                            System.out.println(d.getAccount() + d.getRuolo() + d.getNomeCognome() + d.getAttivo());
+                        }
+                        String s16 = gson.toJson(list16);
+                        out.println(s16);
+                    }
+                    else{
+                        String r16 = "Nessun docente trovato";
+                        String s16 = gson.toJson(r16);
+                        out.println(s16);
+                    }
+                    break;
+
+                case "eliminaDocente":
+                    System.out.println("Sono in eliminaDocente");
+                    String  r17 = eliminaDocente(request,response);
+                    String s17 = gson.toJson(r17);
+                    out.println(s17);
+                    break;
+
+                case "eliminaCorso":
+                    System.out.println("Sono in eliminaCorso");
+                    String r18 = eliminaCorso(request,response);
+                    String s18 = gson.toJson(r18);
+                    out.println(s18);
+                    break;
+
+                case "disdiciPrenotazione":
+                    System.out.println("Sono in disdiciPrenotazione");
+                    String r19 = disdiciPrenotazione(request,response);
+                    String s19 = gson.toJson(r19);
+                    out.println(s19);
+                    break;
             }
         }
     }
@@ -677,4 +702,31 @@ public class ServletController extends HttpServlet {
         }
         return result;
     }
+
+    public ArrayList<Docente> viewAllDocente(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+        ArrayList<Docente> list;
+        list = DAO.viewAllProf();
+        return list;
+    }
+    
+    public String eliminaDocente(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+        String account = request.getParameter("account");
+        String result = DAO.eliminaDocente(account);
+        return result;        
+    }
+
+    public String eliminaCorso(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+        String titolo = request.getParameter("titolo");
+        String result = DAO.eliminaCorso(titolo);
+        return result;
+    }
+
+    public String disdiciPrenotazione(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+        String codice = request.getParameter("codice");
+        String result = DAO.disdiciPrenotazione(codice);
+        return result;
+
+    }
 }
+
+//TODO: mettere le query nuove qui dentro
