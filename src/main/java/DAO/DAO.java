@@ -157,14 +157,14 @@ public class DAO {
         Connection conn1 = null;
         ArrayList<Utente> out = new ArrayList<>();
         try {
-            conn1 = DriverManager.getConnection(url1, user, password);
-            ResultSet rs=null;
-            if (conn1 != null) {
-                System.out.println("Connected to the database test");
-                Statement st = conn1.createStatement();
-                rs = st.executeQuery("SELECT * FROM UTENTE");
+                conn1 = DriverManager.getConnection(url1,user,password);
+                if(conn1 != null){
+                    System.out.println("connessione riuscita");
+                    Statement st = conn1.createStatement();
+                    ResultSet rs = st.executeQuery("SELECT * FROM UTENTE WHERE RUOLO = 0");
+
                 while (rs.next()) {
-                    Utente p = new Utente(rs.getString("ACCOUNT"),rs.getString("PASSWORD"), rs.getInt("RUOLO"));
+                    Utente p = new Utente(rs.getString("account"),rs.getString("password"), rs.getInt("ruolo"));
                     out.add(p);
                 }
             }
@@ -470,7 +470,7 @@ public class DAO {
                 Statement st = conn1.createStatement();
                 //ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONE WHERE DATA = '"+data+"'" );   //CONTROLLA LE VIRGOLETTE DOVE CI SONO TUTTI I +...+...+...+
 
-                ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONE WHERE (UTENTE IS NULL OR UTENTE IS NOT NULL) "+data+" "+corso+" "+slot_ora+" "+docente+" " );   //CONTROLLA LE VIRGOLETTE DOVE CI SONO TUTTI I +...+...+...+
+                ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONE WHERE (UTENTE IS NULL OR UTENTE IS NOT NULL) "+data+" "+corso+" "+slot_ora+" "+docente+" "+utente+" " );   //CONTROLLA LE VIRGOLETTE DOVE CI SONO TUTTI I +...+...+...+
                 //                ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONE WHERE (UTENTE = null or UTENTE = '"+utente+"' ) "+data+" "+corso+" "+slot_ora+" "+docente+" " );   //CONTROLLA LE VIRGOLETTE DOVE CI SONO TUTTI I +...+...+...+
                 int i = 0;
                 while (rs.next()) {

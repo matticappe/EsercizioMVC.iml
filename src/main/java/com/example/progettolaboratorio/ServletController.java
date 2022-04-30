@@ -95,17 +95,11 @@ public class ServletController extends HttpServlet {
 
                 case "stampaUtenti":
                     System.out.println("Sono in stampaUtenti");
-                    Utente[] array1;
-                    array1 = stampaUtenti(request, response);
-                    if(array1 != null) {
-                        String r9 = Arrays.toString(array1);
-                        String s9 = gson.toJson(r9);
-                        out.println(s9);
-                    }
-                    else{
-                        String r9 = "Nessun utente trovato";
-                        String s9 = gson.toJson(r9);
-                        out.println(s9);
+                    ArrayList<Utente> array11 = stampaUtenti(request, response);
+                    if(array11!=null) {
+                        System.out.println("sono nell if viewAllPrenotations");
+                        String s111 = gson.toJson(array11);
+                        out.println(s111);
                     }
                     break;
 
@@ -392,20 +386,15 @@ public class ServletController extends HttpServlet {
         return result;
     }
 
-    public Utente[] stampaUtenti(HttpServletRequest request, HttpServletResponse response) throws ServletException,
+    public ArrayList<Utente> stampaUtenti(HttpServletRequest request, HttpServletResponse response) throws ServletException,
             IOException {
         HttpSession s=request.getSession();
         ArrayList<Utente> list = null;
-        if((int)s.getAttribute("role")==1) {
+        //TODO un controllino per vedere se è admin non ci starebbe male ma rompe cose per ora
             list = DAO.ViewAllUsers();
-        }
-        Utente[] array = null;
-        if(list != null)
-            array = new Utente[list.size()];
-        for (int i = 0; i < list.size(); i++) {
-            array[i] = list.get(i);
-        }
-        return array;
+
+
+        return list;
     }
 
     public String cancellaPrenotazione(HttpServletRequest request, HttpServletResponse response) throws ServletException,
@@ -472,9 +461,10 @@ public class ServletController extends HttpServlet {
         String data = request.getParameter("data");
         String materia = request.getParameter("materia");
         String docente = request.getParameter("docente");
-        String utente = request.getParameter("username");
+        String utente = request.getParameter("utente");
 
         String data1;
+        String utente1;
         String materia1;
         String docente1;
         String slot_ora1;
@@ -498,7 +488,12 @@ public class ServletController extends HttpServlet {
         }else{
             slot_ora1 = " AND SLOT_ORA = '"+slot_ora+"'";
         }
-        list = DAO.filterAdminPrenotations(slot_ora1,data1,materia1,docente1,utente);
+        if(utente==null || utente == ""){
+            utente1="";
+        }else{
+            utente1 = " AND UTENTE = '"+utente+"'";
+        }
+        list = DAO.filterAdminPrenotations(slot_ora1,data1,materia1,docente1, utente1);
         return list;
     }
 

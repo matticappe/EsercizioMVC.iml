@@ -417,6 +417,7 @@
 
 
     <div v-if="setVisibleLogin=='4'" id="logoutAmministratore" class="logout">
+        {{allUsers}}
         <button type="button" v-on:click=setVisibleLogin='0' class="btn btn-secondary"
                 data-toggle="tooltip" data-placement="top" title="Tooltip on top">
             Logout
@@ -502,6 +503,21 @@
                 </tr>
                 <tr>
                     <td>
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button"
+                                    id="dropdownMenuButton5Admin" data-toggle="dropdown"
+                                    aria-haspopup="true" aria-expanded="false">
+                                Seleziona utente
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a v-on:click="filterAdminUser()" class="dropdown-item" href="#">Azzera utente</a>
+                                <a v-on:click="filterAdminUser(u.account)" class="dropdown-item" href="#" v-for="u in allUsers">{{u.account}}</a>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
                         <button v-on:click="setVisibleStorico='2' ; getOwnPrenotations()" type="button" id="StoricoAdmin" class="btn btn-primary">Storico
                             Prenotazioni</button>
                     </td>
@@ -542,6 +558,7 @@
 
     </div>
 
+
 </div>
 
 
@@ -567,13 +584,16 @@
             allSubjects:[],
             codProfs: 'filterProf',
             allProfs:[],
+            allUsers:[],
             dataPren:'',
             oraPren:'',
             materiaPren:'',
             profPren:'',
+            utentePren:'',
             filterPrenCode:'filterPrenotations',
             filterAdminPrenCode:'filterAdminPrenotations',
             codOwnPrenotations:'viewOwnPrenotations',
+            codUsers:'stampaUtenti',
             setVisibleStorico:'1',
         },
         /*
@@ -635,6 +655,7 @@
                         self.getRegisteredPrenotations();
                         self.getAllSubjects();
                         self.getAllProfs() ;
+                        self.getAllUsers();
 
                     }else if(self.risposta==='Guest'){
                         self.setVisibleLogin='1';
@@ -682,6 +703,16 @@
                 console.log("sono in get all profs");
             },
 
+            getAllUsers:function(){
+                let self = this;
+                $.get("ServletController", {"username": this.username, "password": this.password, "invia": this.codUsers},function (data4) {
+                    self.allUsers = data4;
+                    console.log(data4);
+                });
+                //setTimeout(function () { this.fetchHole() }.bind(this), 1000);
+                console.log("sono in get all users");
+            },
+
             filterPrenotations:function(){
                 let self = this;
                 console.log("sono in filterPrenotations");
@@ -699,12 +730,13 @@
 
             filterAdminPrenotations:function(){
                 let self = this;
-                console.log("sono in filterPrenotations");
+                console.log("sono in filterAdminPrenotations");
                 console.log("datapren = "+self.data);
                 console.log("orapren = "+self.oraPren);
                 console.log("profpren = "+self.profPren);
+                console.log("utentePren = "+self.utentePren);
 
-                $.get("ServletController", {"username": this.username, "password": this.password, "materia":self.materiaPren, "docente":self.profPren, "data":self.data, "slot_ora":self.oraPren, "invia": this.filterAdminPrenCode},function (data5) {
+                $.get("ServletController", {"username": this.username, "password": this.password, "materia":self.materiaPren, "docente":self.profPren, "data":self.data, "slot_ora":self.oraPren, "utente":self.utentePren, "invia": this.filterAdminPrenCode},function (data5) {
                     self.allPrenotations = data5;
                     console.log("finita la getFilteredPrenotations");
                     console.log(data5);
@@ -737,35 +769,42 @@
                 let self = this;
                 self.materiaPren=materiaa;
                 console.log("sono in filterProf = "+self.materiaPren);
-                this.filterPrenotations();
+                this.filterAdminPrenotations();
             },
 
             filterAdminData:function(dataa){
                 let self = this;
                 self.data = dataa;
                 console.log("sono in filterData");
-                this.filterPrenotations();
+                this.filterAdminPrenotations();
             },
 
             filterAdminSlot:function(slott){
                 let self = this;
                 self.oraPren = slott;
                 console.log("sono in filterSlot");
-                this.filterPrenotations();
+                this.filterAdminPrenotations();
             },
 
             filterAdminProf:function(proff){
                 let self = this;
                 self.profPren = proff;
                 console.log("sono in filterProf = "+self.profPren);
-                this.filterPrenotations();
+                this.filterAdminPrenotations();
             },
 
             filterAdminMateria:function(materiaa){
                 let self = this;
                 self.materiaPren=materiaa;
                 console.log("sono in filterProf = "+self.materiaPren);
-                this.filterPrenotations();
+                this.filterAdminPrenotations();
+            },
+
+            filterAdminUser:function(utentee){
+                let self = this;
+                self.utentePren=utentee;
+                console.log("sono in filterProf = "+self.utentePren);
+                this.filterAdminPrenotations();
             },
 
 
