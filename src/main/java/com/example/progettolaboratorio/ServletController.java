@@ -2,15 +2,17 @@ package com.example.progettolaboratorio;
 
 import DAO.*;
 import com.google.gson.Gson;
-//import sun.java2d.marlin.DPathConsumer2D;
 
-import javax.print.Doc;
-import javax.servlet.*;
-import javax.servlet.http.*;
-import javax.servlet.annotation.*;
-
-import java.io.*;
-
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -118,11 +120,10 @@ public class ServletController extends HttpServlet {
                     break;
 
                 case "viewAllPrenotations":
-                    System.out.println("Sono in viewAllPrenotations");;
+                    System.out.println("Sono in viewAllPrenotations");
                     ArrayList<Prenotazione> string3 = viewAllPrenotations(request, response);
                     if(string3!=null){
                         System.out.println("sono nell if viewAllPrenotations");
-                        //String r11 = Arrays.copyOf(array3, array3.length, String[].class);
                         System.out.println(string3);
                         for(Prenotazione str: string3){
                             System.out.println(str.getCodice()+str.getUtente()+str.getDocente()+str.getCorso()+str.getData()+str.getSlot_ora()+"\n");
@@ -262,6 +263,13 @@ public class ServletController extends HttpServlet {
                     String r19 = disdiciPrenotazione(request,response);
                     String s19 = gson.toJson(r19);
                     out.println(s19);
+                    break;
+
+                case "inserisciPrenotazione":
+                    System.out.println("Sono in inserisciPrenotazione");
+                    String r20 = inserisciPrenotazione(request,response);
+                    String s20 = gson.toJson(r20);
+                    out.println(s20);
                     break;
             }
         }
@@ -592,9 +600,8 @@ public class ServletController extends HttpServlet {
         return result;
     }
 
-    // Commento inutile
-    public String effettuaPrenotazione(HttpServletRequest request, HttpServletResponse response) throws ServletException,
-            IOException {
+
+    public String effettuaPrenotazione(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String result = "Prenotazione fallita";
         System.out.println("Sono nella effettuaPrenotazione");
         String codice= request.getParameter("codice");
@@ -720,8 +727,12 @@ public class ServletController extends HttpServlet {
         String codice = request.getParameter("codice");
         String result = DAO.disdiciPrenotazione(codice);
         return result;
+    }
 
+    public String inserisciPrenotazione(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+        String codice = request.getParameter("codice");
+        String utente = request.getParameter("utente");
+        String result = DAO.inserisciPrenotazione(codice,utente);
+        return result;
     }
 }
-
-//TODO: mettere le query nuove qui dentro

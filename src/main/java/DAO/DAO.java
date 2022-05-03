@@ -662,10 +662,38 @@ public class DAO {
             conn1 = DriverManager.getConnection(url1,user,password);
             if(conn1 != null){
                 Statement st = conn1.createStatement();
-                int rs = st.executeUpdate("UPDATE PRENOTAZIONE SET CODICE = -, UTENTE = -, DOCENTE = -, CORSO = -, DATA = -, SLOT_ORA = - WHERE CODICE =" + codice);
+                int rs = st.executeUpdate("UPDATE PRENOTAZIONE SET CODICE = NULL, UTENTE = NULL, DOCENTE = NULL, CORSO = NULL, DATA = NULL, SLOT_ORA = NULL WHERE CODICE =" + codice);
                 if(rs != 0){
                     out = "";
                     out = out + "La prenotazione con il codice " + codice + " è stata disdetta con successo";
+                }
+                System.out.println(out);
+            }
+        }catch (SQLException e){
+            System.out.println("Sono nella catch sql " + e.getMessage());
+        }
+        finally {
+            try {
+                if(conn1 != null)
+                    conn1.close();
+            }catch (SQLException e){
+                e.printStackTrace();
+            }
+        }
+        return out;
+    }
+
+    public static String inserisciPrenotazione(String codice, String utente){
+        Connection conn1 = null;
+        String out = "La prenotazione non è stata inserita";
+        try{
+            conn1 = DriverManager.getConnection(url1,user,password);
+            if(conn1 != null){
+                Statement st = conn1.createStatement();
+                int rs = st.executeUpdate("UPDATE PRENOTAZIONE SET UTENTE = '" + utente +"'" + "WHERE CODICE ='" + codice + "'");
+                if(rs != 0){
+                    out = "";
+                    out = out + "La prenotazione con il codice " + codice + " è stata effettuata con successo";
                 }
                 System.out.println(out);
             }
