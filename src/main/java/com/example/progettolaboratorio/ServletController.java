@@ -363,9 +363,8 @@ public class ServletController extends HttpServlet {
 
     public String inserimentoDocente(HttpServletRequest request, HttpServletResponse response) throws ServletException,
             IOException {;
-        String result = "Inserimento fallito";
-        int ris;
-        HttpSession s=request.getSession();
+       HttpSession s = request.getSession();
+       String result = "";
         if((int)s.getAttribute("ruolo")==1) {
             System.out.println("Sono nella InsertProf");
             String account = request.getParameter("account");
@@ -377,10 +376,7 @@ public class ServletController extends HttpServlet {
             String nomeCognome = request.getParameter("nomeCognome");
             System.out.println(nomeCognome);
             String attivo = request.getParameter("attivo");
-            ris = DAO.inserimentoDocente(account, password, ruolo, nomeCognome,attivo);
-            if(ris != 0)
-                result = "L'inserimento del docente " + nomeCognome + "è avvenuto con successo";
-            System.out.println(result);
+            result = DAO.inserimentoDocente(account, password, ruolo, nomeCognome,attivo);
         }
         else{
             ServletContext ctx=request.getServletContext();
@@ -397,9 +393,9 @@ public class ServletController extends HttpServlet {
         HttpSession s=request.getSession();
         ArrayList<Utente> list = null;
         //TODO un controllino per vedere se è admin non ci starebbe male ma rompe cose per ora
+        if(isAdmin(request,response).equals("yes")){
             list = DAO.ViewAllUsers();
-
-
+        }
         return list;
     }
 
@@ -551,31 +547,22 @@ public class ServletController extends HttpServlet {
     public ArrayList<Corso> availableSubjects(HttpServletRequest request, HttpServletResponse response) throws ServletException,
             IOException {
         ArrayList<Corso> list;
-        //String titolo = request.getParameter("titlo");
-        //System.out.println(titolo);
-        //if(titolo == null){
-        //    titolo = "*";
-        //}
         list = DAO.availableSubjects();
         return list;
     }
 
     public String inserimentoCorso(HttpServletRequest request, HttpServletResponse response) throws ServletException,
             IOException {
-        String result = "Inserimento fallito";
+        String result = "";
         HttpSession s=request.getSession();
         if((int)s.getAttribute("ruolo")==1) {
             System.out.println("Sono nella inserimentoDocente");
             String corso = request.getParameter("corso");
+            result = DAO.inserimentoCorso(corso);
             if(corso == null){
                 corso = "*";
             }
             System.out.println(corso);
-            int ris = DAO.inserimentoCorso(corso);
-            if (ris != 0) {
-                result = "L'inserimento del corso " + corso + " è avvenuta con successo";
-            }
-            System.out.println(result);
         }
         else{
             ServletContext ctx=request.getServletContext();

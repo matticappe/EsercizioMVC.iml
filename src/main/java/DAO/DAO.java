@@ -22,15 +22,19 @@ public class DAO {
         }
     }
 
-    public static int inserimentoCorso(String corso){
+    public static String inserimentoCorso(String corso){
         Connection conn1 = null;
-        int ris = 0;
+        String out = "L'inserimento è fallito";
         try {
             conn1 = DriverManager.getConnection(url1, user, password);
             if (conn1 != null) {
                 System.out.println("Connected to the database test");
                 Statement st = conn1.createStatement();
-                ris = st.executeUpdate("INSERT INTO CORSO(TITOLO) VALUES('"+corso+"')");
+                int ris = st.executeUpdate("INSERT INTO CORSO(TITOLO) VALUES('"+corso+"')");
+                if(ris != 0){
+                    out = "";
+                    out = out + "Il corso con il nome" + corso + " è avvenuta con successo";
+                }
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -44,7 +48,7 @@ public class DAO {
                 }
             }
         }
-        return ris;
+        return out;
     }
 
     public static String cancellazionePrenotazione(String codice){
@@ -109,15 +113,19 @@ public class DAO {
     }
 
     //TODO modificare
-    public static int inserimentoDocente(String account, String password, String ruolo, String nomeCognome, String attivo){
+    public static String inserimentoDocente(String account, String pass, String ruolo, String nomeCognome, String attivo){
         Connection conn1 = null;
-        int ris = 0;
+        String out = "L'inserimento del docente è fallito";
         try {
             conn1 = DriverManager.getConnection(url1, user, password);
             if (conn1 != null) {
                 System.out.println("Connected to the database test");
                 Statement st = conn1.createStatement();
-                ris = st.executeUpdate("INSERT INTO DOCENTE(ACCOUNT, PASSWORD, RUOLO, NOMECOGNOME, ATTIVO) VALUES('"+account+"', '"+ password+"', '"+ruolo+"', '"+nomeCognome+"','"+attivo+"')");
+                int ris = st.executeUpdate("INSERT INTO DOCENTE(ACCOUNT, PASSWORD, RUOLO, NOMECOGNOME, ATTIVO) VALUES('"+account+"', '"+ pass+"', '"+ruolo+"', '"+nomeCognome+"','"+attivo+"')");
+                if(ris != 0){
+                    out = "";
+                    out = out + "Il docente " + nomeCognome + " è avvenuta con successo";
+                }
             }
 
         } catch (SQLException e) {
@@ -132,7 +140,7 @@ public class DAO {
                 }
             }
         }
-        return ris;
+        return out;
     }
 
     public static int inserimentoInsegna(String codDocente, String corso){
@@ -538,7 +546,6 @@ public class DAO {
         }
         return out;
     }
-
 
 
     public static ArrayList<Corso> availableSubjects(){
