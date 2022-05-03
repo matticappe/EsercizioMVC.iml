@@ -442,10 +442,9 @@ public class ServletController extends HttpServlet {
         return list;
     }
 
-    public /*Prenotazione[]*/ /*String*/ ArrayList<Prenotazione> viewAllPrenotations(HttpServletRequest request, HttpServletResponse response) throws ServletException,
+    public ArrayList<Prenotazione> viewAllPrenotations(HttpServletRequest request, HttpServletResponse response) throws ServletException,
             IOException {
         ArrayList<Prenotazione> list;
-        //String list;
         list = DAO.viewAllPrenotations();
         return list;
     }
@@ -590,7 +589,7 @@ public class ServletController extends HttpServlet {
 
 
     public String inserisciPrenotazione(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        System.out.println("Sono nella effettuaPrenotazione");
+        System.out.println("Sono nella inserisciPrenotazione");
         String codice= request.getParameter("codice");
         String slot_ora= request.getParameter("slot_ora");
         String data= request.getParameter("data");
@@ -606,7 +605,7 @@ public class ServletController extends HttpServlet {
         String result = "Inserimento fallito";
         HttpSession s= request.getSession();
         if((int)s.getAttribute("ruolo")==1) {
-            System.out.println("Sono nella effettuaPrenotazione");
+            System.out.println("Sono nella inserimentoInsegna");
             String docente = request.getParameter("docente");
             String corso = request.getParameter("corso");
             if(docente == null){
