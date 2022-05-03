@@ -67,9 +67,9 @@ public class ServletController extends HttpServlet {
                     out.println(s4);
                     break;
 
-                case "effettuaPrenotazione":
-                    System.out.println("Sono in effettua prenotazione");
-                    String r5 = effettuaPrenotazione(request, response);
+                case "inserisciPrenotazione":
+                    System.out.println("Sono in inserisci prenotazione");
+                    String r5 = inserisciPrenotazione(request, response);
                     String s5 = gson.toJson(r5);
                     out.println(s5);
                     break;
@@ -107,15 +107,15 @@ public class ServletController extends HttpServlet {
 
                 case "viewOwnPrenotations":
                     System.out.println("Sono in viewOwnPrenotations");
-                    ArrayList<Prenotazione> out2 = viewOwnPrenotations(request, response);
-                    if(out2 != null) {
-                        String s10 = gson.toJson(out2);
-                        out.println(s10);
+                    ArrayList<Prenotazione> s9 = viewOwnPrenotations(request, response);
+                    if(s9 != null){
+                        String r9 = gson.toJson(s9);
+                        out.println(r9);
                     }
                     else{
-                        String r10 = "Nessuna prenotazione trovata";
-                        String s10 = gson.toJson(r10);
-                        out.println(s10);
+                        String s9_1 = "Nessuna prenotazione trovata";
+                        String r9 = gson.toJson(s9_1);
+                        out.println(r9);
                     }
                     break;
 
@@ -123,8 +123,6 @@ public class ServletController extends HttpServlet {
                     System.out.println("Sono in viewAllPrenotations");
                     ArrayList<Prenotazione> string3 = viewAllPrenotations(request, response);
                     if(string3!=null){
-                        System.out.println("sono nell if viewAllPrenotations");
-                        System.out.println(string3);
                         for(Prenotazione str: string3){
                             System.out.println(str.getCodice()+str.getUtente()+str.getDocente()+str.getCorso()+str.getData()+str.getSlot_ora()+"\n");
                         }
@@ -265,9 +263,9 @@ public class ServletController extends HttpServlet {
                     out.println(s19);
                     break;
 
-                case "inserisciPrenotazione":
-                    System.out.println("Sono in inserisciPrenotazione");
-                    String r20 = inserisciPrenotazione(request,response);
+                case "effettuaPrenotazione":
+                    System.out.println("Sono in effettuaPrenotazione");
+                    String r20 = effettuaPrenotazione(request,response);
                     String s20 = gson.toJson(r20);
                     out.println(s20);
                     break;
@@ -407,19 +405,9 @@ public class ServletController extends HttpServlet {
 
     public String cancellaPrenotazione(HttpServletRequest request, HttpServletResponse response) throws ServletException,
             IOException {
-        String result = "Cancellazione fallita";
         String codice= request.getParameter("codice");
-        String utente= request.getParameter("utente");
-        String docente= request.getParameter("docente");
-        String corso= request.getParameter("corso");
-        String data= request.getParameter("data");
-        String slot_ora= request.getParameter("slot_ora");
-        String attivo = request.getParameter("attivo");
-        int ris = DAO.cancellazionePrenotazione(codice,utente,docente,corso, data,slot_ora);
-        if(ris != 0){
-            result = "La cancellazione della prenotazione dell'utente " + utente + " con il docente " + docente + "per il corso" + corso + " è avvenuta con successo";
-        }
-        return result;
+        String ris = DAO.cancellazionePrenotazione(codice);
+        return ris;
     }
 
     //penso prenotazioni prenotabili
@@ -601,19 +589,14 @@ public class ServletController extends HttpServlet {
     }
 
 
-    public String effettuaPrenotazione(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String result = "Prenotazione fallita";
+    public String inserisciPrenotazione(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         System.out.println("Sono nella effettuaPrenotazione");
         String codice= request.getParameter("codice");
         String slot_ora= request.getParameter("slot_ora");
         String data= request.getParameter("data");
-        String utente= request.getParameter("utente");
         String docente= request.getParameter("docente");
         String corso= request.getParameter("corso");
-        int ris = DAO.effettuaPrenotazione(codice,utente,docente,corso,data,slot_ora);
-        if(ris != 0){
-            result = "La prenotazione dell'utente " + utente + " con il docente " + docente+ " del corso " + corso + " è avvenuta con successo";
-        }
+        String result = DAO.inserisciPrenotazione(codice,docente,corso,data,slot_ora);
         System.out.println(result);
         return result;
     }
@@ -729,10 +712,10 @@ public class ServletController extends HttpServlet {
         return result;
     }
 
-    public String inserisciPrenotazione(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+    public String effettuaPrenotazione(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
         String codice = request.getParameter("codice");
         String utente = request.getParameter("utente");
-        String result = DAO.inserisciPrenotazione(codice,utente);
+        String result = DAO.effettuaPrenotazione(codice,utente);
         return result;
     }
 }

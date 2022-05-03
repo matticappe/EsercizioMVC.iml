@@ -47,16 +47,20 @@ public class DAO {
         return ris;
     }
 
-    //TODO:va riscritta
-    public static int cancellazionePrenotazione(String codice, String utente, String docente, String corso, String data, String slot_ora){
+    public static String cancellazionePrenotazione(String codice){
         Connection conn1 = null;
-        int ris = 0;
+        String out = "Eliminazione prenotazione fallita";
         try {
             conn1 = DriverManager.getConnection(url1, user, password);
             if (conn1 != null) {
                 System.out.println("Connected to the database test");
                 Statement st = conn1.createStatement();
-                ris = st.executeUpdate("UPDATE FROM PRENOTAZIONE SET STATO='0' WHERE UTENTE='"+utente+"' AND CODICE='"+codice+"'AND DOCENTE='"+docente+"' AND CORSO='"+corso+"'AND DATA='"+data+"'AND SLOT_ORA='"+slot_ora+"'");
+                int rs = st.executeUpdate("DELETE * FROM PRENOTAZIONE WHERE CODICE '" + codice + "'");
+                if(rs != 0){
+                    out = "";
+                    out = "Eliminazione della prenotazione con il codice" + codice + " è avvenuta con successo";
+                }
+                System.out.println(out);
             }
 
         } catch (SQLException e) {
@@ -71,18 +75,23 @@ public class DAO {
                 }
             }
         }
-        return ris;
+        return out;
     }
-    //TODO: va riscritta pure questa
-    public static int effettuaPrenotazione(String codice, String utente, String docente, String corso, String data, String slot_ora){
+
+
+    public static String inserisciPrenotazione(String codice, String docente, String corso, String data, String slot_ora){
         Connection conn1 = null;
-        int ris = 0;
+        String out = "L'inserimento della prenotazione è fallita";
         try {
             conn1 = DriverManager.getConnection(url1, user, password);
             if (conn1 != null) {
                 System.out.println("Connected to the database test");
                 Statement st = conn1.createStatement();
-                st.execute("INSERT INTO PRENOTAZIONE(CODICE,UTENTE,DOCENTE,CORSO,DATA,SLOT_ORA) VALUES ('"+codice+"','"+utente+"','"+docente+"','"+corso+"','"+data+"','"+slot_ora+"')");
+                int ris = st.executeUpdate("INSERT INTO PRENOTAZIONE(CODICE,DOCENTE,CORSO,DATA,SLOT_ORA) VALUES ('"+codice+"','"+docente+"','"+corso+"','"+data+"','"+slot_ora+"')");
+                if(ris != 0){
+                    out = "";
+                    out = out + "La prenotazione con codice" + codice + " è avvenuta con successo";
+                }
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -96,7 +105,7 @@ public class DAO {
                 }
             }
         }
-        return ris;
+        return out;
     }
 
     //TODO modificare
@@ -683,7 +692,7 @@ public class DAO {
         return out;
     }
 
-    public static String inserisciPrenotazione(String codice, String utente){
+    public static String effettuaPrenotazione(String codice, String utente){
         Connection conn1 = null;
         String out = "La prenotazione non è stata inserita";
         try{
