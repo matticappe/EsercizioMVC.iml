@@ -671,6 +671,7 @@ public class DAO {
             conn1 = DriverManager.getConnection(url1,user,password);
             if(conn1 != null){
                 Statement st = conn1.createStatement();
+
                 int rs = st.executeUpdate("UPDATE PRENOTAZIONE SET UTENTE = NULL WHERE CODICE =" + codice);
                 if(rs != 0){
                     out = "";
