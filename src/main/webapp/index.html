@@ -601,6 +601,7 @@
             utentePren:'',
             searchUser:'',
             newSearchUser:[],
+            newAllUsers:[],
             i : 0,
             filterPrenCode:'filterPrenotations',
             filterAdminPrenCode:'filterAdminPrenotations',
@@ -824,15 +825,21 @@
 
             searchUserName:function(){
                 let self = this;
-                for(let i = 0; i<self.allUsers.length; i++){
-                    console.log("sono nel for"+self.allUsers[i].account);
-                    if(self.allUsers[i].account === self.searchUser) {
-                        console.log("sono nel for"+self.allUsers[i].account);
-                        self.newSearchUser[i] = self.allUsers[i];
+                $.get("ServletController", {"username": this.username, "password": this.password, "invia": this.codUsers},function (data4) {
+                    self.newSearchUser = data4;
+                });
+                let j = 0;
+                for(let i = 0; i<self.newSearchUser.length; i++){
+                    console.log("sono nel for"+self.newSearchUser[i].account);
+                    if(self.newSearchUser[i].account === self.searchUser) {
+                        console.log("sono nel for"+self.newSearchUser[i].account);
+                        self.newAllUsers[j] = self.newSearchUser[i];
+                        j++;
                     }
                 };
-                self.allUsers = self.newSearchUser;
+                self.allUsers = self.newAllUsers;
                 self.newSearchUser = [];
+                self.newAllUsers = [];
 
             },
 
