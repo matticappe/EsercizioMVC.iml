@@ -417,7 +417,7 @@
 
 
     <div v-if="setVisibleLogin=='4'" id="logoutAmministratore" class="logout">
-        {{allUsers}}
+        {{newSearchUser}}
         <button type="button" v-on:click=setVisibleLogin='0' class="btn btn-secondary"
                 data-toggle="tooltip" data-placement="top" title="Tooltip on top">
             Logout
@@ -501,29 +501,37 @@
                         </div>
                     </td>
                 </tr>
-                <tr>
+                <tr v-if="showSearchUser==0">
                     <td>
-                        <div class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle" type="button"
-                                    id="dropdownMenuButton5Admin" data-toggle="dropdown"
-                                    aria-haspopup="true" aria-expanded="false">
-                                Seleziona utente
-                            </button>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a v-on:click="filterAdminUser()" class="dropdown-item" href="#">Azzera utente</a>
-                                <a v-on:click="filterAdminUser(u.account)" class="dropdown-item" href="#" v-for="u in allUsers">{{u.account}}</a>
-                            </div>
+                        <button type="button" class="btn btn-primary" v-on:click="showSearchUser=1">Seleziona Utente</button>
+                    </td>
+                </tr>
+
+                <tr v-if="showSearchUser==1">
+                    <td>
+                        <nav class="navbar navbar-light bg-light">
+                            <button type="button" class="btn btn-primary" v-on:click="showSearchUser=0">Indietro</button>
+                            <form class="form-inline">
+                                <input class="form-control mr-sm-2" type="search" v-model="searchUser" placeholder="Search" aria-label="Search">
+                                <button type="button" class="btn btn-outline-success" v-on:click="searchUserName()">Search</button>
+                            </form>
+                        </nav>
+                        <div class="list-group">
+
+                            <a href="#" class="list-group-item list-group-item-action" v-on:click="getAllUsers(), filterAdminUser()">Azzera utente</a>
+                            <a href="#" class="list-group-item list-group-item-action" v-on:click="filterAdminUser(u.account)" v-for="u in allUsers">{{u.account}}</a>
+
                         </div>
                     </td>
                 </tr>
-                <tr>
-                    <td>
-                        <button v-on:click="setVisibleStorico='2' ; getOwnPrenotations()" type="button" id="StoricoAdmin" class="btn btn-primary">Storico
-                            Prenotazioni</button>
-                    </td>
-                </tr>
+
+
+
                 </tbody>
             </table>
+            <!-- CIO SU CUI LAVORERO DOMANI PER FARE IL SELEZIONA UTENTE CON RICERCA -->
+            <!-- Lo metto nel div dove adesso elenco tutti gli utenti -->
+
         </div>
 
 
@@ -568,6 +576,7 @@
         el: '#loginScreen',
         data: {
             setVisibleLogin: '0',         //0 = login, 1=non registrati, 2=registrati, 3=docenti, 4=admin
+            showSearchUser:'0',
             setVisiblePrenotations: '9999',
             username: '',
             password: '',
@@ -590,6 +599,9 @@
             materiaPren:'',
             profPren:'',
             utentePren:'',
+            searchUser:'',
+            newSearchUser:[],
+            i : 0,
             filterPrenCode:'filterPrenotations',
             filterAdminPrenCode:'filterAdminPrenotations',
             codOwnPrenotations:'viewOwnPrenotations',
@@ -808,13 +820,20 @@
             },
 
 
-            getOwnPrenotations:function(){
+
+
+            searchUserName:function(){
                 let self = this;
-                console.log("sono in get OWN registered prenotations");
-                $.get("ServletController", {"username": this.username, "password": this.password, "invia": this.codOwnPrenotations},function (data2) {
-                    console.log('sono nella post get OWN prenotations');
-                    self.allPrenotations = data2;
-                });
+                for(let i = 0; i<self.allUsers.length; i++){
+                    console.log("sono nel for"+self.allUsers[i].account);
+                    if(self.allUsers[i].account === self.searchUser) {
+                        console.log("sono nel for"+self.allUsers[i].account);
+                        self.newSearchUser[i] = self.allUsers[i];
+                    }
+                };
+                self.allUsers = self.newSearchUser;
+                self.newSearchUser = [];
+
             },
 
 
