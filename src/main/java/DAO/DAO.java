@@ -143,33 +143,6 @@ public class DAO {
         return out;
     }
 
-    public static int inserimentoInsegna(String codDocente, String corso){
-        Connection conn1 = null;
-        int ris = 0;
-        try {
-            conn1 = DriverManager.getConnection(url1, user, password);
-            if (conn1 != null) {
-                System.out.println("Connected to the database test");
-                Statement st = conn1.createStatement();
-                ris = st.executeUpdate("INSERT INTO INSEGNA(CODDOCENTE, CORSO) VALUES('" + codDocente + "', '" + corso + "')");
-            }
-
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-        finally {
-            if (conn1 != null) {
-                try {
-                    conn1.close();
-                } catch (SQLException e2) {
-                    System.out.println(e2.getMessage());
-                }
-            }
-        }
-        return ris;
-    }
-
-
     public static ArrayList<Utente> ViewAllUsers() {
         Connection conn1 = null;
         ArrayList<Utente> out = new ArrayList<>();
@@ -260,17 +233,17 @@ public class DAO {
         return res;
     }
 
-    //gli input vanno gestiti da servlet
-    public static String updateInsegnaDocente(String corso){
+
+    public static String updateInsegnaDocente(String codDocente, String corso){
         Connection conn1 = null;
         String out = "";
         try{
             conn1 = DriverManager.getConnection(url1,user,password);
             if(conn1 != null){
                 Statement st = conn1.createStatement();
-                ResultSet rs = st.executeQuery("UPDATE FROM INSEGNA SET CODDOCENTE='codDocente' WHERE corso = "  + corso);
+                ResultSet rs = st.executeQuery("UPDATE INSEGNA SET CODDOCENTE = '" + codDocente + "'" + "WHERE CORSO = '" + corso + "'");
                 if(rs.next()){
-                    out = out + "Aggiornamento fatto con successo";
+                    out = out + "Aggiornamento fatto con successo dell'insegnate " + codDocente + " nel corso " + corso;
                 } else {
                     out = out + "Aggiornamento fallito";
                 }
@@ -290,16 +263,17 @@ public class DAO {
         return out;
     }
 
-    public static String updateInsegnaMateria(String codDocente){
+    public static String updateInsegnaMateria(String codDocente, String corso){
         Connection conn1 = null;
         String out = "";
         try{
             conn1 = DriverManager.getConnection(url1,user,password);
             if(conn1 != null){
                 Statement st = conn1.createStatement();
-                ResultSet rs = st.executeQuery("UPDATE FROM INSEGNA SET TITOLO='Titolo' WHERE CODDOCENTE = "  + codDocente);
+                //ResultSet rs = st.executeQuery("UPDATE FROM INSEGNA SET TITOLO='Titolo' WHERE CODDOCENTE = "  + codDocente);
+                ResultSet rs = st.executeQuery("UPDATE INSEGNA SET CORSO = '" + corso + "'" + "WHERE CODDOCENTE = '" + codDocente + "'");
                 if(rs.next()){
-                    out = out + "Aggiornamento del docente" + codDocente +" fatto con successo";
+                    out = out + "Aggiornamento del docente" + codDocente + " con la materia " + corso + " fatta con successo";
                 } else {
                     out = out + "Aggiornamento fallito";
                 }
@@ -491,16 +465,12 @@ public class DAO {
                 //                ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONE WHERE (UTENTE = null or UTENTE = '"+utente+"' ) "+data+" "+corso+" "+slot_ora+" "+docente+" " );   //CONTROLLA LE VIRGOLETTE DOVE CI SONO TUTTI I +...+...+...+
                 int i = 0;
                 while (rs.next()) {
-                    //forse va rivista con una document.out per scrivere nel div corretto
                     Prenotazione p = new Prenotazione(rs.getString("codice"),rs.getString("utente"), rs.getString("docente"), rs.getString("corso"), rs.getString("data"), rs.getString("slot_ora"));
                     System.out.println(i + " " + p.getCodice() + p.getUtente() + p.getDocente() + p.getCorso() + p.getData() + p.getSlot_ora());
                     out.add(p);
 
                 }
-                //Prenotazione p = new Prenotazione("impestata", "dio", "cane", "e", "la", "madonna");
-                //out.add(p);
             }
-
         } catch (SQLException e){
             System.out.println("SONO NELLA CATCH SQL " + e.getMessage());
         }
@@ -728,8 +698,36 @@ public class DAO {
         return out;
     }
 
+    public static String inserisciInsegna(String codDocente, String corso){
+        Connection conn1 = null;
+        int ris = 0;
+        String out = "";
+        try {
+            conn1 = DriverManager.getConnection(url1, user, password);
+            if (conn1 != null) {
+                System.out.println("Connected to the database test");
+                Statement st = conn1.createStatement();
+                ris = st.executeUpdate("INSERT INTO INSEGNA(CODDOCENTE, CORSO) VALUES('" + codDocente + "', '" + corso + "')");
+                if(ris != 0){
+                    out = out + "L'inserimento del docente " + codDocente + " che insegna la materia " + corso + " è avvenuta con successo";
+                }
+                else{
+                    out = out + "L'inserimento è fallito";
+                }
+            }
 
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        finally {
+            if (conn1 != null) {
+                try {
+                    conn1.close();
+                } catch (SQLException e2) {
+                    System.out.println(e2.getMessage());
+                }
+            }
+        }
+        return out;
+    }
 }
-
-
-//TODO: prenota

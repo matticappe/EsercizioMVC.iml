@@ -589,7 +589,7 @@ public class ServletController extends HttpServlet {
 
     public String inserimentoInsegna(HttpServletRequest request, HttpServletResponse response) throws ServletException,
             IOException {
-        String result = "Inserimento fallito";
+        String result = "";
         HttpSession s= request.getSession();
         if((int)s.getAttribute("ruolo")==1) {
             System.out.println("Sono nella inserimentoInsegna");
@@ -600,9 +600,7 @@ public class ServletController extends HttpServlet {
             }else if(corso == null){
                 corso = "*";
             }
-            int ris = DAO.inserimentoInsegna(docente, corso);
-            if (ris != 0)
-                result = "L'inserimento del docente " + docente + " del corso " + corso + " è avvenuta con successo";
+            result = result + DAO.inserisciInsegna(docente, corso);
             System.out.println(result);
         }
         else{
@@ -633,14 +631,15 @@ public class ServletController extends HttpServlet {
     }
 
     public String updateInsegnaDocente(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String result = "";
+        String result = "Non hai i permessi";
         HttpSession s= request.getSession();
         if((int)s.getAttribute("ruolo")==1) {
+            String codDocente = request.getParameter("codDocente");
             String titolo = request.getParameter("titolo");
             if(titolo == null){
                 titolo = "*";
             }
-            result = DAO.updateInsegnaDocente(titolo);
+            result = DAO.updateInsegnaDocente(codDocente,titolo);
 
         }
         else{
@@ -658,10 +657,11 @@ public class ServletController extends HttpServlet {
         HttpSession s= request.getSession();
         if((int) s.getAttribute("ruolo")==1) {
             String codDocente = request.getParameter("codDocente");
+            String corso = request.getParameter("corso");
             if(codDocente == null){
                 codDocente = "*";
             }
-            result = DAO.updateInsegnaMateria(codDocente);
+            result = DAO.updateInsegnaMateria(codDocente,corso);
             return result;
         }
         else{
