@@ -204,6 +204,8 @@ public class DAO {
         }
         return out;
     }
+    //ruolo=2 non esiste ???
+    //maybe fixed
     public static boolean isAdmin(String account){
         Connection conn1 = null;
         System.out.println("Account nella query isAdmin: " + account);
@@ -213,9 +215,9 @@ public class DAO {
             if(conn1 != null) {
                 System.out.println("Connected to the database test");
                 Statement st = conn1.createStatement();
-                ResultSet rs = st.executeQuery("SELECT * FROM UTENTE WHERE ACCOUNT = '"  +account+"' AND RUOLO = 2");
+                ResultSet rs = st.executeQuery("SELECT * FROM UTENTE WHERE ACCOUNT = '"  +account+"' AND RUOLO = 1");
                 if(rs.next()){
-                    if(rs.getString("ruolo") == "2" && rs.getString("account") == account);
+                    if(rs.getString("ruolo") == "1" && rs.getString("account") == account);
                         res=true;
                 }
             }
@@ -726,6 +728,39 @@ public class DAO {
                 } catch (SQLException e2) {
                     System.out.println(e2.getMessage());
                 }
+            }
+        }
+        return out;
+    }
+
+    /*
+    * Da questa funzione vedo tutti gli insegnamenti
+    * */
+    public static ArrayList<Insegna> viewInsegna() {
+        Connection conn1 = null;
+        ArrayList<Insegna> out = new ArrayList<>();
+        try {
+            conn1 = DriverManager.getConnection(url1,user,password);
+            if(conn1 != null){
+                System.out.println("Connessione riuscita");
+                Statement st = conn1.createStatement();
+                ResultSet rs = st.executeQuery("SELECT * FROM INSEGNA");
+                int i = 0;
+                Insegna d;
+                while (rs.next()){
+                    d = new Insegna(rs.getString("codDocente"),rs.getString("corso"));
+                    out.add(d);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Sono nella catch sql " + e.getMessage());
+        }
+        finally {
+            try {
+                if(conn1 != null)
+                    conn1.close();
+            }catch (SQLException throwables){
+                throwables.printStackTrace();
             }
         }
         return out;

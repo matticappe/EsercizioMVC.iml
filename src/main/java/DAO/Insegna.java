@@ -19,6 +19,6 @@ public class Insegna {
 
     @Override
     public String toString() {
-        return  codDocente + " " + corso;
+        return  "codDocente:" +codDocente + "corso:" + corso;
     }
 }

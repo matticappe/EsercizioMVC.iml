@@ -269,6 +269,25 @@ public class ServletController extends HttpServlet {
                     String s20 = gson.toJson(r20);
                     out.println(s20);
                     break;
+
+                case "getInsegna":
+                    System.out.println("Sono in viewInsegna");
+                    ArrayList<Insegna> list17 = viewInsegna(request,response);
+                    if(list17 != null){
+                        System.out.println("Sono nell if viewInsegna");
+                        System.out.println(list17);
+                        for (Insegna d : list17) {
+                            System.out.println(d.getCodDocente() + d.getCorso());
+                        }
+                        String s16 = gson.toJson(list17);
+                        out.println(s16);
+                    }
+                    else{
+                        String r21 = "Nessun insegnamento trovato";
+                        String s21 = gson.toJson(r21);
+                        out.println(s21);
+                    }
+                    break;
             }
         }
     }
@@ -595,11 +614,6 @@ public class ServletController extends HttpServlet {
             System.out.println("Sono nella inserimentoInsegna");
             String docente = request.getParameter("docente");
             String corso = request.getParameter("corso");
-            if(docente == null){
-                docente = "*";
-            }else if(corso == null){
-                corso = "*";
-            }
             result = result + DAO.inserisciInsegna(docente, corso);
             System.out.println(result);
         }
@@ -616,9 +630,6 @@ public class ServletController extends HttpServlet {
     public String isAdmin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
         String result = "";
         String username = request.getParameter("username");
-        if(username == null){
-            username = "*";
-        }
         boolean flag;
         flag = DAO.isAdmin(username);
         if(flag){
@@ -704,4 +715,11 @@ public class ServletController extends HttpServlet {
         String result = DAO.effettuaPrenotazione(codice,utente);
         return result;
     }
+    public ArrayList<Insegna> viewInsegna(HttpServletRequest request, HttpServletResponse response) throws ServletException,
+            IOException {
+        ArrayList<Insegna> list = null;
+        list = DAO.viewInsegna();
+        return list;
+    }
+
 }
