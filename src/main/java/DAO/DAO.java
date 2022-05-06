@@ -1,9 +1,5 @@
 package DAO;
 
-import com.google.gson.Gson;
-
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -113,7 +109,7 @@ public class DAO {
     }
 
     //TODO modificare
-    public static String inserimentoDocente(String account, String pass, String ruolo, String nomeCognome, String attivo){
+    public static String inserimentoDocente(String account, String pass, String ruolo){
         Connection conn1 = null;
         String out = "L'inserimento del docente è fallito";
         try {
@@ -499,8 +495,8 @@ public class DAO {
                 int i = 0;
                 while (rs.next()) {
                     //forse va rivista con una document.out per scrivere nel div corretto
-                    Docente d = new Docente(rs.getString("account"),rs.getString("password"), rs.getString("ruolo"), rs.getString("nomeCognome"),rs.getString("attivo"));
-                    System.out.println(i + " " + d.getAccount() + d.getRuolo() + d.getNomeCognome() + d.getAttivo());
+                    Docente d = new Docente(rs.getString("account"), rs.getString("nomeCognome"),rs.getString("attivo"));
+                    System.out.println(i + " " + d.getAccount() + d.getNomeCognome() + d.getAttivo());
                     out.add(d);
                 }
             }
@@ -565,8 +561,8 @@ public class DAO {
                 int i = 0;
                 Docente d;
                 while (rs.next()){
-                    d = new Docente(rs.getString("account"),rs.getString("password"),rs.getString("ruolo"),rs.getString("nomeCognome"),rs.getString("attivo"));
-                    System.out.println(i + " " + d.getAccount() + d.getPassword() + d.getRuolo() + d.getNomeCognome() + d.getAttivo());
+                    d = new Docente(rs.getString("account"),rs.getString("nomeCognome"),rs.getString("attivo"));
+                    System.out.println(i + " " + d.getAccount()  + d.getNomeCognome() + d.getAttivo());
                     out.add(d);
                 }
             }

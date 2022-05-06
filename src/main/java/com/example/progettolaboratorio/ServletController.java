@@ -230,7 +230,7 @@ public class ServletController extends HttpServlet {
                         System.out.println("Sono nell if viewAllProf");
                         System.out.println(list16);
                         for (Docente d : list16) {
-                            System.out.println(d.getAccount() + d.getRuolo() + d.getNomeCognome() + d.getAttivo());
+                            System.out.println(d.getAccount() + d.getNomeCognome() + d.getAttivo());
                         }
                         String s16 = gson.toJson(list16);
                         out.println(s16);
@@ -388,14 +388,10 @@ public class ServletController extends HttpServlet {
             System.out.println("Sono nella InsertProf");
             String account = request.getParameter("account");
             System.out.println(account);
-            String password = request.getParameter("password");
-            System.out.println(password);
-            String ruolo = request.getParameter("ruolo");
-            System.out.println(ruolo);
             String nomeCognome = request.getParameter("nomeCognome");
             System.out.println(nomeCognome);
             String attivo = request.getParameter("attivo");
-            result = DAO.inserimentoDocente(account, password, ruolo, nomeCognome,attivo);
+            result = DAO.inserimentoDocente(account, nomeCognome,attivo);
         }
         else{
             ServletContext ctx=request.getServletContext();
