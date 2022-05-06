@@ -117,7 +117,7 @@ public class DAO {
             if (conn1 != null) {
                 System.out.println("Connected to the database test");
                 Statement st = conn1.createStatement();
-                int ris = st.executeUpdate("INSERT INTO DOCENTE(ACCOUNT, NOMECOGNOME, ATTIVO) VALUES('"+account+"', '"+"', '"+nomeCognome+"','"+attivo+"')");
+                int ris = st.executeUpdate("INSERT INTO DOCENTE(ACCOUNT, NOMECOGNOME, ATTIVO) VALUES('"+account+"', '"+nomeCognome+"','"+attivo+"')");
                 if(ris != 0){
                     out = "";
                     out = out + "Il docente " + nomeCognome + " è avvenuta con successo";
