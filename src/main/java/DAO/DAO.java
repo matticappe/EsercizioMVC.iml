@@ -109,7 +109,7 @@ public class DAO {
     }
 
     //TODO modificare
-    public static String inserimentoDocente(String account, String pass, String ruolo){
+    public static String inserimentoDocente(String account,String nomeCognome,String attivo){
         Connection conn1 = null;
         String out = "L'inserimento del docente è fallito";
         try {
@@ -117,7 +117,7 @@ public class DAO {
             if (conn1 != null) {
                 System.out.println("Connected to the database test");
                 Statement st = conn1.createStatement();
-                int ris = st.executeUpdate("INSERT INTO DOCENTE(ACCOUNT, PASSWORD, RUOLO, NOMECOGNOME, ATTIVO) VALUES('"+account+"', '"+ pass+"', '"+ruolo+"', '"+nomeCognome+"','"+attivo+"')");
+                int ris = st.executeUpdate("INSERT INTO DOCENTE(ACCOUNT, NOMECOGNOME, ATTIVO) VALUES('"+account+"', '"+"', '"+nomeCognome+"','"+attivo+"')");
                 if(ris != 0){
                     out = "";
                     out = out + "Il docente " + nomeCognome + " è avvenuta con successo";
