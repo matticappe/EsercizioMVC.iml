@@ -14,7 +14,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Arrays;
+
 
 import static DAO.DAO.loginUtente;
 import static java.lang.System.out;
@@ -304,10 +304,7 @@ public class ServletController extends HttpServlet {
 
     public String login(HttpServletRequest request, HttpServletResponse response) throws ServletException,
             IOException {
-        //Gson gson = new Gson();
         HttpSession s=null;
-        //response.setContentType("application/json");     //questo non ci va
-        //PrintWriter out = response.getWriter();          //anche questo non ci va
         ServletContext ctx= request.getServletContext();
         RequestDispatcher rd =null;
         String res="";
@@ -407,7 +404,6 @@ public class ServletController extends HttpServlet {
             IOException {
         HttpSession s=request.getSession();
         ArrayList<Utente> list = null;
-        //TODO un controllino per vedere se è admin non ci starebbe male ma rompe cose per ora
         if(isAdmin(request,response).equals("yes")){
             list = DAO.ViewAllUsers();
         }
@@ -421,7 +417,7 @@ public class ServletController extends HttpServlet {
         return ris;
     }
 
-    //penso prenotazioni prenotabili
+
     public ArrayList<Prenotazione> viewOwnPrenotations(HttpServletRequest request, HttpServletResponse response) throws ServletException,
             IOException {
         System.out.println("ViewOwnPrenot");
@@ -469,37 +465,37 @@ public class ServletController extends HttpServlet {
         String docente = request.getParameter("docente");
         String utente = request.getParameter("utente");
 
-        String data1;
-        String utente1;
-        String materia1;
-        String docente1;
-        String slot_ora1;
+        String data_filter;
+        String utente_filter;
+        String materia_filter;
+        String docente_filter;
+        String slot_ora_filter;
         if(data==null || data==""){
-            data1="";
+            data_filter="";
         }else{
-            data1 = " AND DATA = '"+data+"'";
+            data_filter = " AND DATA = '"+data+"'";
         }
         if(materia==null || materia == ""){
-            materia1="";
+            materia_filter="";
         }else{
-            materia1 = " AND CORSO = '"+materia+"'";
+            materia_filter = " AND CORSO = '"+materia+"'";
         }
         if(docente==null || docente == ""){
-            docente1="";
+            docente_filter="";
         }else{
-            docente1 = " AND DOCENTE = '"+docente+"'";
+            docente_filter = " AND DOCENTE = '"+docente+"'";
         }
         if(slot_ora==null || slot_ora == ""){
-            slot_ora1="";
+            slot_ora_filter="";
         }else{
-            slot_ora1 = " AND SLOT_ORA = '"+slot_ora+"'";
+            slot_ora_filter = " AND SLOT_ORA = '"+slot_ora+"'";
         }
         if(utente==null || utente == ""){
-            utente1="";
+            utente_filter="";
         }else{
-            utente1 = " AND UTENTE = '"+utente+"'";
+            utente_filter = " AND UTENTE = '"+utente+"'";
         }
-        list = DAO.filterAdminPrenotations(slot_ora1,data1,materia1,docente1, utente1);
+        list = DAO.filterAdminPrenotations(slot_ora_filter,data_filter,materia_filter,docente_filter, utente_filter);
         return list;
     }
 
@@ -543,17 +539,6 @@ public class ServletController extends HttpServlet {
     public ArrayList<Docente> filterProf(HttpServletRequest request, HttpServletResponse response) throws ServletException,
             IOException {
         ArrayList<Docente> list;
-        String account = request.getParameter("account");
-        String nomeCognome = request.getParameter("nomeCognome");
-        String attivo = request.getParameter("attivo");
-
-        if(account == null){
-            account = "*";
-        }else if(nomeCognome == null){
-            nomeCognome = "*";
-        }else if(attivo == null){
-            attivo = "*";
-        }
         list = DAO.filterProf();
         return list;
     }
@@ -574,9 +559,6 @@ public class ServletController extends HttpServlet {
             System.out.println("Sono nella inserimentoDocente");
             String corso = request.getParameter("corso");
             result = DAO.inserimentoCorso(corso);
-            if(corso == null){
-                corso = "*";
-            }
             System.out.println(corso);
         }
         else{
@@ -643,11 +625,7 @@ public class ServletController extends HttpServlet {
         if((int)s.getAttribute("ruolo")==1) {
             String codDocente = request.getParameter("codDocente");
             String titolo = request.getParameter("titolo");
-            if(titolo == null){
-                titolo = "*";
-            }
             result = DAO.updateInsegnaDocente(codDocente,titolo);
-
         }
         else{
             ServletContext ctx=request.getServletContext();
@@ -665,9 +643,6 @@ public class ServletController extends HttpServlet {
         if((int) s.getAttribute("ruolo")==1) {
             String codDocente = request.getParameter("codDocente");
             String corso = request.getParameter("corso");
-            if(codDocente == null){
-                codDocente = "*";
-            }
             result = DAO.updateInsegnaMateria(codDocente,corso);
             return result;
         }
@@ -717,7 +692,4 @@ public class ServletController extends HttpServlet {
         list = DAO.viewInsegna();
         return list;
     }
-
-    //TODO MODO
-
 }
