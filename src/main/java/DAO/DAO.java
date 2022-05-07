@@ -200,8 +200,7 @@ public class DAO {
         return out;
     }
 
-    //ruolo=2 non esiste ???
-    //maybe fixed
+
     public static boolean isAdmin(String account){
         Connection conn1 = null;
         System.out.println("Account nella query isAdmin: " + account);
@@ -362,7 +361,6 @@ public class DAO {
     public static ArrayList<Prenotazione> viewOwnActPrenotations(String account){
         Connection conn1 = null;
         ArrayList<Prenotazione> out = new ArrayList<>();
-        //String out = "";
         try{
             conn1 = DriverManager.getConnection(url1,user,password);
             if(conn1 != null){

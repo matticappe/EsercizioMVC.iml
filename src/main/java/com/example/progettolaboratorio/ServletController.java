@@ -402,7 +402,6 @@ public class ServletController extends HttpServlet {
 
     public ArrayList<Utente> stampaUtenti(HttpServletRequest request, HttpServletResponse response) throws ServletException,
             IOException {
-        HttpSession s=request.getSession();
         ArrayList<Utente> list = null;
         if(isAdmin(request,response).equals("yes")){
             list = DAO.ViewAllUsers();
