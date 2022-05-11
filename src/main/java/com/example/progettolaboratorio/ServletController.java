@@ -123,9 +123,6 @@ public class ServletController extends HttpServlet {
                     System.out.println("Sono in viewAllPrenotations");
                     ArrayList<Prenotazione> string3 = viewAllPrenotations(request, response);
                     if(string3!=null){
-                        for(Prenotazione str: string3){
-                            System.out.println(str.getCodice()+str.getUtente()+str.getDocente()+str.getCorso()+str.getData()+str.getSlot_ora()+"\n");
-                        }
                         System.out.println("test Stringa");
                         String s11 = gson.toJson(string3);
                         out.println(s11);
@@ -416,7 +413,7 @@ public class ServletController extends HttpServlet {
         return ris;
     }
 
-
+    //prenotazioni dell utente ancora disdicibili e prenotabili e docente dev essere attivo
     public ArrayList<Prenotazione> viewOwnPrenotations(HttpServletRequest request, HttpServletResponse response) throws ServletException,
             IOException {
         System.out.println("ViewOwnPrenot");
@@ -432,7 +429,7 @@ public class ServletController extends HttpServlet {
         return list;
     }
 
-    //penso prenotazioni mie prenotate effettivamente
+    //penso prenotazioni mie prenotate effettivamente (docente non per forza attivo)
     public ArrayList<Prenotazione> viewOwnActPrenotations(HttpServletRequest request, HttpServletResponse response) throws ServletException,
             IOException {
         ArrayList<Prenotazione> list;
@@ -442,7 +439,7 @@ public class ServletController extends HttpServlet {
         if(username==null || username==""){
             username1="";
         }else{
-            username1 = " AND USERNAME = '"+username+"'";
+            username1 = "UTENTE = '"+username+"'";
         }
         list = DAO.viewOwnActPrenotations(username1);
         return list;
@@ -480,9 +477,9 @@ public class ServletController extends HttpServlet {
             materia_filter = " AND CORSO = '"+materia+"'";
         }
         if(docente==null || docente == ""){
-            docente_filter="";
+            docente_filter=" AND ATTIVO = '1'";
         }else{
-            docente_filter = " AND DOCENTE = '"+docente+"'";
+            docente_filter = " AND ATTIVO = '1' AND PRENOTAZIONE.DOCENTE = '"+docente+"'";
         }
         if(slot_ora==null || slot_ora == ""){
             slot_ora_filter="";

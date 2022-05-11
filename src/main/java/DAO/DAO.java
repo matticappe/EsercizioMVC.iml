@@ -325,7 +325,7 @@ public class DAO {
         return out;
     }
 
-    //storico utente
+    //PRENOTAZIONI PRENOTABILI E PRENOTATE MA NON ANCORA FATTE (QUINDI CANCELLABILI), CONTROLLO SU PROF ATTIVI
     public static ArrayList<Prenotazione> viewOwnPrenotations(String utente){
         Connection conn1 = null;
         ArrayList<Prenotazione> out = new ArrayList<>();
@@ -334,7 +334,7 @@ public class DAO {
             conn1 = DriverManager.getConnection(url1,user,password);
             if(conn1 != null){
                 Statement st = conn1.createStatement();
-                ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONE WHERE "  + utente);
+                ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONE join DOCENTE on(PRENOTAZIONE.docente = DOCENTE.account) WHERE ATTIVO = '1' AND (UTENTE IS NULL OR "+ utente+")");
                 int i = 0;
                 while (rs.next()) {
                     Prenotazione p = new Prenotazione(rs.getString("codice"),rs.getString("utente"), rs.getString("docente"), rs.getString("corso"), rs.getString("data"), rs.getString("slot_ora"));
@@ -357,7 +357,7 @@ public class DAO {
         return out;
     }
 
-    //prenotazioni attive
+    //prenotazioni attive (NO CONTROLLI SU PROF ATTIVI)
     public static ArrayList<Prenotazione> viewOwnActPrenotations(String account){
         Connection conn1 = null;
         ArrayList<Prenotazione> out = new ArrayList<>();
@@ -365,7 +365,7 @@ public class DAO {
             conn1 = DriverManager.getConnection(url1,user,password);
             if(conn1 != null){
                 Statement st = conn1.createStatement();
-                ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONE WHERE UTENE IS NULL OR UTENTE = '" + account + "'");
+                ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONE WHERE " + account);
                 int i = 0;
                 while (rs.next()) {
                     Prenotazione p = new Prenotazione(rs.getString("codice"),rs.getString("utente"), rs.getString("docente"), rs.getString("corso"), rs.getString("data"), rs.getString("slot_ora"));
@@ -398,7 +398,7 @@ public class DAO {
             conn1 = DriverManager.getConnection(url1,user,password);
             if(conn1 != null){
                 Statement st = conn1.createStatement();
-                ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONE WHERE (UTENTE IS NULL OR UTENTE = '"+utente+"') "+data+" "+corso+" "+slot_ora+" "+docente+" " );   //CONTROLLA LE VIRGOLETTE DOVE CI SONO TUTTI I +...+...+...+
+                ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONE join DOCENTE on(PRENOTAZIONE.docente = DOCENTE.account) WHERE (UTENTE IS NULL OR UTENTE = '"+utente+"') AND ATTIVO = '1' "+data+" "+corso+" "+slot_ora+" "+docente+" " );   //CONTROLLA LE VIRGOLETTE DOVE CI SONO TUTTI I +...+...+...+
                 int i = 0;
                 while (rs.next()) {
                     //forse va rivista con una document.out per scrivere nel div corretto
@@ -434,7 +434,7 @@ public class DAO {
             conn1 = DriverManager.getConnection(url1,user,password);
             if(conn1 != null){
                 Statement st = conn1.createStatement();
-                ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONE WHERE (UTENTE IS NULL OR UTENTE IS NOT NULL) "+data+" "+corso+" "+slot_ora+" "+docente+" "+utente+" " );   //CONTROLLA LE VIRGOLETTE DOVE CI SONO TUTTI I +...+...+...+
+                ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONE join DOCENTE on(PRENOTAZIONE.docente = DOCENTE.account) WHERE (UTENTE IS NULL OR UTENTE IS NOT NULL) "+data+" "+corso+" "+slot_ora+" "+docente+" "+utente+" " );   //CONTROLLA LE VIRGOLETTE DOVE CI SONO TUTTI I +...+...+...+
                 int i = 0;
                 while (rs.next()) {
                     Prenotazione p = new Prenotazione(rs.getString("codice"),rs.getString("utente"), rs.getString("docente"), rs.getString("corso"), rs.getString("data"), rs.getString("slot_ora"));
@@ -528,7 +528,7 @@ public class DAO {
             if(conn1 != null){
                 System.out.println("Connessione riuscita");
                 Statement st = conn1.createStatement();
-                ResultSet rs = st.executeQuery("SELECT * FROM DOCENTE");
+                ResultSet rs = st.executeQuery("SELECT * FROM DOCENTE WHERE attivo = '1'");
                 int i = 0;
                 Docente d;
                 while (rs.next()){

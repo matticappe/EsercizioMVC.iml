@@ -307,7 +307,7 @@
                 </tr>
                 <tr>
                     <td>
-                        <button v-on:click="setVisibleStorico='2' ; getOwnPrenotations()" type="button" id="StoricoUtenteRegistrato" class="btn btn-primary">Storico
+                        <button v-on:click="setVisibleStorico='2' ; getOwnActPrenotations()" type="button" id="StoricoUtenteRegistrato" class="btn btn-primary">Storico
                             Prenotazioni</button>
                     </td>
                 </tr>
@@ -649,7 +649,7 @@
             codLogin: 'login',
             codLogout: 'logout',
             codSubjects: 'availableSubjects',
-            codPrenotations: 'viewAllPrenotations',
+            codPrenotations: 'viewOwnPrenotations',
             codRimuoviCorso: 'eliminaCorso',
             codRimuoviProf: 'eliminaDocente',
             allPrenotations:[],
@@ -667,7 +667,7 @@
             newAllUsers:[],
             filterPrenCode:'filterPrenotations',
             filterAdminPrenCode:'filterAdminPrenotations',
-            codOwnPrenotations:'viewOwnPrenotations',
+            codOwnActPrenotations:'viewOwnActPrenotations',
             codUsers:'stampaUtenti',
             setVisibleStorico:'1',
             corsoDaRimuovere:'',
@@ -855,7 +855,7 @@
                 let self = this;
                 self.data = dataa;
                 console.log("sono in filterData");
-                this.filterAdminPrenotations();
+                this.filterPrenotations();
             },
 
             filterAdminSlot:function(slott){
@@ -886,7 +886,14 @@
                 this.filterAdminPrenotations();
             },
 
-
+            getOwnActPrenotations:function(){
+                let self = this;
+                console.log("sono in get OWN registered prenotations");
+                $.get("ServletController", {"username": this.username, "password": this.password, "invia": this.codOwnActPrenotations},function (data2) {
+                    console.log('sono nella post get OWN prenotations');
+                    self.allPrenotations = data2;
+                });
+            },
 
 
             searchUserName:function(){
