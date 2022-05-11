@@ -559,7 +559,7 @@ public class DAO {
             conn1 = DriverManager.getConnection(url1,user,password);
             if(conn1 != null){
                 Statement st = conn1.createStatement();
-                int rs = st.executeUpdate("DELETE * FROM DOCENTE WHERE ACCOUNT = '" + account +"'");
+                int rs = st.executeUpdate("UPDATE DOCENTE SET attivo = '0' WHERE ACCOUNT = '" + account +"'");
                 if(rs != 0){
                     out = "";
                     out = out + "Eliminazione del docente" + account + " avvenuta con successo";
@@ -588,7 +588,7 @@ public class DAO {
             conn1 = DriverManager.getConnection(url1,user,password);
             if(conn1 != null){
                 Statement st = conn1.createStatement();
-                int rs = st.executeUpdate("DELETE * FROM CORSO WHERE TITOLO = '" + titolo +"'");
+                int rs = st.executeUpdate("DELETE FROM CORSO WHERE TITOLO = '" + titolo +"'");
                 if(rs != 0){
                     out = "";
                     out = out + "Eliminazione corso " + titolo + " avvenuta con successo";

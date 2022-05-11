@@ -525,12 +525,70 @@
                     </td>
                 </tr>
 
-
-
                 </tbody>
             </table>
             <!-- CIO SU CUI LAVORERO DOMANI PER FARE IL SELEZIONA UTENTE CON RICERCA -->
             <!-- Lo metto nel div dove adesso elenco tutti gli utenti -->
+
+
+
+
+            <!-- ---------------------- INIZIO SECONDA TABELLA SINISTRA ---------------- -->
+
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">Modifica Database</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                    <tr v-if="showRimuoviCorso==0">
+                        <td>
+                            <button type="button" class="btn btn-primary" v-on:click="showRimuoviCorso=1">Rimuovi corso</button>
+                        </td>
+                    </tr>
+
+                    <tr v-if="showRimuoviCorso==1">
+                        <td>
+                            <div class="list-group">
+                                <a v-if="checkRimuoviCorso==='0'" href="#" v-on:click="salvaNomeCorsoRimuovere(s.titolo), checkRimuoviCorso='1'" class="list-group-item list-group-item-action" v-for="s in allSubjects">{{s.titolo}}</a>
+                                <a v-if="checkRimuoviCorso==='1'" href="#" class="list-group-item list-group-item-action" >
+                                    <span class="badge badge-pill badge-danger">Sei sicuro di voler rimuovere ?</span>
+                                    <br>
+                                    <button type="button" class="btn btn-success" v-on:click="showRimuoviCorso=0, checkRimuoviCorso='0'">NO</button>
+                                    <button type="button" class="btn btn-danger" v-on:click="showRimuoviCorso=0, rimuoviCorso(), checkRimuoviCorso='0'">SI</button>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- il controllo v-if non lo faccio per un numero ma per il nome del corso -->
+
+
+                    <tr v-if="showRimuoviProf==0">
+                        <td>
+                            <button type="button" class="btn btn-primary" v-on:click="showRimuoviProf=1">Rimuovi professore</button>
+                        </td>
+                    </tr>
+
+                    <tr v-if="showRimuoviProf==1">
+                        <td>
+                            <div class="list-group">
+                                <a v-if="checkRimuoviProf==='0'" href="#" v-on:click="salvaNomeProfRimuovere(p.account), checkRimuoviProf='1'" class="list-group-item list-group-item-action" v-for="p in allProfs">{{p.nomeCognome}}</a>
+                                <a v-if="checkRimuoviProf==='1'" href="#" class="list-group-item list-group-item-action" >
+                                    <span class="badge badge-pill badge-danger">Sei sicuro di voler rimuovere ?</span>
+                                    <br>
+                                    <button type="button" class="btn btn-success" v-on:click="showRimuoviProf=0, checkRimuoviProf='0'">NO</button>
+                                    <button type="button" class="btn btn-danger" v-on:click="showRimuoviProf=0, rimuoviProf(), checkRimuoviProf='0'">SI</button>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+
+
 
         </div>
 
@@ -578,6 +636,9 @@
             setVisibleLogin: '0',         //0 = login, 1=non registrati, 2=registrati, 3=docenti, 4=admin
             showSearchUser:'0',
             setVisiblePrenotations: '9999',
+            showRimuoviCorso: '0',
+            showRimuoviProf: '0',
+            showRimuoviCorsoElem:[],
             username: '',
             password: '',
             risposta: 'falso',
@@ -589,6 +650,8 @@
             codLogout: 'logout',
             codSubjects: 'availableSubjects',
             codPrenotations: 'viewAllPrenotations',
+            codRimuoviCorso: 'eliminaCorso',
+            codRimuoviProf: 'eliminaDocente',
             allPrenotations:[],
             allSubjects:[],
             codProfs: 'filterProf',
@@ -602,12 +665,15 @@
             searchUser:'',
             newSearchUser:[],
             newAllUsers:[],
-            i : 0,
             filterPrenCode:'filterPrenotations',
             filterAdminPrenCode:'filterAdminPrenotations',
             codOwnPrenotations:'viewOwnPrenotations',
             codUsers:'stampaUtenti',
             setVisibleStorico:'1',
+            corsoDaRimuovere:'',
+            profDaRimuovere:'',
+            checkRimuoviCorso:'0',
+            checkRimuoviProf:'0',
         },
         /*
         mounted:function(){
@@ -843,8 +909,63 @@
 
             },
 
+            salvaNomeCorsoRimuovere:function(titolo){
+                let self = this;
+                self.corsoDaRimuovere = titolo;
+            },
 
+            rimuoviCorso:function(){
+                let self = this;
+                $.get("ServletController", {"username": this.username, "password": this.password, "invia": this.codRimuoviCorso, "titolo": self.corsoDaRimuovere}, function (data3) {
+                    console.log(data3);
+                });
 
+                setTimeout(function() {
+
+                    //aggiorno prenotazioni
+                    $.get("ServletController", {"username": this.username, "password": this.password, "materia":self.materiaPren, "docente":self.profPren, "data":self.data, "slot_ora":self.oraPren, "utente":self.utentePren, "invia": this.filterAdminPrenCode},function (data5) {
+                        self.allPrenotations = data5;
+                        console.log("finita la getFilteredPrenotations");
+                        console.log(data5);
+                    });
+                    //aggiorno materie nel filtro
+                    $.get("ServletController", {"username": this.username, "password": this.password, "invia": this.codSubjects},function (data3) {
+                        self.allSubjects = data3;
+                        console.log(data3);
+                    });
+
+                }.bind(this), 10);
+
+            },
+
+            salvaNomeProfRimuovere:function(nome){
+                let self = this;
+                self.profDaRimuovere = nome;
+            },
+
+            rimuoviProf:function(){
+                let self = this;
+                $.get("ServletController", {"username": this.username, "password": this.password, "invia": this.codRimuoviProf, "account": self.profDaRimuovere}, function (data3) {
+                    console.log(data3);
+                });
+
+                setTimeout(function() {
+
+                    //aggiorno prenotazioni
+                    $.get("ServletController", {"username": this.username, "password": this.password, "materia":self.materiaPren, "docente":self.profPren, "data":self.data, "slot_ora":self.oraPren, "utente":self.utentePren, "invia": this.filterAdminPrenCode},function (data5) {
+                        self.allPrenotations = data5;
+                        console.log("finita la getFilteredPrenotations");
+                        console.log(data5);
+                    });
+                    //aggiorno professori nel filtro
+                    $.get("ServletController", {"username": this.username, "password": this.password, "invia": this.codProfs},function (data4) {
+                        self.allProfs = data4;
+                        console.log(data4);
+                    });
+
+                }.bind(this), 10);
+
+            },
 
 
             /*
