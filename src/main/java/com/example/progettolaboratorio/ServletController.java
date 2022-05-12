@@ -74,7 +74,7 @@ public class ServletController extends HttpServlet {
                     out.println(s5);
                     break;
 
-                case "inserimentoInsegna":
+                case "inserisciInsegna":
                     System.out.println("Sono in inserimento insegna");
                     String r6 = inserimentoInsegna(request, response);
                     String s6 = gson.toJson(r6);
@@ -541,20 +541,11 @@ public class ServletController extends HttpServlet {
     public String inserimentoCorso(HttpServletRequest request, HttpServletResponse response) throws ServletException,
             IOException {
         String result = "";
-        HttpSession s=request.getSession();
-        if((int)s.getAttribute("ruolo")==1) {
             System.out.println("Sono nella inserimentoDocente");
             String corso = request.getParameter("corso");
             result = DAO.inserimentoCorso(corso);
             System.out.println(corso);
-        }
-        else{
-            ServletContext ctx=request.getServletContext();
-            RequestDispatcher rd=ctx.getNamedDispatcher("servletError");
-            String messaggio="Non hai i permessi per utilizzare questa funzione";
-            request.setAttribute("message",messaggio);
-            rd.include(request,response);
-        }
+
         return result;
     }
 
@@ -575,21 +566,13 @@ public class ServletController extends HttpServlet {
             IOException {
         String result = "";
         HttpSession s= request.getSession();
-        if((int)s.getAttribute("ruolo")==1) {
             System.out.println("Sono nella inserimentoInsegna");
-            String docente = request.getParameter("docente");
+            String docente = request.getParameter("codDocente");
             String corso = request.getParameter("corso");
             result = result + DAO.inserisciInsegna(docente, corso);
             System.out.println(result);
-        }
-        else{
-            ServletContext ctx=request.getServletContext();
-            RequestDispatcher rd=ctx.getNamedDispatcher("servletError");
-            String messaggio="Non hai i permessi per utilizzare questa funzione";
-            request.setAttribute("message",messaggio);
-            rd.include(request,response);
-        }
-        return result;
+            return result;
+
     }
 
     public String isAdmin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
@@ -609,38 +592,19 @@ public class ServletController extends HttpServlet {
     public String updateInsegnaDocente(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String result = "Non hai i permessi";
         HttpSession s= request.getSession();
-        if((int)s.getAttribute("ruolo")==1) {
             String codDocente = request.getParameter("codDocente");
             String titolo = request.getParameter("titolo");
             result = DAO.updateInsegnaDocente(codDocente,titolo);
-        }
-        else{
-            ServletContext ctx=request.getServletContext();
-            RequestDispatcher rd=ctx.getNamedDispatcher("servletError");
-            String messaggio="Non hai i permessi per utilizzare questa funzione";
-            request.setAttribute("message",messaggio);
-            rd.include(request,response);
-        }
-        return result;
+            return result;
+
     }
 
     public String updateInsegnaMateria(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String result = "";
-        HttpSession s= request.getSession();
-        if((int) s.getAttribute("ruolo")==1) {
             String codDocente = request.getParameter("codDocente");
             String corso = request.getParameter("corso");
             result = DAO.updateInsegnaMateria(codDocente,corso);
             return result;
-        }
-        else{
-            ServletContext ctx=request.getServletContext();
-            RequestDispatcher rd=ctx.getNamedDispatcher("servletError");
-            String messaggio="Non hai i permessi per utilizzare questa funzione";
-            request.setAttribute("message",messaggio);
-            rd.include(request,response);
-        }
-        return result;
     }
 
     public ArrayList<Docente> viewAllDocente(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{

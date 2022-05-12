@@ -29,7 +29,7 @@ public class DAO {
                 int ris = st.executeUpdate("INSERT INTO CORSO(TITOLO) VALUES('"+corso+"')");
                 if(ris != 0){
                     out = "";
-                    out = out + "Il corso con il nome" + corso + " è avvenuta con successo";
+                    out = out + "Corso creato con successo";
                 }
             }
         } catch (SQLException e) {
@@ -78,7 +78,7 @@ public class DAO {
         return out;
     }
 
-
+//TODO:DA FIXARE
     public static String inserisciPrenotazione(String codice, String docente, String corso, String data, String slot_ora){
         Connection conn1 = null;
         String out = "L'inserimento della prenotazione è fallita";
@@ -90,7 +90,7 @@ public class DAO {
                 int ris = st.executeUpdate("INSERT INTO PRENOTAZIONE(CODICE,DOCENTE,CORSO,DATA,SLOT_ORA) VALUES ('"+codice+"','"+docente+"','"+corso+"','"+data+"','"+slot_ora+"')");
                 if(ris != 0){
                     out = "";
-                    out = out + "La prenotazione con codice" + codice + " è avvenuta con successo";
+                    out = out + "La prenotazione con codice" + codice + " creata con successo";
                 }
             }
         } catch (SQLException e) {
@@ -670,7 +670,7 @@ public class DAO {
     public static String inserisciInsegna(String codDocente, String corso){
         Connection conn1 = null;
         int ris = 0;
-        String out = "";
+        String out = "L'inserimento è fallito";
         try {
             conn1 = DriverManager.getConnection(url1, user, password);
             if (conn1 != null) {
@@ -678,11 +678,9 @@ public class DAO {
                 Statement st = conn1.createStatement();
                 ris = st.executeUpdate("INSERT INTO INSEGNA(CODDOCENTE, CORSO) VALUES('" + codDocente + "', '" + corso + "')");
                 if(ris != 0){
-                    out = out + "L'inserimento del docente " + codDocente + " che insegna la materia " + corso + " è avvenuta con successo";
+                    out = "L'inserimento del docente " + codDocente + " che insegna la materia " + corso + " avvenuto con successo";
                 }
-                else{
-                    out = out + "L'inserimento è fallito";
-                }
+
             }
 
         } catch (SQLException e) {
