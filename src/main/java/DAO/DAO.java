@@ -55,10 +55,10 @@ public class DAO {
             if (conn1 != null) {
                 System.out.println("Connected to the database test");
                 Statement st = conn1.createStatement();
-                int rs = st.executeUpdate("DELETE * FROM PRENOTAZIONE WHERE CODICE '" + codice + "'");
+                int rs = st.executeUpdate("DELETE FROM PRENOTAZIONE WHERE CODICE = '" + codice +"'");
                 if(rs != 0){
                     out = "";
-                    out = "Eliminazione della prenotazione con il codice" + codice + " è avvenuta con successo";
+                    out = "Eliminazione della prenotazione con il codice" + codice + " effettuata con successo";
                 }
                 System.out.println(out);
             }
@@ -87,10 +87,10 @@ public class DAO {
             if (conn1 != null) {
                 System.out.println("Connected to the database test");
                 Statement st = conn1.createStatement();
-                int ris = st.executeUpdate("INSERT INTO PRENOTAZIONE(CODICE,DOCENTE,CORSO,DATA,SLOT_ORA) VALUES ('"+codice+"','"+docente+"','"+corso+"','"+data+"','"+slot_ora+"')");
+                int ris = st.executeUpdate("INSERT INTO PRENOTAZIONE(CODICE,UTENTE,DOCENTE,CORSO,DATA,SLOT_ORA) VALUES ('"+codice+"',NULL,'"+docente+"','"+corso+"','"+data+"','"+slot_ora+"')");
                 if(ris != 0){
                     out = "";
-                    out = out + "La prenotazione con codice" + codice + " creata con successo";
+                    out = out + "La prenotazione con codice " + codice + " creata con successo";
                 }
             }
         } catch (SQLException e) {
@@ -621,7 +621,7 @@ public class DAO {
                 int rs = st.executeUpdate("UPDATE PRENOTAZIONE SET UTENTE = NULL WHERE CODICE =" + codice);
                 if(rs != 0){
                     out = "";
-                    out = out + "La prenotazione con il codice " + codice + " è stata disdetta con successo";
+                    out = out + "La prenotazione con il codice " + codice + " disdetta con successo";
                 }
                 System.out.println(out);
             }
@@ -649,7 +649,7 @@ public class DAO {
                 int rs = st.executeUpdate("UPDATE PRENOTAZIONE SET UTENTE = '" + utente +"'" + "WHERE CODICE ='" + codice + "'");
                 if(rs != 0){
                     out = "";
-                    out = out + "La prenotazione con il codice " + codice + " è stata effettuata con successo";
+                    out = out + "La prenotazione con il codice " + codice + " effettuata con successo";
                 }
                 System.out.println(out);
             }
