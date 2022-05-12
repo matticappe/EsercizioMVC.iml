@@ -562,7 +562,7 @@ public class DAO {
                 int rs = st.executeUpdate("UPDATE DOCENTE SET attivo = '0' WHERE ACCOUNT = '" + account +"'");
                 if(rs != 0){
                     out = "";
-                    out = out + "Eliminazione del docente" + account + " avvenuta con successo";
+                    out = out + "Eliminazione del docente " + account + " avvenuta con successo";
                 }
                 System.out.println(out);
             }
