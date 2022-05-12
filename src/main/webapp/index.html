@@ -585,6 +585,91 @@
                         </td>
                     </tr>
 
+
+                    <tr v-if="showAddProf==0">
+                        <td>
+                            <button type="button" class="btn btn-primary" v-on:click="showAddProf=1">Aggiungi professore</button>
+                        </td>
+                    </tr>
+
+                    <tr v-if="showAddProf==1">
+                        <td>
+                            <form v-if="checkAddProf==='0'">
+                                <div class="form-group">
+                                    <label for="exampleFormControlInput1">Inserisci Account</label>
+                                    <input type="email" class="form-control" id="exampleFormControlInput1" v-model="addProfAccount" placeholder="b1">
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleFormControlInput2">Inserisci Nome e Cognome</label>
+                                    <input type="email" class="form-control" id="exampleFormControlInput2" v-model="addProfNome" placeholder="Igor Miti">
+                                </div>
+                                <fieldset class="form-group">
+                                    <div class="row">
+                                        <legend class="col-form-label col-sm-2 pt-0">Stato</legend>
+                                        <div class="col-sm-10">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="gridRadios" v-on:click="addProfAttivo = 1" id="gridRadios1" value="option1">
+                                                <label class="form-check-label" for="gridRadios1">
+                                                    Professore Attivo
+                                                </label>
+                                            </div>
+                                            <div class="form-check disabled">
+                                                <input class="form-check-input" type="radio" name="gridRadios" v-on:click="addProfAttivo = 0" id="gridRadios2" value="option2" checked>
+                                                <label class="form-check-label" for="gridRadios2">
+                                                    Professore Non Attivo
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+
+                                <div class="form-group row">
+                                    <div class="col-sm-10">
+                                        <button type="button" class="btn btn-primary" v-on:click="checkAddProf='1'">Inserisci</button>
+                                    </div>
+                                </div>
+                            </form>
+
+                            <a v-if="checkAddProf==='1'" href="#" class="list-group-item list-group-item-action" >
+                                <span class="badge badge-pill badge-danger">Sei sicuro di voler aggiungere? ?</span>
+                                <br>
+                                <button type="button" class="btn btn-success" v-on:click="showAddProf='0', checkAddProf='0'">NO</button>
+                                <button type="button" class="btn btn-danger" v-on:click="showAddProf='0', addProf(), checkAddProf='0'">SI</button>
+                            </a>
+                        </td>
+                    </tr>
+
+
+                    <tr v-if="showAddCorso==0">
+                        <td>
+                            <button type="button" class="btn btn-primary" v-on:click="showAddCorso=1">Aggiungi corso</button>
+                        </td>
+                    </tr>
+
+                    <tr v-if="showAddCorso==1">
+                        <td>
+                            <form v-if="checkAddCorso==='0'">
+                                <div class="form-group">
+                                    <label for="exampleFormControlInput1">Inserisci nome corso</label>
+                                    <input type="email" class="form-control" id="exampleFormControlInput11" v-model="addNomeCorso" placeholder="Programmazione">
+                                </div>
+
+                                <div class="form-group row">
+                                    <div class="col-sm-10">
+                                        <button type="button" class="btn btn-primary" v-on:click="checkAddCorso='1'">Inserisci</button>
+                                    </div>
+                                </div>
+                            </form>
+
+                            <a v-if="checkAddCorso==='1'" href="#" class="list-group-item list-group-item-action" >
+                                <span class="badge badge-pill badge-danger">Sei sicuro di voler aggiungere? ?</span>
+                                <br>
+                                <button type="button" class="btn btn-success" v-on:click="showAddCorso='0', checkAddCorso='0'">NO</button>
+                                <button type="button" class="btn btn-danger" v-on:click="showAddCorso='0', addCorso(), checkAddCorso='0'">SI</button>
+                            </a>
+                        </td>
+                    </tr>
+
                 </tbody>
             </table>
 
@@ -638,6 +723,10 @@
             setVisiblePrenotations: '9999',
             showRimuoviCorso: '0',
             showRimuoviProf: '0',
+            showAddProf: '0',
+            checkAddProf:'0',
+            showAddCorso:'0',
+            checkAddCorso:'0',
             showRimuoviCorsoElem:[],
             username: '',
             password: '',
@@ -655,6 +744,8 @@
             allPrenotations:[],
             allSubjects:[],
             codProfs: 'filterProf',
+            codAddProf: 'inserimentoDocente',
+            codAddCorso:'inserimentoCorso',
             allProfs:[],
             allUsers:[],
             dataPren:'',
@@ -674,6 +765,10 @@
             profDaRimuovere:'',
             checkRimuoviCorso:'0',
             checkRimuoviProf:'0',
+            addProfNome:'',
+            addProfAccount:'',
+            addProfAttivo:'0',
+            addNomeCorso:'',
         },
         /*
         mounted:function(){
@@ -972,6 +1067,20 @@
 
                 }.bind(this), 10);
 
+            },
+
+            addProf:function(){
+                let self = this;
+                $.get("ServletController", {"username": this.username, "password": this.password, "invia": this.codAddProf, "account": self.addProfAccount, "nomeCognome": self.addProfNome, "attivo": self.addProfAttivo},function (data4) {
+                    console.log("addprof = "+data4);
+                });
+            },
+
+            addCorso:function(){
+                let self = this;
+                $.get("ServletController", {"username": this.username, "password": this.password, "invia": this.codAddCorso, "corso": this.addNomeCorso},function (data4) {
+                    console.log("addCorso = "+data4);
+                });
             },
 
 

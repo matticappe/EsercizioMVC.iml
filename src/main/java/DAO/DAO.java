@@ -26,7 +26,7 @@ public class DAO {
             if (conn1 != null) {
                 System.out.println("Connected to the database test");
                 Statement st = conn1.createStatement();
-                int ris = st.executeUpdate("INSERT INTO CORSO(TITOLO) VALUES('"+corso+"')");
+                int ris = st.executeUpdate("INSERT INTO CORSO(TITOLO) VALUE('" +corso+ "')");
                 if(ris != 0){
                     out = "";
                     out = out + "Corso creato con successo";
