@@ -118,8 +118,7 @@ public class DAO {
                 Statement st = conn1.createStatement();
                 int ris = st.executeUpdate("INSERT INTO DOCENTE(ACCOUNT, NOMECOGNOME, ATTIVO) VALUES('"+account+"', '"+nomeCognome+"','"+attivo+"')");
                 if(ris != 0){
-                    out = "";
-                    out = out + "Il docente " + nomeCognome + " è avvenuta con successo";
+                    out = "Docente aggiunto con successo";
                 }
             }
 
@@ -135,6 +134,7 @@ public class DAO {
                 }
             }
         }
+        System.out.println(out);
         return out;
     }
 
@@ -300,7 +300,7 @@ public class DAO {
             if(conn1 != null){
                 System.out.println("connessione riuscita");
                 Statement st = conn1.createStatement();
-                ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONE");
+                ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONE WHERE UTENTE IS NULL");
                 int i = 0;
                 Prenotazione p;
                 while (rs.next()) {

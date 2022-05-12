@@ -46,7 +46,7 @@ public class ServletController extends HttpServlet {
                     out.println(s1);
                     break;
 
-                case "inserisciDocente":
+                case "inserimentoDocente":
                     System.out.println("Sono in inserimento docente");
                     String r2 = inserimentoDocente(request, response);
                     String s2 = gson.toJson(r2);
@@ -375,10 +375,8 @@ public class ServletController extends HttpServlet {
     }
 
     public String inserimentoDocente(HttpServletRequest request, HttpServletResponse response) throws ServletException,
-            IOException {;
-       HttpSession s = request.getSession();
-       String result = "";
-        if((int)s.getAttribute("ruolo")==1) {
+            IOException {
+        String result = "";
             System.out.println("Sono nella InsertProf");
             String account = request.getParameter("account");
             System.out.println(account);
@@ -386,14 +384,7 @@ public class ServletController extends HttpServlet {
             System.out.println(nomeCognome);
             String attivo = request.getParameter("attivo");
             result = DAO.inserimentoDocente(account, nomeCognome,attivo);
-        }
-        else{
-            ServletContext ctx=request.getServletContext();
-            RequestDispatcher rd=ctx.getNamedDispatcher("servletError");
-            String messaggio="Non hai i permessi per utilizzare questa funzione";
-            request.setAttribute("message",messaggio);
-            rd.include(request,response);
-        }
+
         return result;
     }
 
