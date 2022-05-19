@@ -74,23 +74,23 @@ public class ServletController extends HttpServlet {
                     out.println(s5);
                     break;
 
-                case "inserimentoInsegna":
+                case "inserisciInsegna":
                     System.out.println("Sono in inserimento insegna");
                     String r6 = inserimentoInsegna(request, response);
                     String s6 = gson.toJson(r6);
                     out.println(s6);
                     break;
 
-                case "updateInsegnaDocente":
+                case "rimuoviInsegna":
                     System.out.println("Sono in updateInsegnaDocente");
-                    String r7 = updateInsegnaDocente(request, response);
+                    String r7 = rimuoviInsegna(request, response);
                     String s7 = gson.toJson(r7);
                     out.println(s7);
                     break;
 
-                case "updateInsegnaMateria":
-                    System.out.println("Sono in updateInsegnaMateria");
-                    String r8 = updateInsegnaMateria(request, response);
+                case "addInsegna":
+                    System.out.println("Sono in addInsegna");
+                    String r8 = addInsegna(request, response);
                     String s8 = gson.toJson(r8);
                     out.println(s8);
                     break;
@@ -377,13 +377,13 @@ public class ServletController extends HttpServlet {
     public String inserimentoDocente(HttpServletRequest request, HttpServletResponse response) throws ServletException,
             IOException {
         String result = "";
-            System.out.println("Sono nella InsertProf");
-            String account = request.getParameter("account");
-            System.out.println(account);
-            String nomeCognome = request.getParameter("nomeCognome");
-            System.out.println(nomeCognome);
-            String attivo = request.getParameter("attivo");
-            result = DAO.inserimentoDocente(account, nomeCognome,attivo);
+        System.out.println("Sono nella InsertProf");
+        String account = request.getParameter("account");
+        System.out.println(account);
+        String nomeCognome = request.getParameter("nomeCognome");
+        System.out.println(nomeCognome);
+        String attivo = request.getParameter("attivo");
+        result = DAO.inserimentoDocente(account, nomeCognome,attivo);
 
         return result;
     }
@@ -541,23 +541,15 @@ public class ServletController extends HttpServlet {
     public String inserimentoCorso(HttpServletRequest request, HttpServletResponse response) throws ServletException,
             IOException {
         String result = "";
-        HttpSession s=request.getSession();
-        if((int)s.getAttribute("ruolo")==1) {
-            System.out.println("Sono nella inserimentoDocente");
-            String corso = request.getParameter("corso");
-            result = DAO.inserimentoCorso(corso);
-            System.out.println(corso);
-        }
-        else{
-            ServletContext ctx=request.getServletContext();
-            RequestDispatcher rd=ctx.getNamedDispatcher("servletError");
-            String messaggio="Non hai i permessi per utilizzare questa funzione";
-            request.setAttribute("message",messaggio);
-            rd.include(request,response);
-        }
+        System.out.println("Sono nella inserimentoDocente");
+        String corso = request.getParameter("corso");
+        result = DAO.inserimentoCorso(corso);
+        System.out.println(corso);
+
         return result;
     }
-    
+
+
     public String inserisciPrenotazione(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         System.out.println("Sono nella inserisciPrenotazione");
         String codice= request.getParameter("codice");
@@ -574,21 +566,13 @@ public class ServletController extends HttpServlet {
             IOException {
         String result = "";
         HttpSession s= request.getSession();
-        if((int)s.getAttribute("ruolo")==1) {
-            System.out.println("Sono nella inserimentoInsegna");
-            String docente = request.getParameter("docente");
-            String corso = request.getParameter("corso");
-            result = result + DAO.inserisciInsegna(docente, corso);
-            System.out.println(result);
-        }
-        else{
-            ServletContext ctx=request.getServletContext();
-            RequestDispatcher rd=ctx.getNamedDispatcher("servletError");
-            String messaggio="Non hai i permessi per utilizzare questa funzione";
-            request.setAttribute("message",messaggio);
-            rd.include(request,response);
-        }
+        System.out.println("Sono nella inserimentoInsegna");
+        String docente = request.getParameter("codDocente");
+        String corso = request.getParameter("corso");
+        result = result + DAO.inserisciInsegna(docente, corso);
+        System.out.println(result);
         return result;
+
     }
 
     public String isAdmin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
@@ -605,40 +589,21 @@ public class ServletController extends HttpServlet {
         return result;
     }
 
-    public String updateInsegnaDocente(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public String rimuoviInsegna(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String result = "Non hai i permessi";
         HttpSession s= request.getSession();
-        if((int)s.getAttribute("ruolo")==1) {
-            String codDocente = request.getParameter("codDocente");
-            String titolo = request.getParameter("titolo");
-            result = DAO.updateInsegnaDocente(codDocente,titolo);
-        }
-        else{
-            ServletContext ctx=request.getServletContext();
-            RequestDispatcher rd=ctx.getNamedDispatcher("servletError");
-            String messaggio="Non hai i permessi per utilizzare questa funzione";
-            request.setAttribute("message",messaggio);
-            rd.include(request,response);
-        }
+        String codDocente = request.getParameter("codDocente");
+        String titolo = request.getParameter("titolo");
+        result = DAO.rimuoviInsegna(codDocente,titolo);
         return result;
+
     }
 
-    public String updateInsegnaMateria(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public String addInsegna(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String result = "";
-        HttpSession s= request.getSession();
-        if((int) s.getAttribute("ruolo")==1) {
-            String codDocente = request.getParameter("codDocente");
-            String corso = request.getParameter("corso");
-            result = DAO.updateInsegnaMateria(codDocente,corso);
-            return result;
-        }
-        else{
-            ServletContext ctx=request.getServletContext();
-            RequestDispatcher rd=ctx.getNamedDispatcher("servletError");
-            String messaggio="Non hai i permessi per utilizzare questa funzione";
-            request.setAttribute("message",messaggio);
-            rd.include(request,response);
-        }
+        String codDocente = request.getParameter("codDocente");
+        String corso = request.getParameter("corso");
+        result = DAO.addInsegna(codDocente,corso);
         return result;
     }
 
@@ -647,11 +612,11 @@ public class ServletController extends HttpServlet {
         list = DAO.viewAllProf();
         return list;
     }
-    
+
     public String eliminaDocente(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
         String account = request.getParameter("account");
         String result = DAO.eliminaDocente(account);
-        return result;        
+        return result;
     }
 
     public String eliminaCorso(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{

@@ -26,7 +26,7 @@ public class DAO {
             if (conn1 != null) {
                 System.out.println("Connected to the database test");
                 Statement st = conn1.createStatement();
-                int ris = st.executeUpdate("INSERT INTO CORSO(TITOLO) VALUE('" +corso+ "')");
+                int ris = st.executeUpdate("INSERT INTO CORSO(TITOLO) VALUES('"+corso+"')");
                 if(ris != 0){
                     out = "";
                     out = out + "Corso creato con successo";
@@ -78,7 +78,7 @@ public class DAO {
         return out;
     }
 
-//TODO:DA FIXARE
+    //TODO:DA FIXARE
     public static String inserisciPrenotazione(String codice, String docente, String corso, String data, String slot_ora){
         Connection conn1 = null;
         String out = "L'inserimento della prenotazione è fallita";
@@ -142,11 +142,11 @@ public class DAO {
         Connection conn1 = null;
         ArrayList<Utente> out = new ArrayList<>();
         try {
-                conn1 = DriverManager.getConnection(url1,user,password);
-                if(conn1 != null){
-                    System.out.println("connessione riuscita");
-                    Statement st = conn1.createStatement();
-                    ResultSet rs = st.executeQuery("SELECT * FROM UTENTE WHERE RUOLO = 0");
+            conn1 = DriverManager.getConnection(url1,user,password);
+            if(conn1 != null){
+                System.out.println("connessione riuscita");
+                Statement st = conn1.createStatement();
+                ResultSet rs = st.executeQuery("SELECT * FROM UTENTE WHERE RUOLO = 0");
 
                 while (rs.next()) {
                     Utente p = new Utente(rs.getString("account"),rs.getString("password"), rs.getInt("ruolo"));
@@ -213,7 +213,7 @@ public class DAO {
                 ResultSet rs = st.executeQuery("SELECT * FROM UTENTE WHERE ACCOUNT = '"  +account+"' AND RUOLO = 1");
                 if(rs.next()){
                     if(rs.getString("ruolo") == "1" && rs.getString("account") == account);
-                        res=true;
+                    res=true;
                 }
             }
             System.out.println("admin = "+res);
@@ -231,18 +231,17 @@ public class DAO {
     }
 
 
-    public static String updateInsegnaDocente(String codDocente, String corso){
+    public static String rimuoviInsegna(String codDocente, String corso){
         Connection conn1 = null;
         String out = "";
         try{
             conn1 = DriverManager.getConnection(url1,user,password);
             if(conn1 != null){
                 Statement st = conn1.createStatement();
-                ResultSet rs = st.executeQuery("UPDATE INSEGNA SET CODDOCENTE = '" + codDocente + "'" + "WHERE CORSO = '" + corso + "'");
-                if(rs.next()){
-                    out = out + "Aggiornamento fatto con successo dell'insegnate " + codDocente + " nel corso " + corso;
-                } else {
-                    out = out + "Aggiornamento fallito";
+                int rs = st.executeUpdate("DELETE FROM INSEGNA WHERE CORSO = '" + corso +"' AND codDocente = '" + codDocente + "'");
+                if(rs != 0){
+                    out = "";
+                    out = out + "Eliminazione di insegna avvenuta con successo";
                 }
                 System.out.println(out);
             }
@@ -260,7 +259,7 @@ public class DAO {
         return out;
     }
 
-    public static String updateInsegnaMateria(String codDocente, String corso){
+    public static String addInsegna(String codDocente, String corso){
         Connection conn1 = null;
         String out = "";
         try{
@@ -434,7 +433,7 @@ public class DAO {
             conn1 = DriverManager.getConnection(url1,user,password);
             if(conn1 != null){
                 Statement st = conn1.createStatement();
-                ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONE join DOCENTE on(PRENOTAZIONE.docente = DOCENTE.account) WHERE (UTENTE IS NULL OR UTENTE IS NOT NULL) "+data+" "+corso+" "+slot_ora+" "+docente+" "+utente+" " );   //CONTROLLA LE VIRGOLETTE DOVE CI SONO TUTTI I +...+...+...+
+                ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONE join DOCENTE on(PRENOTAZIONE.docente = DOCENTE.account) WHERE (UTENTE IS NULL OR UTENTE IS NOT NULL)"+data+""+corso+""+slot_ora+""+docente+""+utente+"" );   //CONTROLLA LE VIRGOLETTE DOVE CI SONO TUTTI I +...+...+...+
                 int i = 0;
                 while (rs.next()) {
                     Prenotazione p = new Prenotazione(rs.getString("codice"),rs.getString("utente"), rs.getString("docente"), rs.getString("corso"), rs.getString("data"), rs.getString("slot_ora"));
@@ -621,7 +620,7 @@ public class DAO {
                 int rs = st.executeUpdate("UPDATE PRENOTAZIONE SET UTENTE = NULL WHERE CODICE =" + codice);
                 if(rs != 0){
                     out = "";
-                    out = out + "La prenotazione con il codice " + codice + " disdetta con successo";
+                    out = out + "La prenotazione e stata disdetta con successo";
                 }
                 System.out.println(out);
             }
@@ -641,7 +640,7 @@ public class DAO {
 
     public static String effettuaPrenotazione(String codice, String utente){
         Connection conn1 = null;
-        String out = "La prenotazione non è stata inserita";
+        String out = "La prenotazione non e stata inserita";
         try{
             conn1 = DriverManager.getConnection(url1,user,password);
             if(conn1 != null){
@@ -649,7 +648,7 @@ public class DAO {
                 int rs = st.executeUpdate("UPDATE PRENOTAZIONE SET UTENTE = '" + utente +"'" + "WHERE CODICE ='" + codice + "'");
                 if(rs != 0){
                     out = "";
-                    out = out + "La prenotazione con il codice " + codice + " effettuata con successo";
+                    out = out + "La prenotazione e stata fatta con successo";
                 }
                 System.out.println(out);
             }
@@ -669,20 +668,17 @@ public class DAO {
 
     public static String inserisciInsegna(String codDocente, String corso){
         Connection conn1 = null;
-        int ris = 0;
-        String out = "L'inserimento è fallito";
+        String out = "L'inserimento è fallitoooo"+codDocente + corso;
         try {
             conn1 = DriverManager.getConnection(url1, user, password);
             if (conn1 != null) {
                 System.out.println("Connected to the database test");
                 Statement st = conn1.createStatement();
-                ris = st.executeUpdate("INSERT INTO INSEGNA(CODDOCENTE, CORSO) VALUES('" + codDocente + "', '" + corso + "')");
+                int ris = st.executeUpdate("INSERT INTO INSEGNA(CODDOCENTE, CORSO) VALUES('"+codDocente+"', '" + corso + "')");
                 if(ris != 0){
-                    out = "L'inserimento del docente " + codDocente + " che insegna la materia " + corso + " avvenuto con successo";
+                    out = "L inserimento di insegna e avvenuto con successo"+codDocente + corso;
                 }
-
             }
-
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -698,9 +694,10 @@ public class DAO {
         return out;
     }
 
+
     /*
-    * Da questa funzione vedo tutti gli insegnamenti
-    * */
+     * Da questa funzione vedo tutti gli insegnamenti
+     * */
     public static ArrayList<Insegna> viewInsegna() {
         Connection conn1 = null;
         ArrayList<Insegna> out = new ArrayList<>();

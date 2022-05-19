@@ -56,6 +56,9 @@ td:first-child, th:first-child {
     clear: both;
 }
 
+.associazioneCorso{
+    float:left;
+}
 
 
 

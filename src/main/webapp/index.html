@@ -38,7 +38,7 @@
 
 
 <div id="loginScreen">
-    <div v-if="setVisibleLogin=='0'" class="d-flex justify-content-center">
+    <div v-if="setVisibleLogin==='0'" class="d-flex justify-content-center">
         {{setVisibleLogin}}
         <div class="col-8 col-lg-3">
             <h2 class="d-flex justify-content-center">Form di autenticazione
@@ -60,12 +60,12 @@
                             <input type="checkbox" value="remember-me"> Remember me
                         </label>
                     </div>
-                    <button v-on:click="login(); /*getError();*/" class="btn btn-lg btn-primary btn-block" input id="invia"
+                    <button v-on:click="login(); /*getError();*/" class="btn btn-lg btn-primary btn-block" id="invia"
 
                             type="button" value="login">Sign in
                     </button>
 
-                    <h3 v-if="loginError=='vero'">{{message}}</h3>
+                    <h3 v-if="loginError==='vero'">{{message}}</h3>
                     <!--
                     <div v-for="error in errorMessage"><p>{{error.result}}</p></div>
                     -->
@@ -85,13 +85,13 @@
     <!--   --------------------------------FINE DELLA SCHERMATA DI LOGIN -----------------------------------------   -->
 
     <!--   ----------------------------INIZIO SCHERMATA UTENTI NON REGISTRATI--------------------------------------  -->
-    <div v-if="setVisibleLogin=='1'" id="logoutNonRegistrato" class="logout">
+    <div v-if="setVisibleLogin==='1'" id="logoutNonRegistrato" class="logout">
         <button type="button" v-on:click=setVisibleLogin='0' class="btn btn-secondary"
                 data-toggle="tooltip" data-placement="top" title="Tooltip on top">
             Log-in
         </button>
     </div>
-    <div v-if="setVisibleLogin=='1'" id="userScreenNonRegistrato" class="row">
+    <div v-if="setVisibleLogin==='1'" id="userScreenNonRegistrato" class="row">
         <div class="column1">
             <table class="table">
                 <thead>
@@ -221,7 +221,7 @@
 
     <!--  ------------------------------INIZIO SCHERMATA UTENTI REGISTRATI-----------------------------------------  -->
 
-    <div v-if="setVisibleLogin=='2'" id="logoutUtenteRegistrato" class="logout">
+    <div v-if="setVisibleLogin==='2'" id="logoutUtenteRegistrato" class="logout">
         {{allPrenotations}}
         <button type="button" v-on:click="setVisibleLogin='0'; registeredUserLogout()" class="btn btn-secondary"
                 data-toggle="tooltip" data-placement="top" title="Tooltip on top">
@@ -229,8 +229,8 @@
         </button>
     </div>
 
-    <div v-if="setVisibleLogin=='2'" id="userScreenUtenteRegistrato" class="row">
-        <div v-if="setVisibleStorico=='1'" class="column1">
+    <div v-if="setVisibleLogin==='2'" id="userScreenUtenteRegistrato" class="row">
+        <div v-if="setVisibleStorico==='1'" class="column1">
             <table class="table">
                 <thead>
                 <tr>
@@ -317,7 +317,7 @@
 
 
 
-        <div v-if="setVisibleStorico=='1'" class="column2">
+        <div v-if="setVisibleStorico==='1'" class="column2">
             <table class="table">
                 <thead class="thead-light">
                 <tr>
@@ -335,9 +335,9 @@
                     <td><div>{{p.docente}}</div></td>
                     <td><div>{{p.data}}</div></td>
                     <td><div>{{p.slot_ora}}</div></td>
-                    <td><button type="button" class="btn btn-primary" v-if="p.utente === null || p.utente==='' || p.utente === undefined" onclick="prenota(this)">Prenota</button>
-                        <button type="button" class="btn btn-primary" v-if="p.utente === username" onclick="prenota(this)">Disdici prenotazione</button>
-                        <button type="button" class="btn btn-primary" v-if="p.utente !== username && p.utente !== null && p.utente !== '' && p.utente !== undefined" disabled>Prenotato</button>
+                    <td><button type="button" class="btn btn-primary" v-if="p.utente === null || p.utente==='' || p.utente === undefined" onclick="prenota(this)" v-on:click="addPrenotation(p.codice)">Prenota</button>
+                        <button type="button" class="btn btn-primary" v-if="p.utente === username" onclick="prenota(this)" v-on:click="removePrenotation(p.codice)">Disdici prenotazione</button>
+                        <button type="button" class="btn btn-primary" v-if="p.utente !== username && p.utente !== null && p.utente !== '' && p.utente !== undefined" disabled>Non disponibile</button>
 
                     </td>
                 </tr>
@@ -349,7 +349,7 @@
 
         <!-- inizio schermata storico prenotazioni utenti registrati -->
 
-        <div  v-if="setVisibleStorico=='2'" class="column1" >
+        <div  v-if="setVisibleStorico==='2'" class="column1" >
                 <table class="table">
                     <thead>
                     <tr>
@@ -366,7 +366,7 @@
                 </table>
         </div>
 
-        <div v-if="setVisibleStorico=='2'" class="column2">
+        <div v-if="setVisibleStorico==='2'" class="column2">
                 <table class="table">
                     <thead class="thead-light">
                     <tr>
@@ -416,17 +416,17 @@
 
 
 
-    <div v-if="setVisibleLogin=='4'" id="logoutAmministratore" class="logout">
+    <div v-if="setVisibleLogin==='4'" id="logoutAmministratore" class="logout">
         {{newSearchUser}}
-        <button type="button" v-on:click=setVisibleLogin='0' class="btn btn-secondary"
+        <button type="button" v-on:click="setVisibleLogin='0'; registeredUserLogout()" class="btn btn-secondary"
                 data-toggle="tooltip" data-placement="top" title="Tooltip on top">
             Logout
         </button>
     </div>
 
 
-    <div v-if="setVisibleLogin=='4'" id="userScreenAmministratore" class="row">
-        <div v-if="setVisibleStorico=='1'" class="column1">
+    <div v-if="setVisibleLogin==='4'" id="userScreenAmministratore" class="row">
+        <div v-if="setVisibleStorico==='1'" class="column1">
             <table class="table">
                 <thead>
                 <tr>
@@ -473,7 +473,7 @@
                                 Seleziona giorno
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a v-on:click="filterAdminData('')" class="dropdown-item" href="#">Azzera data</a>
+                                <a v-on:click="filterAdminData()" class="dropdown-item" href="#">Azzera data</a>
                                 <a v-on:click="filterAdminData('07/03/2022')" class="dropdown-item" href="#">07/03/2022</a>
                                 <a v-on:click="filterAdminData('08/03/2022')" class="dropdown-item" href="#">08/03/2022</a>
                                 <a v-on:click="filterAdminData('09/03/2022')" class="dropdown-item" href="#">09/03/2022</a>
@@ -501,16 +501,17 @@
                         </div>
                     </td>
                 </tr>
-                <tr v-if="showSearchUser==0">
+
+                <tr v-if="showSearchUser==='0'">
                     <td>
-                        <button type="button" class="btn btn-primary" v-on:click="showSearchUser=1">Seleziona Utente</button>
+                        <button type="button" class="btn btn-primary" v-on:click="showSearchUser='1'">Seleziona Utente</button>
                     </td>
                 </tr>
 
-                <tr v-if="showSearchUser==1">
+                <tr v-if="showSearchUser==='1'">
                     <td>
                         <nav class="navbar navbar-light bg-light">
-                            <button type="button" class="btn btn-primary" v-on:click="showSearchUser=0">Indietro</button>
+                            <button type="button" class="btn btn-primary" v-on:click="showSearchUser='0'">Indietro</button>
                             <form class="form-inline">
                                 <input class="form-control mr-sm-2" type="search" v-model="searchUser" placeholder="Search" aria-label="Search">
                                 <button type="button" class="btn btn-outline-success" v-on:click="searchUserName()">Search</button>
@@ -518,7 +519,7 @@
                         </nav>
                         <div class="list-group">
 
-                            <a href="#" class="list-group-item list-group-item-action" v-on:click="getAllUsers(), filterAdminUser()">Azzera utente</a>
+                            <a href="#" class="list-group-item list-group-item-action" v-on:click="getAllUsers(); filterAdminUser()">Azzera utente</a>
                             <a href="#" class="list-group-item list-group-item-action" v-on:click="filterAdminUser(u.account)" v-for="u in allUsers">{{u.account}}</a>
 
                         </div>
@@ -543,21 +544,21 @@
                 </thead>
                 <tbody>
 
-                    <tr v-if="showRimuoviCorso==0">
+                    <tr v-if="showRimuoviCorso==='0'">
                         <td>
-                            <button type="button" class="btn btn-primary" v-on:click="showRimuoviCorso=1">Rimuovi corso</button>
+                            <button type="button" class="btn btn-primary" v-on:click="showRimuoviCorso='1'">Rimuovi corso</button>
                         </td>
                     </tr>
 
-                    <tr v-if="showRimuoviCorso==1">
+                    <tr v-if="showRimuoviCorso==='1'">
                         <td>
                             <div class="list-group">
                                 <a v-if="checkRimuoviCorso==='0'" href="#" v-on:click="salvaNomeCorsoRimuovere(s.titolo), checkRimuoviCorso='1'" class="list-group-item list-group-item-action" v-for="s in allSubjects">{{s.titolo}}</a>
                                 <a v-if="checkRimuoviCorso==='1'" href="#" class="list-group-item list-group-item-action" >
                                     <span class="badge badge-pill badge-danger">Sei sicuro di voler rimuovere ?</span>
                                     <br>
-                                    <button type="button" class="btn btn-success" v-on:click="showRimuoviCorso=0, checkRimuoviCorso='0'">NO</button>
-                                    <button type="button" class="btn btn-danger" v-on:click="showRimuoviCorso=0, rimuoviCorso(), checkRimuoviCorso='0'">SI</button>
+                                    <button type="button" class="btn btn-success" v-on:click="showRimuoviCorso='0', checkRimuoviCorso='0'">NO</button>
+                                    <button type="button" class="btn btn-danger" v-on:click="showRimuoviCorso='0', rimuoviCorso(), checkRimuoviCorso='0'">SI</button>
                                 </a>
                             </div>
                         </td>
@@ -565,34 +566,34 @@
                     <!-- il controllo v-if non lo faccio per un numero ma per il nome del corso -->
 
 
-                    <tr v-if="showRimuoviProf==0">
+                    <tr v-if="showRimuoviProf==='0'">
                         <td>
-                            <button type="button" class="btn btn-primary" v-on:click="showRimuoviProf=1">Rimuovi professore</button>
+                            <button type="button" class="btn btn-primary" v-on:click="showRimuoviProf='1'">Rimuovi professore</button>
                         </td>
                     </tr>
 
-                    <tr v-if="showRimuoviProf==1">
+                    <tr v-if="showRimuoviProf==='1'">
                         <td>
                             <div class="list-group">
-                                <a v-if="checkRimuoviProf==='0'" href="#" v-on:click="salvaNomeProfRimuovere(p.account), checkRimuoviProf='1'" class="list-group-item list-group-item-action" v-for="p in allProfs">{{p.nomeCognome}}</a>
+                                <a v-if="checkRimuoviProf==='0'" href="#" v-on:click="salvaNomeProfRimuovere(p.account); checkRimuoviProf='1'" class="list-group-item list-group-item-action" v-for="p in allProfs">{{p.nomeCognome}}</a>
                                 <a v-if="checkRimuoviProf==='1'" href="#" class="list-group-item list-group-item-action" >
                                     <span class="badge badge-pill badge-danger">Sei sicuro di voler rimuovere ?</span>
                                     <br>
-                                    <button type="button" class="btn btn-success" v-on:click="showRimuoviProf=0, checkRimuoviProf='0'">NO</button>
-                                    <button type="button" class="btn btn-danger" v-on:click="showRimuoviProf=0, rimuoviProf(), checkRimuoviProf='0'">SI</button>
+                                    <button type="button" class="btn btn-success" v-on:click="showRimuoviProf='0'; checkRimuoviProf='0'">NO</button>
+                                    <button type="button" class="btn btn-danger" v-on:click="showRimuoviProf='0'; rimuoviProf(); checkRimuoviProf='0'">SI</button>
                                 </a>
                             </div>
                         </td>
                     </tr>
 
 
-                    <tr v-if="showAddProf==0">
+                    <tr v-if="showAddProf==='0'">
                         <td>
-                            <button type="button" class="btn btn-primary" v-on:click="showAddProf=1">Aggiungi professore</button>
+                            <button type="button" class="btn btn-primary" v-on:click="showAddProf='1'">Aggiungi professore</button>
                         </td>
                     </tr>
 
-                    <tr v-if="showAddProf==1">
+                    <tr v-if="showAddProf==='1'">
                         <td>
                             <form v-if="checkAddProf==='0'">
                                 <div class="form-group">
@@ -608,13 +609,13 @@
                                         <legend class="col-form-label col-sm-2 pt-0">Stato</legend>
                                         <div class="col-sm-10">
                                             <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="gridRadios" v-on:click="addProfAttivo = 1" id="gridRadios1" value="option1">
+                                                <input class="form-check-input" type="radio" name="gridRadios" v-on:click="addProfAttivo ='1'" id="gridRadios1" value="option1">
                                                 <label class="form-check-label" for="gridRadios1">
                                                     Professore Attivo
                                                 </label>
                                             </div>
                                             <div class="form-check disabled">
-                                                <input class="form-check-input" type="radio" name="gridRadios" v-on:click="addProfAttivo = 0" id="gridRadios2" value="option2" checked>
+                                                <input class="form-check-input" type="radio" name="gridRadios" v-on:click="addProfAttivo ='0'" id="gridRadios2" value="option2" checked>
                                                 <label class="form-check-label" for="gridRadios2">
                                                     Professore Non Attivo
                                                 </label>
@@ -633,20 +634,20 @@
                             <a v-if="checkAddProf==='1'" href="#" class="list-group-item list-group-item-action" >
                                 <span class="badge badge-pill badge-danger">Sei sicuro di voler aggiungere? ?</span>
                                 <br>
-                                <button type="button" class="btn btn-success" v-on:click="showAddProf='0', checkAddProf='0'">NO</button>
-                                <button type="button" class="btn btn-danger" v-on:click="showAddProf='0', addProf(), checkAddProf='0'">SI</button>
+                                <button type="button" class="btn btn-success" v-on:click="showAddProf='0'; checkAddProf='0'">NO</button>
+                                <button type="button" class="btn btn-danger" v-on:click="showAddProf='0'; addProf(); checkAddProf='0'">SI</button>
                             </a>
                         </td>
                     </tr>
 
 
-                    <tr v-if="showAddCorso==0">
+                    <tr v-if="showAddCorso==='0'">
                         <td>
-                            <button type="button" class="btn btn-primary" v-on:click="showAddCorso=1">Aggiungi corso</button>
+                            <button type="button" class="btn btn-primary" v-on:click="showAddCorso='1'">Aggiungi corso</button>
                         </td>
                     </tr>
 
-                    <tr v-if="showAddCorso==1">
+                    <tr v-if="showAddCorso==='1'">
                         <td>
                             <form v-if="checkAddCorso==='0'">
                                 <div class="form-group">
@@ -664,15 +665,85 @@
                             <a v-if="checkAddCorso==='1'" href="#" class="list-group-item list-group-item-action" >
                                 <span class="badge badge-pill badge-danger">Sei sicuro di voler aggiungere? ?</span>
                                 <br>
-                                <button type="button" class="btn btn-success" v-on:click="showAddCorso='0', checkAddCorso='0'">NO</button>
-                                <button type="button" class="btn btn-danger" v-on:click="showAddCorso='0', addCorso(), checkAddCorso='0'">SI</button>
+                                <button type="button" class="btn btn-success" v-on:click="showAddCorso='0'; checkAddCorso='0'">NO</button>
+                                <button type="button" class="btn btn-danger" v-on:click="showAddCorso='0'; addCorso(); checkAddCorso='0'">SI</button>
+                            </a>
+                        </td>
+                    </tr>
+
+
+                    <tr v-if="showRimuoviAssociazione==='0'">
+                        <td>
+                            <button type="button" class="btn btn-primary" v-on:click="showRimuoviAssociazione='1'">Elimina Associazione</button>
+                        </td>
+                    </tr>
+
+                    <tr v-if="showRimuoviAssociazione==='1'">
+                        <td>
+                            <div class="dropdown">
+                                <button type="button" class="btn btn-primary" v-on:click="showRimuoviAssociazione ='0'">Indietro</button>
+                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Elimina Associazione
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <a class="dropdown-item" v-on:click="rimuoviAssociazione(i.codDocente, i.corso)" href="#" v-for="i in allInsegna">{{i.codDocente}}-{{i.corso}}</a>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+
+
+                    <tr v-if="showAddAssociazione==='0'">
+                        <td>
+                            <button type="button" class="btn btn-primary" v-on:click="showAddAssociazione='1'">Aggiungi Associazione</button>
+                        </td>
+                    </tr>
+
+                    <tr v-if="showAddAssociazione==='1'">
+                        <td>
+                                <div class="dropdown" v-if="checkAddAssociazione==='0'">
+                                    <button type="button" class="btn btn-primary" v-on:click="showAddAssociazione ='0'">Indietro</button>
+                                    <br>
+                                    <label>Scegli un professore</label>
+                                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        {{profAssociazione}}
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <a class="dropdown-item" v-on:click="salvaProfAssociazione(p.account)" href="#" v-for="p in allProfs">{{p.nomeCognome}}</a>
+                                    </div>
+                                </div>
+
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+
+                                <div id="associazioneCorso" class="dropdown" v-if="checkAddAssociazione==='0'">
+
+                                    <label>Scegli un corso</label>
+
+                                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        {{corsoAssociazione}}
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <a class="dropdown-item" v-on:click="salvaCorsoAssociazione(c.titolo)" href="#" v-for="c in allSubjects">{{c.titolo}}</a>
+                                    </div>
+                                    <br>
+                                    <button type="button" class="btn btn-primary" v-on:click="checkAddAssociazione='1'">Aggiungi Associazione</button>
+
+                                </div>
+
+                            <a v-if="checkAddAssociazione==='1'" href="#" class="list-group-item list-group-item-action" >
+                                <span class="badge badge-pill badge-danger">Sei sicuro di voler aggiungere? ?</span>
+                                <br>
+                                <button type="button" class="btn btn-success" v-on:click="showAddAssociazione='0'; checkAddAssociazione='0'">NO</button>
+                                <button type="button" class="btn btn-danger" v-on:click="showAddAssociazione='0'; addAssociazione(); checkAddAssociazione='0'">SI</button>
                             </a>
                         </td>
                     </tr>
 
                 </tbody>
             </table>
-
 
 
         </div>
@@ -696,9 +767,25 @@
                     <td><div>{{p.docente}}</div></td>
                     <td><div>{{p.data}}</div></td>
                     <td><div>{{p.slot_ora}}</div></td>
-                    <td><button type="button" class="btn btn-primary" v-if="p.utente === null || p.utente==='' || p.utente === undefined" onclick="prenota(this)">Prenota</button>
-                        <button type="button" class="btn btn-primary" v-if="p.utente === username" onclick="prenota(this)">Disdici prenotazione</button>
-                        <button type="button" class="btn btn-primary" v-if="p.utente !== username && p.utente !== null && p.utente !== '' && p.utente !== undefined">Prenotato da {{p.utente}}</button>
+                    <td><div v-if="p.utente === null || p.utente==='' || p.utente === undefined">Non prenotato</div>
+                        <div v-if="p.utente !== username && p.utente !== null && p.utente !== '' && p.utente !== undefined">Prenotato da {{p.utente}}</div></td>
+                    <td>
+                        <div v-if="!(prenCodeShow===p.codice)">
+                            <button type="button" class="btn btn-primary" v-if="p.utente === null || p.utente==='' || p.utente === undefined" v-on:click="prenCodeShow =p.codice" onclick="prenota(this)">Prenota per</button>
+                        </div>
+
+                        <div v-if="prenCodeShow===p.codice" class="dropdown">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Selezione utente
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <a class="dropdown-item" href="#" v-on:click="addPrenotationAdmin(p.codice, u.account), prenCodeShow='0'" v-for="u in allUsers">{{u.account}}</a>
+                                </div>
+                        </div>
+
+                        <button type="button" class="btn btn-primary" v-if="p.utente !== username && p.utente !== null && p.utente !== '' && p.utente !== undefined" v-on:click="removePrenotation(p.codice), prenCodeShow=''">Cancella prenotazione di {{p.utente}}</button>
+
+
 
                     </td>
                 </tr>
@@ -727,6 +814,9 @@
             checkAddProf:'0',
             showAddCorso:'0',
             checkAddCorso:'0',
+            showRimuoviAssociazione: '0',
+            showAddAssociazione: '0',
+            checkAddAssociazione: '0',
             showRimuoviCorsoElem:[],
             username: '',
             password: '',
@@ -741,6 +831,10 @@
             codPrenotations: 'viewOwnPrenotations',
             codRimuoviCorso: 'eliminaCorso',
             codRimuoviProf: 'eliminaDocente',
+            codRimuoviAssociazione:'rimuoviInsegna',
+            codAddAssociazione:'inserisciInsegna',
+            codPrenotazione:'effettuaPrenotazione',
+            codDisdiciPrenotazione:'disdiciPrenotazione',
             allPrenotations:[],
             allSubjects:[],
             codProfs: 'filterProf',
@@ -748,6 +842,7 @@
             codAddCorso:'inserimentoCorso',
             allProfs:[],
             allUsers:[],
+            allInsegna:[],
             dataPren:'',
             oraPren:'',
             materiaPren:'',
@@ -759,6 +854,7 @@
             filterPrenCode:'filterPrenotations',
             filterAdminPrenCode:'filterAdminPrenotations',
             codOwnActPrenotations:'viewOwnActPrenotations',
+            codInsegna:'getInsegna',
             codUsers:'stampaUtenti',
             setVisibleStorico:'1',
             corsoDaRimuovere:'',
@@ -769,6 +865,9 @@
             addProfAccount:'',
             addProfAttivo:'0',
             addNomeCorso:'',
+            profAssociazione:'',
+            corsoAssociazione:'',
+            prenCodeShow:'0',
         },
         /*
         mounted:function(){
@@ -789,8 +888,7 @@
                     console.log('logout = '+self.risposta);
                     self.message=self.risposta;
                     //devo mettere QUA un modo per printare nella schermata di login "LOGOUT EFFETTUATO CON SUCCESSO", e potrei usare la textbox che mi dice login fallito, mettendogli un messaggio generico dentro e cambiandolo
-                    self.setVisibleLogin=0;
-                    self.loginError='vero';
+
 
                 });
             },
@@ -826,10 +924,11 @@
                         self.setVisibleLogin='4';
                         console.log("vis0.3 "+this.setVisibleLogin);    //li vedo entrambi, this e self
                         console.log("vis0.4 "+self.setVisibleLogin);
-                        self.getRegisteredPrenotations();
+                        self.filterAdminPrenotations();
                         self.getAllSubjects();
                         self.getAllProfs() ;
                         self.getAllUsers();
+                        self.getAllInsegna();
 
                     }else if(self.risposta==='Guest'){
                         self.setVisibleLogin='1';
@@ -950,7 +1049,7 @@
                 let self = this;
                 self.data = dataa;
                 console.log("sono in filterData");
-                this.filterPrenotations();
+                this.filterAdminPrenotations();
             },
 
             filterAdminSlot:function(slott){
@@ -1077,10 +1176,88 @@
             },
 
             addCorso:function(){
-                let self = this;
                 $.get("ServletController", {"username": this.username, "password": this.password, "invia": this.codAddCorso, "corso": this.addNomeCorso},function (data4) {
                     console.log("addCorso = "+data4);
                 });
+            },
+
+            getAllInsegna:function(){
+                let self = this;
+                $.get("ServletController", {"username": this.username, "password": this.password, "invia": this.codInsegna},function (data4) {
+                    console.log("addCorso = "+data4);
+                    self.allInsegna = data4;
+                });
+            },
+
+            rimuoviAssociazione:function(codDocente, corso){
+                $.get("ServletController", {"username": this.username, "password": this.password, "invia": this.codRimuoviAssociazione, "codDocente": codDocente, "titolo": corso},function (data4) {
+                    console.log("addCorso = "+data4);
+                });
+            },
+
+            salvaProfAssociazione:function(prof){
+                let self = this;
+                self.profAssociazione = prof;
+            },
+
+            salvaCorsoAssociazione:function(corso){
+                let self = this;
+                self.corsoAssociazione = corso;
+            },
+
+            addAssociazione:function(){
+                let self = this;
+                console.log("sono in addAssociazioneeeee"+self.profAssociazione + self.corsoAssociazione);
+                $.get("ServletController", {"username": this.username, "password": this.password, "invia": this.codAddAssociazione, "codDocente": self.profAssociazione, "corso": self.corsoAssociazione},function (data4) {
+                    console.log("addAssociazione = "+data4);
+                });
+            },
+
+            addPrenotation:function(codice){
+                console.log("sono in addPrenotations" + codice + this.username);
+                $.get("ServletController", {"username": this.username, "password": this.password, "invia": this.codPrenotazione, "codice":codice, "utente": this.username},function (data4) {
+                    console.log("addPrenotazione = "+data4);
+                });
+            },
+
+            addPrenotationAdmin:function(codice, account){
+                let self = this;
+                console.log("sono in addPrenotationsAdmin" + codice + account);
+                $.get("ServletController", {"username": this.username, "password": this.password, "invia": this.codPrenotazione, "codice":codice, "utente": account},function (data4) {
+                    console.log("addPrenotazione = "+data4);
+                });
+
+                setTimeout(function() {
+
+                    //aggiorno prenotazioni
+                    $.get("ServletController", {"username": this.username, "password": this.password, "materia":self.materiaPren, "docente":self.profPren, "data":self.data, "slot_ora":self.oraPren, "utente":self.utentePren, "invia": this.filterAdminPrenCode},function (data5) {
+                        self.allPrenotations = data5;
+                        console.log("finita la getFilteredPrenotations");
+                        console.log(data5);
+                    });
+
+                }.bind(this), 10);
+
+            },
+
+
+            removePrenotation:function(codice){
+                let self = this;
+                console.log("sono in removePrenotations" + codice);
+                $.get("ServletController", {"username": this.username, "password": this.password, "invia": this.codDisdiciPrenotazione, "codice":codice},function (data4) {
+                    console.log("addPrenotazione = "+data4);
+                });
+
+                setTimeout(function() {
+
+                    //aggiorno prenotazioni
+                    $.get("ServletController", {"username": this.username, "password": this.password, "materia":self.materiaPren, "docente":self.profPren, "data":self.data, "slot_ora":self.oraPren, "utente":self.utentePren, "invia": this.filterAdminPrenCode},function (data5) {
+                        self.allPrenotations = data5;
+                        console.log("finita la getFilteredPrenotations");
+                        console.log(data5);
+                    });
+
+                }.bind(this), 10);
             },
 
 
