@@ -26,7 +26,7 @@ public class DAO {
             if (conn1 != null) {
                 System.out.println("Connected to the database test");
                 Statement st = conn1.createStatement();
-                int ris = st.executeUpdate("INSERT INTO CORSO(TITOLO) VALUES('"+corso+"')");
+                int ris = st.executeUpdate("INSERT INTO CORSO(TITOLO, ATTIVO) VALUES('"+corso+"', '1')");
                 if(ris != 0){
                     out = "";
                     out = out + "Corso creato con successo";
@@ -304,7 +304,7 @@ public class DAO {
                 Prenotazione p;
                 while (rs.next()) {
                     //forse va rivista con una document.out per scrivere nel div corretto
-                    p = new Prenotazione(rs.getString("codice"),rs.getString("utente"), rs.getString("docente"), rs.getString("corso"), rs.getString("data"), rs.getString("slot_ora"));
+                    p = new Prenotazione(rs.getString("codice"),rs.getString("utente"), rs.getString("docente"), rs.getString("corso"), rs.getString("data"), rs.getString("slot_ora"), rs.getString("stato"));
                     System.out.println(i+" "+p.getCodice()+p.getUtente()+p.getDocente()+p.getCorso()+p.getData()+p.getSlot_ora());
                     out.add(p);
                 }
@@ -333,10 +333,10 @@ public class DAO {
             conn1 = DriverManager.getConnection(url1,user,password);
             if(conn1 != null){
                 Statement st = conn1.createStatement();
-                ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONE join DOCENTE on(PRENOTAZIONE.docente = DOCENTE.account) WHERE ATTIVO = '1' AND (UTENTE IS NULL OR "+ utente+")");
+                ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONE join DOCENTE on(PRENOTAZIONE.docente = DOCENTE.account) join CORSO on(CORSO.titolo = PRENOTAZIONE.corso) WHERE DOCENTE.ATTIVO = '1' AND CORSO.ATTIVO='1' AND (UTENTE IS NULL OR "+ utente+") AND (STATO = '1' OR STATO = '0')");
                 int i = 0;
                 while (rs.next()) {
-                    Prenotazione p = new Prenotazione(rs.getString("codice"),rs.getString("utente"), rs.getString("docente"), rs.getString("corso"), rs.getString("data"), rs.getString("slot_ora"));
+                    Prenotazione p = new Prenotazione(rs.getString("codice"),rs.getString("utente"), rs.getString("docente"), rs.getString("corso"), rs.getString("data"), rs.getString("slot_ora"), rs.getString("stato"));
                     System.out.println(i + " " + p.getCodice() + p.getUtente() + p.getDocente() + p.getCorso() + p.getData() + p.getSlot_ora());
                     out.add(p);
                 }
@@ -367,7 +367,7 @@ public class DAO {
                 ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONE WHERE " + account);
                 int i = 0;
                 while (rs.next()) {
-                    Prenotazione p = new Prenotazione(rs.getString("codice"),rs.getString("utente"), rs.getString("docente"), rs.getString("corso"), rs.getString("data"), rs.getString("slot_ora"));
+                    Prenotazione p = new Prenotazione(rs.getString("codice"),rs.getString("utente"), rs.getString("docente"), rs.getString("corso"), rs.getString("data"), rs.getString("slot_ora"), rs.getString("stato"));
                     System.out.println(i + " " + p.getCodice() + p.getUtente() + p.getDocente() + p.getCorso() + p.getData() + p.getSlot_ora());
                     out.add(p);
                 }
@@ -397,11 +397,11 @@ public class DAO {
             conn1 = DriverManager.getConnection(url1,user,password);
             if(conn1 != null){
                 Statement st = conn1.createStatement();
-                ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONE join DOCENTE on(PRENOTAZIONE.docente = DOCENTE.account) WHERE (UTENTE IS NULL OR UTENTE = '"+utente+"') AND ATTIVO = '1' "+data+" "+corso+" "+slot_ora+" "+docente+" " );   //CONTROLLA LE VIRGOLETTE DOVE CI SONO TUTTI I +...+...+...+
+                ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONE join DOCENTE on(PRENOTAZIONE.docente = DOCENTE.account)  join CORSO on(CORSO.titolo = PRENOTAZIONE.corso) WHERE (UTENTE IS NULL OR UTENTE = '"+utente+"') AND DOCENTE.ATTIVO = '1' AND CORSO.attivo = '1' "+data+" "+corso+" "+slot_ora+" "+docente+" AND (STATO = '1' OR STATO = '0')" );   //CONTROLLA LE VIRGOLETTE DOVE CI SONO TUTTI I +...+...+...+
                 int i = 0;
                 while (rs.next()) {
                     //forse va rivista con una document.out per scrivere nel div corretto
-                    Prenotazione p = new Prenotazione(rs.getString("codice"),rs.getString("utente"), rs.getString("docente"), rs.getString("corso"), rs.getString("data"), rs.getString("slot_ora"));
+                    Prenotazione p = new Prenotazione(rs.getString("codice"),rs.getString("utente"), rs.getString("docente"), rs.getString("corso"), rs.getString("data"), rs.getString("slot_ora"), rs.getString("stato"));
                     System.out.println(i + " " + p.getCodice() + p.getUtente() + p.getDocente() + p.getCorso() + p.getData() + p.getSlot_ora());
                     out.add(p);
 
@@ -436,7 +436,7 @@ public class DAO {
                 ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONE join DOCENTE on(PRENOTAZIONE.docente = DOCENTE.account) WHERE (UTENTE IS NULL OR UTENTE IS NOT NULL)"+data+""+corso+""+slot_ora+""+docente+""+utente+"" );   //CONTROLLA LE VIRGOLETTE DOVE CI SONO TUTTI I +...+...+...+
                 int i = 0;
                 while (rs.next()) {
-                    Prenotazione p = new Prenotazione(rs.getString("codice"),rs.getString("utente"), rs.getString("docente"), rs.getString("corso"), rs.getString("data"), rs.getString("slot_ora"));
+                    Prenotazione p = new Prenotazione(rs.getString("codice"),rs.getString("utente"), rs.getString("docente"), rs.getString("corso"), rs.getString("data"), rs.getString("slot_ora"), rs.getString("stato"));
                     System.out.println(i + " " + p.getCodice() + p.getUtente() + p.getDocente() + p.getCorso() + p.getData() + p.getSlot_ora());
                     out.add(p);
 
@@ -495,10 +495,10 @@ public class DAO {
             conn1 = DriverManager.getConnection(url1,user,password);
             if(conn1 != null){
                 Statement st = conn1.createStatement();
-                ResultSet rs = st.executeQuery("SELECT * FROM CORSO");
+                ResultSet rs = st.executeQuery("SELECT * FROM CORSO WHERE ATTIVO = '1'");
                 int i = 0;
                 while (rs.next()) {
-                    Corso c = new Corso(rs.getString("Titolo"));
+                    Corso c = new Corso(rs.getString("Titolo"), rs.getString("attivo"));
                     out.add(c);
                 }
             }
@@ -587,7 +587,7 @@ public class DAO {
             conn1 = DriverManager.getConnection(url1,user,password);
             if(conn1 != null){
                 Statement st = conn1.createStatement();
-                int rs = st.executeUpdate("DELETE FROM CORSO WHERE TITOLO = '" + titolo +"'");
+                int rs = st.executeUpdate("UPDATE CORSO SET ATTIVO = '0' WHERE TITOLO = '" + titolo +"'");
                 if(rs != 0){
                     out = "";
                     out = out + "Eliminazione corso " + titolo + " avvenuta con successo";
@@ -617,8 +617,11 @@ public class DAO {
             if(conn1 != null){
                 Statement st = conn1.createStatement();
 
-                int rs = st.executeUpdate("UPDATE PRENOTAZIONE SET UTENTE = NULL WHERE CODICE =" + codice);
-                if(rs != 0){
+                /*int rs = st.executeUpdate("UPDATE PRENOTAZIONE SET STATO = '2' WHERE CODICE =" + codice);*/
+                int rs = st.executeUpdate("UPDATE PRENOTAZIONE SET STATO ='2' WHERE CODICE = '" + codice +"'");
+                int riss = st.executeUpdate("INSERT INTO PRENOTAZIONE (CODICE, UTENTE, DOCENTE, CORSO, DATA, SLOT_ORA, STATO) SELECT '"+'1'+codice+"', NULL, DOCENTE, CORSO, DATA, SLOT_ORA, '0' FROM PRENOTAZIONE WHERE CODICE ='"+codice+"'");
+
+                if(rs != 0 && riss!=0){
                     out = "";
                     out = out + "La prenotazione e stata disdetta con successo";
                 }
@@ -646,7 +649,8 @@ public class DAO {
             if(conn1 != null){
                 Statement st = conn1.createStatement();
                 int rs = st.executeUpdate("UPDATE PRENOTAZIONE SET UTENTE = '" + utente +"'" + "WHERE CODICE ='" + codice + "'");
-                if(rs != 0){
+                int rrs = st.executeUpdate("UPDATE PRENOTAZIONE SET STATO = '1' WHERE CODICE ='" + codice + "'");
+                if(rs != 0 && rrs != 0){
                     out = "";
                     out = out + "La prenotazione e stata fatta con successo";
                 }

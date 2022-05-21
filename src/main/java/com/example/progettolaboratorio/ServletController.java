@@ -430,7 +430,7 @@ public class ServletController extends HttpServlet {
         if(username==null || username==""){
             username1="";
         }else{
-            username1 = "UTENTE = '"+username+"'";
+            username1 = "UTENTE = '"+username+"' AND (STATO = '1' OR STATO = '2') ";
         }
         list = DAO.viewOwnActPrenotations(username1);
         return list;
@@ -468,9 +468,9 @@ public class ServletController extends HttpServlet {
             materia_filter = " AND CORSO = '"+materia+"'";
         }
         if(docente==null || docente == ""){
-            docente_filter=" AND ATTIVO = '1'";
+            docente_filter="";
         }else{
-            docente_filter = " AND ATTIVO = '1' AND PRENOTAZIONE.DOCENTE = '"+docente+"'";
+            docente_filter = " AND PRENOTAZIONE.DOCENTE = '"+docente+"'";
         }
         if(slot_ora==null || slot_ora == ""){
             slot_ora_filter="";

@@ -10,14 +10,19 @@ public class Prenotazione {
     private String corso;
     private String data;
     private String slot_ora;
+    private String stato;
+    //0 prenotabile
+    //1 prnotata dall utente
+    //2 disdetta, l utente che l ha disdetta lo recupri nel campo utente
 
-    public Prenotazione(String codice, String utente, String docente, String corso, String data, String slot_ora) {
+    public Prenotazione(String codice, String utente, String docente, String corso, String data, String slot_ora, String stato) {
         this.codice = codice;
         this.utente = utente;
         this.docente = docente;
         this.corso = corso;
         this.data = data;
         this.slot_ora = slot_ora;
+        this.stato = stato;
     }
 
     public String getCodice() {
@@ -44,6 +49,10 @@ public class Prenotazione {
         return slot_ora;
     }
 
+    public String getStato() {
+        return stato;
+    }
+
     public void setCorso(String corso) {
         this.corso = corso;
     }
@@ -66,6 +75,10 @@ public class Prenotazione {
 
     public void setUtente(String utente) {
         this.utente = utente;
+    }
+
+    public void setStato(String stato) {
+        this.stato = stato;
     }
 
 

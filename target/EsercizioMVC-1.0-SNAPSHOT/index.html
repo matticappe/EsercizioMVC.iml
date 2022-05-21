@@ -326,6 +326,7 @@
                     <th scope="col">Professore</th>
                     <th scope="col">Giorno</th>
                     <th scope="col">Ora</th>
+                    <th scope="col">Stato</th>
                     <th scope="col">Prenotazione</th>
                 </tr>
                 </thead>
@@ -335,9 +336,10 @@
                     <td><div>{{p.docente}}</div></td>
                     <td><div>{{p.data}}</div></td>
                     <td><div>{{p.slot_ora}}</div></td>
-                    <td><button type="button" class="btn btn-primary" v-if="p.utente === null || p.utente==='' || p.utente === undefined" onclick="prenota(this)" v-on:click="addPrenotation(p.codice)">Prenota</button>
-                        <button type="button" class="btn btn-primary" v-if="p.utente === username" onclick="prenota(this)" v-on:click="removePrenotation(p.codice)">Disdici prenotazione</button>
-                        <button type="button" class="btn btn-primary" v-if="p.utente !== username && p.utente !== null && p.utente !== '' && p.utente !== undefined" disabled>Non disponibile</button>
+                    <td><div v-if="p.stato === '0'">Libera</div>
+                        <div v-if="p.stato === '1'">Prenotata</div></td>
+                    <td><button type="button" class="btn btn-primary" v-if="p.stato === '0'" v-on:click="addPrenotation(p.codice)">Prenota</button>
+                        <button type="button" class="btn btn-primary" v-if="p.stato === '1'" v-on:click="removePrenotation(p.codice)">Disdici prenotazione</button>
 
                     </td>
                 </tr>
@@ -375,6 +377,7 @@
                         <th scope="col">Professore</th>
                         <th scope="col">Giorno</th>
                         <th scope="col">Ora</th>
+                        <th scope="col">Stato</th>
                         <th scope="col">Prenotazione</th>
                     </tr>
                     </thead>
@@ -384,9 +387,12 @@
                         <td><div>{{p.docente}}</div></td>
                         <td><div>{{p.data}}</div></td>
                         <td><div>{{p.slot_ora}}</div></td>
-                        <td><button type="button" class="btn btn-primary" v-if="p.utente === null || p.utente==='' || p.utente === undefined" onclick="prenota(this)">Prenota</button>
-                            <button type="button" class="btn btn-primary" v-if="p.utente === username" onclick="prenota(this)">Disdici prenotazione</button>
-                            <button type="button" class="btn btn-primary" v-if="p.utente !== username && p.utente !== null && p.utente !== '' && p.utente !== undefined" disabled>Prenotato</button>
+                        <td><div v-if="p.stato === '2'">Disdetta</div>
+                            <div v-if="p.stato === '1'">Prenotata</div></td>
+                        <td>
+                            <button type="button" class="btn btn-primary" v-if="p.stato === '1' && isValido(p.corso, p.docente)" v-on:click="removePrenotation(p.codice)">Disdici prenotazione</button>
+                            <button type="button" class="btn btn-primary" v-if="p.stato === '1' && !isValido(p.corso, p.docente)" v-on:click="removePrenotation(p.codice)" disabled>Docente o corso cancellato</button>
+                            <button type="button" class="btn btn-primary" v-if="p.stato === '2'" disabled>Disdetta</button>
 
                         </td>
                     </tr>
@@ -758,7 +764,7 @@
                     <th scope="col">Professore</th>
                     <th scope="col">Giorno</th>
                     <th scope="col">Ora</th>
-                    <th scope="col">Prenotazione</th>
+                    <th scope="col">Stato</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -767,11 +773,12 @@
                     <td><div>{{p.docente}}</div></td>
                     <td><div>{{p.data}}</div></td>
                     <td><div>{{p.slot_ora}}</div></td>
-                    <td><div v-if="p.utente === null || p.utente==='' || p.utente === undefined">Non prenotato</div>
-                        <div v-if="p.utente !== username && p.utente !== null && p.utente !== '' && p.utente !== undefined">Prenotato da {{p.utente}}</div></td>
+                    <td><div v-if="p.stato === '2'">Disdetta da {{p.utente}}</div>
+                        <div v-if="p.stato === '1'">Prenotato da {{p.utente}}</div>
+                        <div v-if="p.stato === '0'">Libera</div></td>
                     <td>
                         <div v-if="!(prenCodeShow===p.codice)">
-                            <button type="button" class="btn btn-primary" v-if="p.utente === null || p.utente==='' || p.utente === undefined" v-on:click="prenCodeShow =p.codice" onclick="prenota(this)">Prenota per</button>
+                            <button type="button" class="btn btn-primary" v-if="p.stato === '0'" v-on:click="prenCodeShow =p.codice" onclick="prenota(this)">Prenota per</button>
                         </div>
 
                         <div v-if="prenCodeShow===p.codice" class="dropdown">
@@ -783,7 +790,11 @@
                                 </div>
                         </div>
 
-                        <button type="button" class="btn btn-primary" v-if="p.utente !== username && p.utente !== null && p.utente !== '' && p.utente !== undefined" v-on:click="removePrenotation(p.codice), prenCodeShow=''">Cancella prenotazione di {{p.utente}}</button>
+                        <button type="button" class="btn btn-primary" v-if="p.stato === '2'" v-on:click="removePrenotation(p.codice), prenCodeShow=''" disabled>Prenotazione di {{p.utente}} disdetta</button>
+                        <button type="button" class="btn btn-primary" v-if="p.stato === '1' && isValido(p.corso, p.docente)" v-on:click="removePrenotation(p.codice), prenCodeShow=''">Cancella prenotazione di {{p.utente}}</button>
+                        <button type="button" class="btn btn-primary" v-if="p.stato === '1' && !isValido(p.corso, p.docente)" v-on:click="removePrenotation(p.codice), prenCodeShow=''" disabled>Docente o corso cancellato</button>
+
+
 
 
 
@@ -1151,7 +1162,6 @@
                 });
 
                 setTimeout(function() {
-
                     //aggiorno prenotazioni
                     $.get("ServletController", {"username": this.username, "password": this.password, "materia":self.materiaPren, "docente":self.profPren, "data":self.data, "slot_ora":self.oraPren, "utente":self.utentePren, "invia": this.filterAdminPrenCode},function (data5) {
                         self.allPrenotations = data5;
@@ -1236,7 +1246,7 @@
                         console.log(data5);
                     });
 
-                }.bind(this), 10);
+                }.bind(this), 1000);
 
             },
 
@@ -1257,7 +1267,27 @@
                         console.log(data5);
                     });
 
-                }.bind(this), 10);
+                }.bind(this), 1000);
+            },
+
+            isValido:function(corso, docente){
+                let self = this;
+                let j = 0;
+                let k = 0;
+                for(let i = 0; i<self.allSubjects.length; i++) {
+                    if(corso === self.allSubjects[i].titolo){
+                        j = 1;
+                    }
+                }
+                for(let i = 0; i<self.allProfs.length; i++) {
+                    if(docente === self.allProfs[i].account){
+                        k = 1;
+                    }
+                }
+                if(j === 1 && k === 1)
+                    return true;
+                else
+                    return false;
             },
 
 
