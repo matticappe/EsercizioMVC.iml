@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import static DAO.DAO.loginUtente;
 import static java.lang.System.out;
 
-// CIAO CAPPEEEEEEEEEEEEEEEEEE
 
 @WebServlet(name = "ServletController", value = "/ServletController") //questa è la value che verrà usata nell'ancora del HTML
 public class ServletController extends HttpServlet {
@@ -35,62 +34,96 @@ public class ServletController extends HttpServlet {
             response.setContentType("application/json");
             Gson gson = new Gson();
             String action = request.getParameter("invia");
+            ServletContext ctx=getServletContext();
+            RequestDispatcher rd;
+            String actionRD;
             System.out.println("Action = " + action); //inserire un controllo per il != da null
 
             switch (action) {
                 case "login":
-                    System.out.println("Sono nel login");
-                    String answ =login(request,response);
-                    System.out.println("TRA POCO INVIO CORRETTO");
+                    actionRD="login";
+                    request.setAttribute("actionRD",actionRD);
+                    rd=ctx.getNamedDispatcher("ServletLogin");
+                    rd.include(request,response);
+
+                    String answ = (String) request.getAttribute("risultato");
                     String s1 = gson.toJson(answ);
                     out.println(s1);
                     break;
 
                 case "inserimentoDocente":
-                    System.out.println("Sono in inserimento docente");
-                    String r2 = inserimentoDocente(request, response);
+                    actionRD="inserimentoDocente";
+                    request.setAttribute("actionRD",actionRD);
+                    rd=ctx.getNamedDispatcher("ServletDocenti");
+                    rd.include(request,response);
+
+                    String r2 = (String) request.getAttribute("risultato");
                     String s2 = gson.toJson(r2);
                     out.println(s2);
                     break;
 
                 case "cancellaPrenotazione":
-                    System.out.println("Sono in cancella prenotazione");
-                    String r3 = cancellaPrenotazione(request, response);
+                    actionRD="cancellaPrenotazione";
+                    request.setAttribute("actionRD",actionRD);
+                    rd=ctx.getNamedDispatcher("ServletPrenotazione");
+                    rd.include(request,response);
+
+                    String r3 = (String) request.getAttribute("risultato");
                     String s3 = gson.toJson(r3);
                     out.println(s3);
                     break;
 
                 case "inserimentoCorso":
-                    System.out.println("Sono in inserimento corso");
-                    String r4 = inserimentoCorso(request, response);
+                    actionRD="inserimentoCorso";
+                    request.setAttribute("actionRD",actionRD);
+                    rd=ctx.getNamedDispatcher("ServletCorsi");
+                    rd.include(request,response);
+
+                    String r4 = (String) request.getAttribute("risultato");
                     String s4 = gson.toJson(r4);
                     out.println(s4);
                     break;
 
                 case "inserisciPrenotazione":
-                    System.out.println("Sono in inserisci prenotazione");
-                    String r5 = inserisciPrenotazione(request, response);
+                    actionRD="inserisciPrenotazione";
+                    request.setAttribute("actionRD",actionRD);
+                    rd=ctx.getNamedDispatcher("ServletPrenotazione");
+                    rd.include(request,response);
+
+                    String r5 = (String) request.getAttribute("risultato");
                     String s5 = gson.toJson(r5);
                     out.println(s5);
                     break;
 
                 case "inserisciInsegna":
-                    System.out.println("Sono in inserimento insegna");
-                    String r6 = inserimentoInsegna(request, response);
+                    actionRD="inserisciInsegna";
+                    request.setAttribute("actionRD",actionRD);
+                    rd=ctx.getNamedDispatcher("ServletInsegna");
+                    rd.include(request,response);
+
+                    String r6 = (String) request.getAttribute("risultato");
                     String s6 = gson.toJson(r6);
                     out.println(s6);
                     break;
 
                 case "rimuoviInsegna":
-                    System.out.println("Sono in updateInsegnaDocente");
-                    String r7 = rimuoviInsegna(request, response);
+                    actionRD="rimuoviInsegna";
+                    request.setAttribute("actionRD",actionRD);
+                    rd=ctx.getNamedDispatcher("ServletInsegna");
+                    rd.include(request,response);
+
+                    String r7 = (String) request.getAttribute("risultato");
                     String s7 = gson.toJson(r7);
                     out.println(s7);
                     break;
 
                 case "addInsegna":
-                    System.out.println("Sono in addInsegna");
-                    String r8 = addInsegna(request, response);
+                    actionRD="addInsegna";
+                    request.setAttribute("actionRD",actionRD);
+                    rd=ctx.getNamedDispatcher("ServletInsegna");
+                    rd.include(request,response);
+
+                    String r8 = (String) request.getAttribute("risultato");
                     String s8 = gson.toJson(r8);
                     out.println(s8);
                     break;
@@ -99,15 +132,18 @@ public class ServletController extends HttpServlet {
                     System.out.println("Sono in stampaUtenti");
                     ArrayList<Utente> array11 = stampaUtenti(request, response);
                     if(array11!=null) {
-                        System.out.println("sono nell if viewAllPrenotations");
                         String s111 = gson.toJson(array11);
                         out.println(s111);
                     }
                     break;
 
                 case "viewOwnPrenotations":
-                    System.out.println("Sono in viewOwnPrenotations");
-                    ArrayList<Prenotazione> s9 = viewOwnPrenotations(request, response);
+                    actionRD="viewOwnPrenotations";
+                    request.setAttribute("actionRD",actionRD);
+                    rd=ctx.getNamedDispatcher("ServletPrenotazione");
+                    rd.include(request,response);
+
+                    ArrayList<Prenotazione> s9 = (ArrayList<Prenotazione>) request.getAttribute("risultato");
                     if(s9 != null){
                         String r9 = gson.toJson(s9);
                         out.println(r9);
@@ -120,8 +156,12 @@ public class ServletController extends HttpServlet {
                     break;
 
                 case "viewAllPrenotations":
-                    System.out.println("Sono in viewAllPrenotations");
-                    ArrayList<Prenotazione> string3 = viewAllPrenotations(request, response);
+                    actionRD="viewAllPrenotations";
+                    request.setAttribute("actionRD",actionRD);
+                    rd=ctx.getNamedDispatcher("ServletPrenotazione");
+                    rd.include(request,response);
+
+                    ArrayList<Prenotazione> string3 = (ArrayList<Prenotazione>) request.getAttribute("risultato");
                     if(string3!=null){
                         System.out.println("test Stringa");
                         String s11 = gson.toJson(string3);
@@ -135,8 +175,12 @@ public class ServletController extends HttpServlet {
                     break;
 
                 case "viewOwnActPrenotations":
-                    System.out.println("Sono in viewOwnActPrenotations");
-                    ArrayList<Prenotazione> out4 = viewOwnActPrenotations(request, response);
+                    actionRD="viewOwnActPrenotations";
+                    request.setAttribute("actionRD",actionRD);
+                    rd=ctx.getNamedDispatcher("ServletPrenotazione");
+                    rd.include(request,response);
+
+                    ArrayList<Prenotazione> out4 = (ArrayList<Prenotazione>) request.getAttribute("risultato");
                     if (out4 != null){
                         String s12 = gson.toJson(out4);
                         out.println(s12);
@@ -149,11 +193,16 @@ public class ServletController extends HttpServlet {
                     break;
 
                 case "filterProf":
-                    System.out.println("Sono in filterProf");
-                    ArrayList<Docente> out5 = filterProf(request, response);
+                    actionRD="filterProf";
+                    request.setAttribute("actionRD",actionRD);
+                    rd=ctx.getNamedDispatcher("ServletDocenti");
+                    rd.include(request,response);
+
+                    ArrayList<Docente> out5 = (ArrayList<Docente>) request.getAttribute("risultato");
                     if (out5 != null){
                         String r13 = gson.toJson(out5);
                         out.println(r13);
+                        System.out.println(r13);
                     }
                     else{
                         String s13 = "Nessun professore trovato";
@@ -163,8 +212,12 @@ public class ServletController extends HttpServlet {
                     break;
 
                 case "filterPrenotations":
-                    System.out.println("Sono in filterPrenotations");
-                    ArrayList<Prenotazione> out6 =  filterPrenotations(request, response);
+                    actionRD="filterPrenotations";
+                    request.setAttribute("actionRD",actionRD);
+                    rd=ctx.getNamedDispatcher("ServletPrenotazione");
+                    rd.include(request,response);
+
+                    ArrayList<Prenotazione> out6 =  (ArrayList<Prenotazione>) request.getAttribute("risultato");
                     System.out.println("FILTRATE"+out6);
                     if(out6 != null){
                         String r14 = gson.toJson(out6);
@@ -178,8 +231,12 @@ public class ServletController extends HttpServlet {
                     break;
 
                 case "filterAdminPrenotations":
-                    System.out.println("Sono in filterAdminPrenotations");
-                    ArrayList<Prenotazione> out61 =  filterAdminPrenotations(request, response);
+                    actionRD="filterAdminPrenotations";
+                    request.setAttribute("actionRD",actionRD);
+                    rd=ctx.getNamedDispatcher("ServletPrenotazione");
+                    rd.include(request,response);
+
+                    ArrayList<Prenotazione> out61 =  (ArrayList<Prenotazione>) request.getAttribute("risultato");
                     System.out.println("FILTRATE"+out61);
                     if(out61 != null){
                         String r14 = gson.toJson(out61);
@@ -193,8 +250,11 @@ public class ServletController extends HttpServlet {
                     break;
 
                 case "availableSubjects":
-                    System.out.println("Sono in availableSubjects");
-                    ArrayList<Corso> out7 = availableSubjects(request, response);
+                    actionRD="availableSubjects";
+                    request.setAttribute("actionRD",actionRD);
+                    rd=ctx.getNamedDispatcher("ServletCorsi");
+                    rd.include(request,response);
+                    ArrayList<Corso> out7 = (ArrayList<Corso>) request.getAttribute("risultato");
                     if(out7 != null){
                         String r15 = gson.toJson(out7);
                         out.println(r15);
@@ -207,22 +267,34 @@ public class ServletController extends HttpServlet {
                     break;
 
                 case "isAdmin":
-                    System.out.println("Sono in isAdmin");
-                    String s15 = isAdmin(request, response);
+                    actionRD="isAdmin";
+                    request.setAttribute("actionRD",actionRD);
+                    rd=ctx.getNamedDispatcher("ServletLogin");
+                    rd.include(request,response);
+
+                    String s15 = (String) request.getAttribute("risultato");
                     String r15 = gson.toJson(s15);
                     out.println(r15);
                     break;
 
                 case "logout":
-                    System.out.println("Sono in logout");
-                    String lout=logout(request, response);
+                    actionRD="logout";
+                    request.setAttribute("actionRD",actionRD);
+                    rd=ctx.getNamedDispatcher("ServletLogin");
+                    rd.include(request,response);
+
+                    String lout=(String) request.getAttribute("risultato");
                     String sLout = gson.toJson(lout);
                     out.println(sLout);
                     break;
 
                 case "viewAllProf":
-                    System.out.println("Sono in viewAllProf");
-                    ArrayList<Docente> list16 = viewAllDocente(request,response);
+                    actionRD="viewAllProf";
+                    request.setAttribute("actionRD",actionRD);
+                    rd=ctx.getNamedDispatcher("ServletDocenti");
+                    rd.include(request,response);
+
+                    ArrayList<Docente> list16 = (ArrayList<Docente>) request.getAttribute("risultato");
                     if(list16 != null){
                         System.out.println("Sono nell if viewAllProf");
                         System.out.println(list16);
@@ -240,36 +312,57 @@ public class ServletController extends HttpServlet {
                     break;
 
                 case "eliminaDocente":
-                    System.out.println("Sono in eliminaDocente");
-                    String  r17 = eliminaDocente(request,response);
+                    actionRD="viewAllProf";
+                    request.setAttribute("actionRD",actionRD);
+                    rd=ctx.getNamedDispatcher("ServletDocenti");
+                    rd.include(request,response);
+
+                    String  r17 = (String) request.getAttribute("risultato");
                     String s17 = gson.toJson(r17);
                     out.println(s17);
                     break;
 
                 case "eliminaCorso":
-                    System.out.println("Sono in eliminaCorso");
-                    String r18 = eliminaCorso(request,response);
+                    actionRD="eliminaCorso";
+                    request.setAttribute("actionRD",actionRD);
+                    rd=ctx.getNamedDispatcher("ServletCorsi");
+                    rd.include(request,response);
+
+                    String r18 = (String) request.getAttribute("risultato");
                     String s18 = gson.toJson(r18);
                     out.println(s18);
                     break;
 
                 case "disdiciPrenotazione":
-                    System.out.println("Sono in disdiciPrenotazione");
-                    String r19 = disdiciPrenotazione(request,response);
+                    actionRD="filterAdminPrenotations";
+                    request.setAttribute("actionRD",actionRD);
+                    rd=ctx.getNamedDispatcher("ServletPrenotazione");
+                    rd.include(request,response);
+
+                    String r19 = (String) request.getAttribute("risultato");
                     String s19 = gson.toJson(r19);
                     out.println(s19);
                     break;
 
                 case "effettuaPrenotazione":
+                    actionRD="filterAdminPrenotations";
+                    request.setAttribute("actionRD",actionRD);
+                    rd=ctx.getNamedDispatcher("ServletPrenotazione");
+                    rd.include(request,response);
+
                     System.out.println("Sono in effettuaPrenotazione");
-                    String r20 = effettuaPrenotazione(request,response);
+                    String r20 = (String) request.getAttribute("risultato");
                     String s20 = gson.toJson(r20);
                     out.println(s20);
                     break;
 
                 case "getInsegna":
-                    System.out.println("Sono in viewInsegna");
-                    ArrayList<Insegna> list17 = viewInsegna(request,response);
+                    actionRD="filterAdminPrenotations";
+                    request.setAttribute("actionRD",actionRD);
+                    rd=ctx.getNamedDispatcher("ServletPrenotazione");
+                    rd.include(request,response);
+
+                    ArrayList<Insegna> list17 = (ArrayList<Insegna>) request.getAttribute("risultato");
                     if(list17 != null){
                         System.out.println("Sono nell if viewInsegna");
                         System.out.println(list17);
@@ -286,6 +379,7 @@ public class ServletController extends HttpServlet {
                     }
                     break;
             }
+            out.flush();
         }
     }
 
@@ -299,95 +393,7 @@ public class ServletController extends HttpServlet {
         processRequest(request,response);
     }
 
-    public String login(HttpServletRequest request, HttpServletResponse response) throws ServletException,
-            IOException {
-        HttpSession s=null;
-        ServletContext ctx= request.getServletContext();
-        RequestDispatcher rd =null;
-        String res="";
-        try {
-            String st="";
-            String username = request.getParameter("username");
-            String password = request.getParameter("password");
-            if(username.equals(password) && username==""){      //non è null, è una stringa vuota
-                st="Guest";
-                out.flush();
-                out.close();
-                return st;
-            }
-            else {
-                System.out.println("Username: " + username);
-                System.out.println("Password: " + password);
-                Utente result = null;
-                result = loginUtente(username, password);
-                //
-                if (result != null) {
-                    res = result.toString();
-                    s = request.getSession();
-                    if (s.isNew()) {            //isNew è un metodo di librerie gestione utente
-                        String account = result.getAccount();
-                        s.setAttribute("User", account);
-                        int role = result.getRuolo();
-                        s.setAttribute("Ruolo", role);
-                        System.out.println("LoginEffettuato");
-                        if(isAdmin(request, response) == "yes")
-                            st = "admin";
-                        else
-                            st = "utenteRegistrato";
-                        out.flush();
-                        out.close();
-                        return st;
-                    } else{
-                        //DEVO METTERE UN ELSE SE L UTENTE NON é ANCORA REGOISTRATOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
-                    }
-                } else {
-                    String messaggio = "Login errato, Username o password errati";
-                    res=messaggio;
-                    //a sto punto sta roba sotto è useless
-                    request.setAttribute("message", messaggio);
-                    rd = getServletContext().getNamedDispatcher("ServletError");
-
-                    // String messaggio="Login errato, Username o password errati";
-                    //request.setAttribute("message",messaggio);
-                    rd.include(request, response);
-                    st="Login Errato";
-                    out.flush();
-                    out.close();
-                    return st;
-                }
-            }
-            out.flush();
-            out.close();
-            String end ="risposta: sono arrivato alla fine";
-            return end;
-        }finally {
-            out.close();
-            risTest=res;
-        }
-    }
-
-    public String logout(HttpServletRequest request, HttpServletResponse response) throws ServletException,
-            IOException{
-        HttpSession s=request.getSession();
-        s.invalidate();
-        String st="Logout effettuato con successo";
-        return st;
-    }
-
-    public String inserimentoDocente(HttpServletRequest request, HttpServletResponse response) throws ServletException,
-            IOException {
-        String result = "";
-        System.out.println("Sono nella InsertProf");
-        String account = request.getParameter("account");
-        System.out.println(account);
-        String nomeCognome = request.getParameter("nomeCognome");
-        System.out.println(nomeCognome);
-        String attivo = request.getParameter("attivo");
-        result = DAO.inserimentoDocente(account, nomeCognome,attivo);
-
-        return result;
-    }
-
+    //STAMPA UTENTI NON LO SPOSTO
     public ArrayList<Utente> stampaUtenti(HttpServletRequest request, HttpServletResponse response) throws ServletException,
             IOException {
         ArrayList<Utente> list = null;
@@ -397,183 +403,8 @@ public class ServletController extends HttpServlet {
         return list;
     }
 
-    public String cancellaPrenotazione(HttpServletRequest request, HttpServletResponse response) throws ServletException,
-            IOException {
-        String codice= request.getParameter("codice");
-        String ris = DAO.cancellazionePrenotazione(codice);
-        return ris;
-    }
-
-    //prenotazioni dell utente ancora disdicibili e prenotabili e docente dev essere attivo
-    public ArrayList<Prenotazione> viewOwnPrenotations(HttpServletRequest request, HttpServletResponse response) throws ServletException,
-            IOException {
-        System.out.println("ViewOwnPrenot");
-        ArrayList<Prenotazione> list;
-        String username = request.getParameter("username");
-        String username1;
-        if(username==null || username==""){
-            username1="";
-        }else{
-            username1 = "  UTENTE = '"+username+"'";
-        }
-        list = DAO.viewOwnPrenotations(username1);
-        return list;
-    }
-
-    //penso prenotazioni mie prenotate effettivamente (docente non per forza attivo)
-    public ArrayList<Prenotazione> viewOwnActPrenotations(HttpServletRequest request, HttpServletResponse response) throws ServletException,
-            IOException {
-        ArrayList<Prenotazione> list;
-        String username = request.getParameter("username");
-
-        String username1;
-        if(username==null || username==""){
-            username1="";
-        }else{
-            username1 = "UTENTE = '"+username+"' AND (STATO = '1' OR STATO = '2') ";
-        }
-        list = DAO.viewOwnActPrenotations(username1);
-        return list;
-    }
-
-    public ArrayList<Prenotazione> viewAllPrenotations(HttpServletRequest request, HttpServletResponse response) throws ServletException,
-            IOException {
-        ArrayList<Prenotazione> list;
-        list = DAO.viewAllPrenotations();
-        return list;
-    }
-
-    public ArrayList<Prenotazione> filterAdminPrenotations(HttpServletRequest request, HttpServletResponse response) throws ServletException,
-            IOException {
-        ArrayList<Prenotazione> list;
-        String slot_ora = request.getParameter("slot_ora");
-        String data = request.getParameter("data");
-        String materia = request.getParameter("materia");
-        String docente = request.getParameter("docente");
-        String utente = request.getParameter("utente");
-
-        String data_filter;
-        String utente_filter;
-        String materia_filter;
-        String docente_filter;
-        String slot_ora_filter;
-        if(data==null || data==""){
-            data_filter="";
-        }else{
-            data_filter = " AND DATA = '"+data+"'";
-        }
-        if(materia==null || materia == ""){
-            materia_filter="";
-        }else{
-            materia_filter = " AND CORSO = '"+materia+"'";
-        }
-        if(docente==null || docente == ""){
-            docente_filter="";
-        }else{
-            docente_filter = " AND PRENOTAZIONE.DOCENTE = '"+docente+"'";
-        }
-        if(slot_ora==null || slot_ora == ""){
-            slot_ora_filter="";
-        }else{
-            slot_ora_filter = " AND SLOT_ORA = '"+slot_ora+"'";
-        }
-        if(utente==null || utente == ""){
-            utente_filter="";
-        }else{
-            utente_filter = " AND UTENTE = '"+utente+"'";
-        }
-        list = DAO.filterAdminPrenotations(slot_ora_filter,data_filter,materia_filter,docente_filter, utente_filter);
-        return list;
-    }
-
-    public ArrayList<Prenotazione> filterPrenotations(HttpServletRequest request, HttpServletResponse response) throws ServletException,
-            IOException {
-        ArrayList<Prenotazione> list;
-        String slot_ora = request.getParameter("slot_ora");
-        String data = request.getParameter("data");
-        String materia = request.getParameter("materia");
-        String docente = request.getParameter("docente");
-        String utente = request.getParameter("username");
-
-        String data1;
-        String materia1;
-        String docente1;
-        String slot_ora1;
-        if(data==null || data==""){
-            data1="";
-        }else{
-            data1 = " AND DATA = '"+data+"'";
-        }
-        if(materia==null || materia == ""){
-            materia1="";
-        }else{
-            materia1 = " AND CORSO = '"+materia+"'";
-        }
-        if(docente==null || docente == ""){
-            docente1="";
-        }else{
-            docente1 = " AND DOCENTE = '"+docente+"'";
-        }
-        if(slot_ora==null || slot_ora == ""){
-            slot_ora1="";
-        }else{
-            slot_ora1 = " AND SLOT_ORA = '"+slot_ora+"'";
-        }
-        list = DAO.filterPrenotations(slot_ora1,data1,materia1,docente1,utente);
-        return list;
-    }
-
-    public ArrayList<Docente> filterProf(HttpServletRequest request, HttpServletResponse response) throws ServletException,
-            IOException {
-        ArrayList<Docente> list;
-        list = DAO.filterProf();
-        return list;
-    }
 
 
-    public ArrayList<Corso> availableSubjects(HttpServletRequest request, HttpServletResponse response) throws ServletException,
-            IOException {
-        ArrayList<Corso> list;
-        list = DAO.availableSubjects();
-        return list;
-    }
-
-    public String inserimentoCorso(HttpServletRequest request, HttpServletResponse response) throws ServletException,
-            IOException {
-        String result = "";
-        System.out.println("Sono nella inserimentoDocente");
-        String corso = request.getParameter("corso");
-        result = DAO.inserimentoCorso(corso);
-        System.out.println(corso);
-
-        return result;
-    }
-
-
-    public String inserisciPrenotazione(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        System.out.println("Sono nella inserisciPrenotazione");
-        String codice= request.getParameter("codice");
-        String slot_ora= request.getParameter("slot_ora");
-        String data= request.getParameter("data");
-        String docente= request.getParameter("docente");
-        String corso= request.getParameter("corso");
-        String result = DAO.inserisciPrenotazione(codice,docente,corso,data,slot_ora);
-        System.out.println(result);
-        return result;
-    }
-
-    public String inserimentoInsegna(HttpServletRequest request, HttpServletResponse response) throws ServletException,
-            IOException {
-        String result = "";
-        HttpSession s= request.getSession();
-        System.out.println("Sono nella inserimentoInsegna");
-        String docente = request.getParameter("codDocente");
-        String corso = request.getParameter("corso");
-        result = result + DAO.inserisciInsegna(docente, corso);
-        System.out.println(result);
-        return result;
-
-    }
 
     public String isAdmin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
         String result = "";
@@ -589,58 +420,6 @@ public class ServletController extends HttpServlet {
         return result;
     }
 
-    public String rimuoviInsegna(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String result = "Non hai i permessi";
-        HttpSession s= request.getSession();
-        String codDocente = request.getParameter("codDocente");
-        String titolo = request.getParameter("titolo");
-        result = DAO.rimuoviInsegna(codDocente,titolo);
-        return result;
 
-    }
 
-    public String addInsegna(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String result = "";
-        String codDocente = request.getParameter("codDocente");
-        String corso = request.getParameter("corso");
-        result = DAO.addInsegna(codDocente,corso);
-        return result;
-    }
-
-    public ArrayList<Docente> viewAllDocente(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-        ArrayList<Docente> list;
-        list = DAO.viewAllProf();
-        return list;
-    }
-
-    public String eliminaDocente(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-        String account = request.getParameter("account");
-        String result = DAO.eliminaDocente(account);
-        return result;
-    }
-
-    public String eliminaCorso(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-        String titolo = request.getParameter("titolo");
-        String result = DAO.eliminaCorso(titolo);
-        return result;
-    }
-
-    public String disdiciPrenotazione(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-        String codice = request.getParameter("codice");
-        String result = DAO.disdiciPrenotazione(codice);
-        return result;
-    }
-
-    public String effettuaPrenotazione(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-        String codice = request.getParameter("codice");
-        String utente = request.getParameter("utente");
-        String result = DAO.effettuaPrenotazione(codice,utente);
-        return result;
-    }
-    public ArrayList<Insegna> viewInsegna(HttpServletRequest request, HttpServletResponse response) throws ServletException,
-            IOException {
-        ArrayList<Insegna> list = null;
-        list = DAO.viewInsegna();
-        return list;
-    }
 }

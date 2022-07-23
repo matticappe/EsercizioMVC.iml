@@ -8,6 +8,7 @@ import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 
 import DAO.*;
+import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -25,11 +26,19 @@ public void init() {
         }
 
     private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ScriptException, NoSuchMethodException {
+        try(PrintWriter out = response.getWriter()) {
+            response.setContentType("application/json");
+            Gson gson = new Gson();
+            //continua qui
+        }
+        /* VECCHIO SCRIPT QUA SOTTO... DA COMPLETARE
         message=request.getParameter("message");
         PrintWriter out=response.getWriter();
         response.setContentType("text/plain");
         System.out.println("1");
         System.out.println(message);
+
+         */
 
     }
 
