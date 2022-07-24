@@ -317,7 +317,7 @@ public class ServletController extends HttpServlet {
                     break;
 
                 case "eliminaDocente":
-                    actionRD="viewAllProf";
+                    actionRD="eliminaDocente";
                     request.setAttribute("actionRD",actionRD);
                     rd=ctx.getNamedDispatcher("ServletDocenti");
                     rd.include(request,response);
@@ -339,7 +339,7 @@ public class ServletController extends HttpServlet {
                     break;
 
                 case "disdiciPrenotazione":
-                    actionRD="filterAdminPrenotations";
+                    actionRD="disdiciPrenotazione";
                     request.setAttribute("actionRD",actionRD);
                     rd=ctx.getNamedDispatcher("ServletPrenotazione");
                     rd.include(request,response);
@@ -350,7 +350,7 @@ public class ServletController extends HttpServlet {
                     break;
 
                 case "effettuaPrenotazione":
-                    actionRD="filterAdminPrenotations";
+                    actionRD="effettuaPrenotazione";
                     request.setAttribute("actionRD",actionRD);
                     rd=ctx.getNamedDispatcher("ServletPrenotazione");
                     rd.include(request,response);
@@ -362,9 +362,9 @@ public class ServletController extends HttpServlet {
                     break;
 
                 case "getInsegna":
-                    actionRD="filterAdminPrenotations";
+                    actionRD="getInsegna";
                     request.setAttribute("actionRD",actionRD);
-                    rd=ctx.getNamedDispatcher("ServletPrenotazione");
+                    rd=ctx.getNamedDispatcher("ServletInsegna");
                     rd.include(request,response);
 
                     ArrayList<Insegna> list17 = (ArrayList<Insegna>) request.getAttribute("risultato");
