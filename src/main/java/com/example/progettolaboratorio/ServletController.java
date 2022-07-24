@@ -138,15 +138,20 @@ public class ServletController extends HttpServlet {
                     break;
 
                 case "viewOwnPrenotations":
+                    System.out.println("1");
                     actionRD="viewOwnPrenotations";
                     request.setAttribute("actionRD",actionRD);
+                    System.out.println("2");
                     rd=ctx.getNamedDispatcher("ServletPrenotazione");
+                    System.out.println("3");
                     rd.include(request,response);
+                    System.out.println("4");
 
                     ArrayList<Prenotazione> s9 = (ArrayList<Prenotazione>) request.getAttribute("risultato");
                     if(s9 != null){
                         String r9 = gson.toJson(s9);
                         out.println(r9);
+                        System.out.println(s9);
                     }
                     else{
                         String s9_1 = "Nessuna prenotazione trovata";

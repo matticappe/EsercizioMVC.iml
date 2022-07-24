@@ -16,10 +16,7 @@ import java.util.ArrayList;
 
 @WebServlet(name = "ServletPrenotazione", value = "/ServletPrenotazione")
 public class ServletPrenotazione extends HttpServlet{
-    public void init() {
-        //registrazione del driver
-        DAO.registerDriver();
-    }
+
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
         processRequest(request, response);
@@ -32,12 +29,12 @@ public class ServletPrenotazione extends HttpServlet{
 
     public void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException,
             IOException {
-        ArrayList <Prenotazione> answ;
+        ArrayList <Prenotazione> answ=new ArrayList<Prenotazione>();
         String answ1;
-        try(PrintWriter out = response.getWriter()) {
-            String action = request.getParameter("actionRD");
+            String action =(String) request.getAttribute("actionRD");
             switch (action){
                 case "viewOwnPrenotations":
+                    System.out.println("3");
                     answ =viewOwnPrenotations(request,response);
                     request.setAttribute("risultato",answ);
                     break;
@@ -74,7 +71,6 @@ public class ServletPrenotazione extends HttpServlet{
                     request.setAttribute("risultato",answ1);
                     break;
             }
-        }
     }
     public String inserisciPrenotazione(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         System.out.println("Sono nella inserisciPrenotazione");

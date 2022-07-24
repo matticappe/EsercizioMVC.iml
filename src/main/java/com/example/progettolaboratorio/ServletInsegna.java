@@ -16,10 +16,7 @@ import java.util.ArrayList;
 
 @WebServlet(name = "ServletInsegna", value = "/ServletInsegna")
 public class ServletInsegna extends HttpServlet{
-    public void init() {
-        //registrazione del driver
-        DAO.registerDriver();
-    }
+
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
         processRequest(request, response);
@@ -33,8 +30,8 @@ public class ServletInsegna extends HttpServlet{
             IOException {
         String answ;
         ArrayList<Insegna>answ1;
-        try(PrintWriter out = response.getWriter()) {
-            String action = request.getParameter("actionRD");
+
+        String action =(String) request.getAttribute("actionRD");
             switch (action){
                 case "inserisciInsegna":
                     answ =(String) inserimentoInsegna(request,response);
@@ -53,7 +50,7 @@ public class ServletInsegna extends HttpServlet{
                     request.setAttribute("risultato",answ1);
                     break;
             }
-        }
+
 
     }
 

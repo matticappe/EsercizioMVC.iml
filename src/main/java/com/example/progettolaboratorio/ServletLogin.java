@@ -20,10 +20,6 @@ import static java.lang.System.out;
 @WebServlet(name = "ServletLogin", value = "/ServletLogin")
 public class ServletLogin extends HttpServlet{
     public String risTest;
-    public void init() {
-        //registrazione del driver
-        DAO.registerDriver();
-    }
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
         processRequest(request, response);
