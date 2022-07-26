@@ -42,7 +42,7 @@ public class ServletLogin extends HttpServlet{
                     request.setAttribute("risultato",answ1);
                     break;
                 case "isAdmin":
-                    String answ2 =logout(request,response);
+                    String answ2 =isAdmin(request,response);
                     request.setAttribute("risultato",answ2);
                     break;
             }
