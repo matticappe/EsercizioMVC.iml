@@ -646,10 +646,12 @@ public class DAO {
         String out = "La prenotazione non e stata inserita";
         try{
             conn1 = DriverManager.getConnection(url1,user,password);
+            out = "sono nella try dopo conn1";
             if(conn1 != null){
                 Statement st = conn1.createStatement();
                 int rs = st.executeUpdate("UPDATE PRENOTAZIONE SET UTENTE = '" + utente +"'" + "WHERE CODICE ='" + codice + "'");
                 int rrs = st.executeUpdate("UPDATE PRENOTAZIONE SET STATO = '1' WHERE CODICE ='" + codice + "'");
+                out = "query fatte";
                 if(rs != 0 && rrs != 0){
                     out = "";
                     out = out + "La prenotazione e stata fatta con successo";

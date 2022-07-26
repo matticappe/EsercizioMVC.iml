@@ -390,8 +390,8 @@
                         <td><div v-if="p.stato === '2'">Disdetta</div>
                             <div v-if="p.stato === '1'">Prenotata</div></td>
                         <td>
-                            <button type="button" class="btn btn-primary" v-if="p.stato === '1' && isValido(p.corso, p.docente)" v-on:click="removePrenotation(p.codice)">Disdici prenotazione</button>
-                            <button type="button" class="btn btn-primary" v-if="p.stato === '1' && !isValido(p.corso, p.docente)" v-on:click="removePrenotation(p.codice)" disabled>Docente o corso cancellato</button>
+                            <button type="button" class="btn btn-primary" v-if="p.stato === '1' && isValido(p.corso, p.docente)" v-on:click="removePrenotationHistory(p.codice)">Disdici prenotazione</button>
+                            <button type="button" class="btn btn-primary" v-if="p.stato === '1' && !isValido(p.corso, p.docente)" v-on:click="removePrenotationHistory(p.codice)" disabled>Docente o corso cancellato</button>
                             <button type="button" class="btn btn-primary" v-if="p.stato === '2'" disabled>Disdetta</button>
 
                         </td>
@@ -790,9 +790,9 @@
                                 </div>
                         </div>
 
-                        <button type="button" class="btn btn-primary" v-if="p.stato === '2'" v-on:click="removePrenotation(p.codice), prenCodeShow=''" disabled>Prenotazione di {{p.utente}} disdetta</button>
-                        <button type="button" class="btn btn-primary" v-if="p.stato === '1' && isValido(p.corso, p.docente)" v-on:click="removePrenotation(p.codice), prenCodeShow=''">Cancella prenotazione di {{p.utente}}</button>
-                        <button type="button" class="btn btn-primary" v-if="p.stato === '1' && !isValido(p.corso, p.docente)" v-on:click="removePrenotation(p.codice), prenCodeShow=''" disabled>Docente o corso cancellato</button>
+                        <button type="button" class="btn btn-primary" v-if="p.stato === '2'" v-on:click="removePrenotationAdmin(p.codice), prenCodeShow=''" disabled>Prenotazione di {{p.utente}} disdetta</button>
+                        <button type="button" class="btn btn-primary" v-if="p.stato === '1' && isValido(p.corso, p.docente)" v-on:click="removePrenotationAdmin(p.codice), prenCodeShow=''">Cancella prenotazione di {{p.utente}}</button>
+                        <button type="button" class="btn btn-primary" v-if="p.stato === '1' && !isValido(p.corso, p.docente)" v-on:click="removePrenotationAdmin(p.codice), prenCodeShow=''" disabled>Docente o corso cancellato</button>
 
 
 
@@ -1053,7 +1053,7 @@
                 let self = this;
                 self.materiaPren=materiaa;
                 console.log("sono in filterProf = "+self.materiaPren);
-                this.filterAdminPrenotations();
+                this.filterPrenotations();
             },
 
             filterAdminData:function(dataa){
@@ -1106,18 +1106,21 @@
                 $.get("ServletController", {"username": this.username, "password": this.password, "invia": this.codUsers},function (data4) {
                     self.newSearchUser = data4;
                 });
-                let j = 0;
-                for(let i = 0; i<self.newSearchUser.length; i++){
-                    console.log("sono nel for"+self.newSearchUser[i].account);
-                    if(self.newSearchUser[i].account === self.searchUser) {
+                setTimeout(function(){
+                    let j = 0;
+                    for(let i = 0; i<self.newSearchUser.length; i++){
                         console.log("sono nel for"+self.newSearchUser[i].account);
-                        self.newAllUsers[j] = self.newSearchUser[i];
-                        j++;
-                    }
-                };
-                self.allUsers = self.newAllUsers;
-                self.newSearchUser = [];
-                self.newAllUsers = [];
+                        if(self.newSearchUser[i].account === this.searchUser) {
+                            console.log("sono nel for"+self.newSearchUser[i].account);
+                            self.newAllUsers[j] = self.newSearchUser[i];
+                            j++;
+                        }
+                    };
+                    this.allUsers = self.newAllUsers;
+                    self.newSearchUser = [];
+                    self.newAllUsers = [];
+                }.bind(this), 10);
+
 
             },
 
@@ -1224,10 +1227,22 @@
             },
 
             addPrenotation:function(codice){
+                let self = this;
                 console.log("sono in addPrenotations" + codice + this.username);
                 $.get("ServletController", {"username": this.username, "password": this.password, "invia": this.codPrenotazione, "codice":codice, "utente": this.username},function (data4) {
                     console.log("addPrenotazione = "+data4);
                 });
+
+                setTimeout(function() {
+
+                    //aggiorno prenotazioni
+                    $.get("ServletController", {"username": this.username, "password": this.password, "materia":self.materiaPren, "docente":self.profPren, "data":self.data, "slot_ora":self.oraPren, "invia": this.filterPrenCode},function (data5) {
+                        self.allPrenotations = data5;
+                        console.log("finita la getFilteredPrenotations");
+                        console.log(data5);
+                    });
+
+                }.bind(this), 1000);
             },
 
             addPrenotationAdmin:function(codice, account){
@@ -1261,6 +1276,26 @@
                 setTimeout(function() {
 
                     //aggiorno prenotazioni
+                    $.get("ServletController", {"username": this.username, "password": this.password, "materia":self.materiaPren, "docente":self.profPren, "data":self.data, "slot_ora":self.oraPren, "invia": this.filterPrenCode},function (data5) {
+                        self.allPrenotations = data5;
+                        console.log("finita la getFilteredPrenotations");
+                        console.log(data5);
+                    });
+
+                }.bind(this), 1000);
+            },
+
+
+            removePrenotationAdmin:function(codice){
+                let self = this;
+                console.log("sono in removePrenotations" + codice);
+                $.get("ServletController", {"username": this.username, "password": this.password, "invia": this.codDisdiciPrenotazione, "codice":codice},function (data4) {
+                    console.log("addPrenotazione = "+data4);
+                });
+
+                setTimeout(function() {
+
+                    //aggiorno prenotazioni
                     $.get("ServletController", {"username": this.username, "password": this.password, "materia":self.materiaPren, "docente":self.profPren, "data":self.data, "slot_ora":self.oraPren, "utente":self.utentePren, "invia": this.filterAdminPrenCode},function (data5) {
                         self.allPrenotations = data5;
                         console.log("finita la getFilteredPrenotations");
@@ -1269,6 +1304,26 @@
 
                 }.bind(this), 1000);
             },
+
+
+            removePrenotationHistory:function(codice){
+                let self = this;
+                console.log("sono in removePrenotations" + codice);
+                $.get("ServletController", {"username": this.username, "password": this.password, "invia": this.codDisdiciPrenotazione, "codice":codice},function (data4) {
+                    console.log("addPrenotazione = "+data4);
+                });
+
+                setTimeout(function() {
+
+                    //aggiorno prenotazioni
+                    $.get("ServletController", {"username": this.username, "password": this.password, "invia": this.codOwnActPrenotations},function (data2) {
+                        console.log('sono nella post get OWN prenotations');
+                        self.allPrenotations = data2;
+                    });
+
+                }.bind(this), 1000);
+            },
+
 
             isValido:function(corso, docente){
                 let self = this;
