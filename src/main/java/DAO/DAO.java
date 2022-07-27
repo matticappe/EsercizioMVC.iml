@@ -2,6 +2,7 @@ package DAO;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class DAO {
 
@@ -299,14 +300,33 @@ public class DAO {
             if(conn1 != null){
                 System.out.println("connessione riuscita");
                 Statement st = conn1.createStatement();
-                ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONE WHERE UTENTE IS NULL");
+                ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONE WHERE UTENTE IS NULL ORDER BY STATO DESC");
                 int i = 0;
                 Prenotazione p;
                 while (rs.next()) {
                     //forse va rivista con una document.out per scrivere nel div corretto
                     p = new Prenotazione(rs.getString("codice"),rs.getString("utente"), rs.getString("docente"), rs.getString("corso"), rs.getString("data"), rs.getString("slot_ora"), rs.getString("stato"));
                     System.out.println(i+" "+p.getCodice()+p.getUtente()+p.getDocente()+p.getCorso()+p.getData()+p.getSlot_ora());
-                    out.add(p);
+                    //out.add(p);
+
+                    boolean ok = false;
+                    System.out.println("sto per entrare nel for filter");
+                    if(i == 0){
+                        out.add(p);
+                    }else{
+                        for(int j = 0; j < out.size(); j++){
+                            if(Objects.equals(out.get(j).getDocente(), p.getDocente()) && Objects.equals(out.get(j).getData(), p.getData()) && Objects.equals(out.get(j).getSlot_ora(), p.getSlot_ora()) && (Objects.equals(out.get(j).getStato(), "1") && Objects.equals(p.getStato(), "0"))){
+                                System.out.println("eliminata");
+                            }else{
+                                ok = true;
+                            }
+                        }
+                    }
+
+                    i++;
+                    if(ok)
+                        out.add(p);
+                    ok = false;
                 }
             }
 
@@ -333,12 +353,31 @@ public class DAO {
             conn1 = DriverManager.getConnection(url1,user,password);
             if(conn1 != null){
                 Statement st = conn1.createStatement();
-                ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONE join DOCENTE on(PRENOTAZIONE.docente = DOCENTE.account) join CORSO on(CORSO.titolo = PRENOTAZIONE.corso) WHERE DOCENTE.ATTIVO = '1' AND CORSO.ATTIVO='1' AND (UTENTE IS NULL OR "+ utente+") AND (STATO = '1' OR STATO = '0')");
+                ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONE join DOCENTE on(PRENOTAZIONE.docente = DOCENTE.account) join CORSO on(CORSO.titolo = PRENOTAZIONE.corso) WHERE DOCENTE.ATTIVO = '1' AND CORSO.ATTIVO='1' AND (UTENTE IS NULL OR "+ utente+") AND (STATO = '1' OR STATO = '0') ORDER BY STATO DESC");
                 int i = 0;
                 while (rs.next()) {
                     Prenotazione p = new Prenotazione(rs.getString("codice"),rs.getString("utente"), rs.getString("docente"), rs.getString("corso"), rs.getString("data"), rs.getString("slot_ora"), rs.getString("stato"));
                     System.out.println(i + " " + p.getCodice() + p.getUtente() + p.getDocente() + p.getCorso() + p.getData() + p.getSlot_ora());
-                    out.add(p);
+                    //out.add(p);
+
+                    boolean ok = false;
+                    System.out.println("sto per entrare nel for filter");
+                    if(i == 0){
+                        out.add(p);
+                    }else{
+                        for(int j = 0; j < out.size(); j++){
+                            if(Objects.equals(out.get(j).getDocente(), p.getDocente()) && Objects.equals(out.get(j).getData(), p.getData()) && Objects.equals(out.get(j).getSlot_ora(), p.getSlot_ora()) && (Objects.equals(out.get(j).getStato(), "1") && Objects.equals(p.getStato(), "0"))){
+                                System.out.println("eliminata");
+                            }else{
+                                ok = true;
+                            }
+                        }
+                    }
+
+                    i++;
+                    if(ok)
+                        out.add(p);
+                    ok = false;
                 }
             }
 
@@ -397,14 +436,32 @@ public class DAO {
             conn1 = DriverManager.getConnection(url1,user,password);
             if(conn1 != null){
                 Statement st = conn1.createStatement();
-                ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONE join DOCENTE on(PRENOTAZIONE.docente = DOCENTE.account)  join CORSO on(CORSO.titolo = PRENOTAZIONE.corso) WHERE (UTENTE IS NULL OR UTENTE = '"+utente+"') AND DOCENTE.ATTIVO = '1' AND CORSO.attivo = '1' "+data+" "+corso+" "+slot_ora+" "+docente+" AND (STATO = '1' OR STATO = '0')" );   //CONTROLLA LE VIRGOLETTE DOVE CI SONO TUTTI I +...+...+...+
+                ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONE join DOCENTE on(PRENOTAZIONE.docente = DOCENTE.account)  join CORSO on(CORSO.titolo = PRENOTAZIONE.corso) WHERE (UTENTE IS NULL OR UTENTE = '"+utente+"') AND DOCENTE.ATTIVO = '1' AND CORSO.attivo = '1' "+data+" "+corso+" "+slot_ora+" "+docente+" AND (STATO = '1' OR STATO = '0') ORDER BY STATO DESC" );   //CONTROLLA LE VIRGOLETTE DOVE CI SONO TUTTI I +...+...+...+
                 int i = 0;
                 while (rs.next()) {
                     //forse va rivista con una document.out per scrivere nel div corretto
                     Prenotazione p = new Prenotazione(rs.getString("codice"),rs.getString("utente"), rs.getString("docente"), rs.getString("corso"), rs.getString("data"), rs.getString("slot_ora"), rs.getString("stato"));
                     System.out.println(i + " " + p.getCodice() + p.getUtente() + p.getDocente() + p.getCorso() + p.getData() + p.getSlot_ora());
-                    out.add(p);
+                    //out.add(p);
 
+                    boolean ok = false;
+                    System.out.println("sto per entrare nel for filter");
+                    if(i == 0){
+                        out.add(p);
+                    }else{
+                        for(int j = 0; j < out.size(); j++){
+                            if(Objects.equals(out.get(j).getDocente(), p.getDocente()) && Objects.equals(out.get(j).getData(), p.getData()) && Objects.equals(out.get(j).getSlot_ora(), p.getSlot_ora()) && (Objects.equals(out.get(j).getStato(), "1") && Objects.equals(p.getStato(), "0"))){
+                                System.out.println("eliminata");
+                            }else{
+                                ok = true;
+                            }
+                        }
+                    }
+
+                    i++;
+                    if(ok)
+                        out.add(p);
+                    ok = false;
                 }
             }
 
@@ -433,12 +490,32 @@ public class DAO {
             conn1 = DriverManager.getConnection(url1,user,password);
             if(conn1 != null){
                 Statement st = conn1.createStatement();
-                ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONE join DOCENTE on(PRENOTAZIONE.docente = DOCENTE.account) WHERE (UTENTE IS NULL OR UTENTE IS NOT NULL)"+data+""+corso+""+slot_ora+""+docente+""+utente+"" );   //CONTROLLA LE VIRGOLETTE DOVE CI SONO TUTTI I +...+...+...+
+                ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONE join DOCENTE on(PRENOTAZIONE.docente = DOCENTE.account) WHERE (UTENTE IS NULL OR UTENTE IS NOT NULL)"+data+""+corso+""+slot_ora+""+docente+""+utente+" ORDER BY STATO DESC" );   //CONTROLLA LE VIRGOLETTE DOVE CI SONO TUTTI I +...+...+...+
                 int i = 0;
                 while (rs.next()) {
                     Prenotazione p = new Prenotazione(rs.getString("codice"),rs.getString("utente"), rs.getString("docente"), rs.getString("corso"), rs.getString("data"), rs.getString("slot_ora"), rs.getString("stato"));
                     System.out.println(i + " " + p.getCodice() + p.getUtente() + p.getDocente() + p.getCorso() + p.getData() + p.getSlot_ora());
-                    out.add(p);
+                    //out.add(p);
+
+                    boolean ok = false;
+                    System.out.println("sto per entrare nel for filter");
+                    if(i == 0){
+                        out.add(p);
+                    }else{
+                        for(int j = 0; j < out.size(); j++){
+                            if(Objects.equals(out.get(j).getDocente(), p.getDocente()) && Objects.equals(out.get(j).getData(), p.getData()) && Objects.equals(out.get(j).getSlot_ora(), p.getSlot_ora()) && (Objects.equals(out.get(j).getStato(), "1") && Objects.equals(p.getStato(), "0"))){
+                                System.out.println("eliminata");
+                            }else{
+                                System.out.println("ok");
+                                ok = true;
+                            }
+                        }
+                    }
+
+                    i++;
+                    if(ok)
+                        out.add(p);
+                    ok = false;
 
                 }
             }
