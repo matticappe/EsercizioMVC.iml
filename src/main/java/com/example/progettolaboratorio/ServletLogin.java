@@ -48,6 +48,7 @@ public class ServletLogin extends HttpServlet{
             }
 
     }
+
 //    public String login(HttpServletRequest request, HttpServletResponse response) throws ServletException,
 //            IOException {
 //        HttpSession s=null;
@@ -112,7 +113,7 @@ public class ServletLogin extends HttpServlet{
          IOException {
             HttpSession s = null;
             RequestDispatcher rd = null;
-            String st = "";
+            String st = "Errore nel metodo di login";
             try {
                 out.println("Login");
                 String username = request.getParameter("username");
