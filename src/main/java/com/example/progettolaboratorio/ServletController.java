@@ -286,6 +286,7 @@ public class ServletController extends HttpServlet {
                     request.setAttribute("actionRD",actionRD);
                     rd=ctx.getNamedDispatcher("ServletLogin");
                     rd.include(request,response);
+                    s.invalidate();
 
                     String lout=(String) request.getAttribute("risultato");
                     String sLout = gson.toJson(lout);
