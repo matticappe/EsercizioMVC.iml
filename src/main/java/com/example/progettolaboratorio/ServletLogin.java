@@ -109,8 +109,6 @@ public class ServletLogin extends HttpServlet{
 
     public String logout(HttpServletRequest request, HttpServletResponse response) throws ServletException,
             IOException{
-        HttpSession s=request.getSession();
-        s.invalidate();
         String st="Logout effettuato con successo";
         return st;
     }

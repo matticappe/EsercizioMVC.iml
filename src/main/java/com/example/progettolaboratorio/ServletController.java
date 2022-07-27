@@ -287,6 +287,10 @@ public class ServletController extends HttpServlet {
                     rd=ctx.getNamedDispatcher("ServletLogin");
                     rd.include(request,response);
 
+                    s.invalidate();
+                    System.out.println("SONO USCITO DALLA SESSIONE");
+
+
                     String lout=(String) request.getAttribute("risultato");
                     String sLout = gson.toJson(lout);
                     out.println(sLout);
