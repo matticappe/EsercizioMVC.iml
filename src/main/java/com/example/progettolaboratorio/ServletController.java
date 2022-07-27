@@ -13,10 +13,6 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 
 
-import static DAO.DAO.loginUtente;
-import static java.lang.System.out;
-
-
 @WebServlet(name = "ServletController", value = "/ServletController") //questa è la value che verrà usata nell'ancora del HTML
 public class ServletController extends HttpServlet {
     public void init() {
@@ -36,9 +32,10 @@ public class ServletController extends HttpServlet {
             String actionRD;
             System.out.println("Action = " + action); //inserire un controllo per il != da null
 
-            String nome = request.getParameter("nome"); // recupero il nome utente
-            Cookie ck = new Cookie("username", nome);   // crea un oggetto cookie
-            response.addCookie(ck); // aggiungi cookie alla risposta
+            String userName = request.getParameter("login");
+            HttpSession s = request.getSession();
+            if(userName != null)
+                s.setAttribute("userName", userName);
 
 
             switch (action) {
