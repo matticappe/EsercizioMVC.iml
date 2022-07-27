@@ -48,63 +48,107 @@ public class ServletLogin extends HttpServlet{
             }
 
     }
+//    public String login(HttpServletRequest request, HttpServletResponse response) throws ServletException,
+//            IOException {
+//        HttpSession s=null;
+//        ServletContext ctx= request.getServletContext();
+//        RequestDispatcher rd =null;
+//        String res="";
+//        try {
+//            String st="";
+//            System.out.println("login");
+//            String username = request.getParameter("username");
+//            String password = request.getParameter("password");
+//            if(username.equals(password) && username==""){      //non è null, è una stringa vuota
+//                st="Guest";
+//                return st;
+//            }
+//            else {
+//                System.out.println("Username: " + username);
+//                System.out.println("Password: " + password);
+//                Utente result = null;
+//                result = loginUtente(username, password);
+//                //
+//                if (result != null) {
+//                    res = result.toString();
+//                    s = request.getSession();
+//                    if (s.isNew()) {            //isNew è un metodo di librerie gestione utente
+//                        String account = result.getAccount();
+//                        s.setAttribute("User", account);
+//                        int role = result.getRuolo();
+//                        s.setAttribute("Ruolo", role);
+//                        System.out.println("LoginEffettuato");
+//                        if(isAdmin(request, response) == "yes")
+//                            st = "admin";
+//                        else
+//                            st = "utenteRegistrato";
+//                        return st;
+//                    } else{
+//                        //DEVO METTERE UN ELSE SE L UTENTE NON é ANCORA REGOISTRATOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
+//                    }
+//                } else {
+//                    String messaggio = "Login errato, Username o password errati";
+//                    res=messaggio;
+//                    //a sto punto sta roba sotto è useless
+//                    request.setAttribute("message", messaggio);
+//                    rd = getServletContext().getNamedDispatcher("ServletError");
+//
+//                    // String messaggio="Login errato, Username o password errati";
+//                    //request.setAttribute("message",messaggio);
+//                    rd.include(request, response);
+//                    st="Login Errato";
+//                    return st;
+//                }
+//            }
+//            String end ="risposta: sono arrivato alla fine";
+//            return end;
+//        }finally {
+//            risTest=res;
+//        }
+//    }
+
+
     public String login(HttpServletRequest request, HttpServletResponse response) throws ServletException,
-            IOException {
-        HttpSession s=null;
-        ServletContext ctx= request.getServletContext();
-        RequestDispatcher rd =null;
-        String res="";
-        try {
-            String st="";
-            System.out.println("login");
-            String username = request.getParameter("username");
-            String password = request.getParameter("password");
-            if(username.equals(password) && username==""){      //non è null, è una stringa vuota
-                st="Guest";
-                return st;
-            }
-            else {
-                System.out.println("Username: " + username);
-                System.out.println("Password: " + password);
-                Utente result = null;
-                result = loginUtente(username, password);
-                //
-                if (result != null) {
-                    res = result.toString();
+         IOException {
+            HttpSession s = null;
+            RequestDispatcher rd = null;
+            String st = "";
+            try {
+                out.println("Login");
+                String username = request.getParameter("username");
+                String password = request.getParameter("password");
+                if (username.equals(password) && username == "") {
+                    st = "Guest";
+                    return st;
+                 } else {
+                    Utente result = null;
+                    result = loginUtente(username, password);
+                 if (result != null) {
                     s = request.getSession();
-                    if (s.isNew()) {            //isNew è un metodo di librerie gestione utente
+                    if (s.isNew()) {
                         String account = result.getAccount();
                         s.setAttribute("User", account);
                         int role = result.getRuolo();
                         s.setAttribute("Ruolo", role);
-                        System.out.println("LoginEffettuato");
-                        if(isAdmin(request, response) == "yes")
+                        if (isAdmin(request, response) == "yes")
                             st = "admin";
                         else
                             st = "utenteRegistrato";
                         return st;
-                    } else{
-                        //DEVO METTERE UN ELSE SE L UTENTE NON é ANCORA REGOISTRATOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
                     }
-                } else {
-                    String messaggio = "Login errato, Username o password errati";
-                    res=messaggio;
-                    //a sto punto sta roba sotto è useless
-                    request.setAttribute("message", messaggio);
-                    rd = getServletContext().getNamedDispatcher("ServletError");
-
-                    // String messaggio="Login errato, Username o password errati";
-                    //request.setAttribute("message",messaggio);
-                    rd.include(request, response);
-                    st="Login Errato";
-                    return st;
+                 } else {
+                     st = "Login errato, Username o password errati";
+//                     String messaggio = "Login errato, Username o password errati";
+//                      //a sto punto sta roba sotto è useless
+//                     request.setAttribute("message", messaggio);
+//                     rd = getServletContext().getNamedDispatcher("ServletError");
+//                     rd.include(request, response);
                 }
             }
-            String end ="risposta: sono arrivato alla fine";
-            return end;
-        }finally {
-            risTest=res;
+        } catch (ServletException | IOException e) {
+                e.printStackTrace();
         }
+            return st;
     }
 
     public String logout(HttpServletRequest request, HttpServletResponse response) throws ServletException,
