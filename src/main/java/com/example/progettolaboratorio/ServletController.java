@@ -286,6 +286,7 @@ public class ServletController extends HttpServlet {
                     request.setAttribute("actionRD",actionRD);
                     rd=ctx.getNamedDispatcher("ServletLogin");
                     rd.include(request,response);
+                    s.invalidate();
 
                     s.invalidate();
                     System.out.println("SONO USCITO DALLA SESSIONE");
