@@ -32,11 +32,11 @@ public class ServletController extends HttpServlet {
             String actionRD;
             System.out.println("Action = " + action); //inserire un controllo per il != da null
 
-            String userName = request.getParameter("login");
+            String userName = request.getParameter("username");
             HttpSession s = request.getSession();
             if(userName != null)
                 s.setAttribute("userName", userName);
-
+            System.out.println("HTTP SESSIONE " + s.getAttribute("userName"));
 
             switch (action) {
                 case "login":
