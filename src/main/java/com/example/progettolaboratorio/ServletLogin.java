@@ -116,9 +116,8 @@ public class ServletLogin extends HttpServlet{
             try {
                 String username = request.getParameter("username");
                 String password = request.getParameter("password");
-                if (username.equals(password) && username == "") {
+                if (username.equals(password) && username.equals("")) {
                     st = "Guest";
-                    return st;
                 } else {
                     Utente result = null;
                     result = loginUtente(username, password);
@@ -128,16 +127,15 @@ public class ServletLogin extends HttpServlet{
                         s.setAttribute("User", account);
                         int role = result.getRuolo();
                         s.setAttribute("Ruolo", role);
-                        if (isAdmin(request, response) == "yes")
+                        if (isAdmin(request, response).equals("yes"))
                             st = "admin";
                         else
                             st = "utenteRegistrato";
-                        return st;
                     } else {
                         st = "Login errato, Username o password errati";
-                        return st;
                     }
                 }
+                return st;
             }
             catch (ServletException | IOException e) {
                 e.printStackTrace();
