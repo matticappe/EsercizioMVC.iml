@@ -20,6 +20,7 @@ import static java.lang.System.out;
 @WebServlet(name = "ServletLogin", value = "/ServletLogin")
 public class ServletLogin extends HttpServlet{
     public String risTest;
+    HttpSession s = null;
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
         processRequest(request, response);
@@ -111,50 +112,55 @@ public class ServletLogin extends HttpServlet{
 
     public String login(HttpServletRequest request, HttpServletResponse response) throws ServletException,
          IOException {
-            HttpSession s = null;
-            RequestDispatcher rd = null;
-            String st = "Errore nel metodo di login";
+        String st = "";
             try {
-                out.println("Login");
+                System.out.println("Sono nella Login");
                 String username = request.getParameter("username");
                 String password = request.getParameter("password");
                 if (username.equals(password) && username == "") {
                     st = "Guest";
                     return st;
-                 } else {
+                } else {
                     Utente result = null;
                     result = loginUtente(username, password);
-                 if (result != null) {
-                    s = request.getSession();
-                    if (s.isNew()) {
-                        String account = result.getAccount();
-                        s.setAttribute("User", account);
-                        int role = result.getRuolo();
-                        s.setAttribute("Ruolo", role);
-                        if (isAdmin(request, response) == "yes")
-                            st = "admin";
-                        else
-                            st = "utenteRegistrato";
+                    if (result != null) {
+                        System.out.println("Il login è giusto1");
+                        s = request.getSession();
+                        System.out.println("SONO PRIMA DELL'IFFFFFFFF");
+                        if (s.isNew()) {
+
+                            String account = result.getAccount();
+                            s.setAttribute("User", account);
+                            int role = result.getRuolo();
+                            s.setAttribute("Ruolo", role);
+                            if (isAdmin(request, response) == "yes") {
+                                st = "admin";
+                                System.out.println("Il login è admin");
+                            }
+                            else {
+                                st = "utenteRegistrato";
+                                System.out.println("Il login è utenteRegsitarto");
+                            }
+                            System.out.println("Il login è giusto2");
+                            return st;
+                        }
+                    } else {
+                        st = "Login errato, Username o password errati";
                         return st;
                     }
-                 } else {
-                     st = "Login errato, Username o password errati";
-//                     String messaggio = "Login errato, Username o password errati";
-//                      //a sto punto sta roba sotto è useless
-//                     request.setAttribute("message", messaggio);
-//                     rd = getServletContext().getNamedDispatcher("ServletError");
-//                     rd.include(request, response);
                 }
             }
-        } catch (ServletException | IOException e) {
+            catch (ServletException | IOException e) {
                 e.printStackTrace();
-        }
+            }
+            s.invalidate();
             return st;
     }
 
     public String logout(HttpServletRequest request, HttpServletResponse response) throws ServletException,
             IOException{
         String st="Logout effettuato con successo";
+        s.invalidate();
         return st;
     }
     public String isAdmin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
