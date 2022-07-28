@@ -104,14 +104,13 @@
                     <td>
                         <div class="dropdown">
                             <button class="btn btn-secondary dropdown-toggle" type="button"
-                                    id="dropdownMenuButton1NonRegistrato" data-toggle="dropdown"
+                                    id="dropdownMenuButton1UtenteNonRegistrato" data-toggle="dropdown"
                                     aria-haspopup="true" aria-expanded="false">
                                 Seleziona materia
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" href="#">Action</a>
-                                <a class="dropdown-item" href="#">Another action</a>
-                                <a class="dropdown-item" href="#">Something else here</a>
+                                <a v-on:click="filterMateria()" class="dropdown-item" href="#">Azzera materia</a>
+                                <a v-on:click="filterMateria(s.titolo)" class="dropdown-item" v-for="s in allSubjects">{{s.titolo}}</a>
                             </div>
                         </div>
                     </td>
@@ -120,14 +119,13 @@
                     <td>
                         <div class="dropdown">
                             <button class="btn btn-secondary dropdown-toggle" type="button"
-                                    id="dropdownMenuButton2NonRegistrato" data-toggle="dropdown"
+                                    id="dropdownMenuButton2UtenteNonRegistrato" data-toggle="dropdown"
                                     aria-haspopup="true" aria-expanded="false">
                                 Seleziona professore
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" href="#">Action</a>
-                                <a class="dropdown-item" href="#">Another action</a>
-                                <a class="dropdown-item" href="#">Something else here</a>
+                                <a v-on:click="filterProf()" class="dropdown-item" href="#">Azzera professore</a>
+                                <a v-on:click="filterProf(p.account)" class="dropdown-item" href="#" v-for="p in allProfs">{{p.nomeCognome}}</a>
                             </div>
                         </div>
                     </td>
@@ -136,14 +134,17 @@
                     <td>
                         <div class="dropdown">
                             <button class="btn btn-secondary dropdown-toggle" type="button"
-                                    id="dropdownMenuButton3NonRegistrato" data-toggle="dropdown"
+                                    id="dropdownMenuButton3UtenteNonRegistrato" data-toggle="dropdown"
                                     aria-haspopup="true" aria-expanded="false">
                                 Seleziona giorno
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" href="#">Action</a>
-                                <a class="dropdown-item" href="#">Another action</a>
-                                <a class="dropdown-item" href="#">Something else here</a>
+                                <a v-on:click="filterData('')" class="dropdown-item" href="#">Azzera data</a>
+                                <a v-on:click="filterData('07/03/2022')" class="dropdown-item" href="#">07/03/2022</a>
+                                <a v-on:click="filterData('08/03/2022')" class="dropdown-item" href="#">08/03/2022</a>
+                                <a v-on:click="filterData('09/03/2022')" class="dropdown-item" href="#">09/03/2022</a>
+                                <a v-on:click="filterData('10/03/2022')" class="dropdown-item" href="#">10/03/2022</a>
+                                <a v-on:click="filterData('11/03/2022')" class="dropdown-item" href="#">11/03/2022</a>
                             </div>
                         </div>
                     </td>
@@ -152,22 +153,18 @@
                     <td>
                         <div class="dropdown">
                             <button class="btn btn-secondary dropdown-toggle" type="button"
-                                    id="dropdownMenuButton4NonRegistrato" data-toggle="dropdown"
+                                    id="dropdownMenuButton4UtenteNonRegistrato" data-toggle="dropdown"
                                     aria-haspopup="true" aria-expanded="false">
                                 Seleziona orario
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" href="#">Action</a>
-                                <a class="dropdown-item" href="#">Another action</a>
-                                <a class="dropdown-item" href="#">Something else here</a>
+                                <a v-on:click="filterSlot('')" class="dropdown-item" href="#">Azzera orario</a>
+                                <a v-on:click="filterSlot('15:00-16:00')" class="dropdown-item" href="#">15:00-16:00</a>
+                                <a v-on:click="filterSlot('16:00-17:00')" class="dropdown-item" href="#">16:00-17:00</a>
+                                <a v-on:click="filterSlot('17:00-18:00')" class="dropdown-item" href="#">17:00-18:00</a>
+                                <a v-on:click="filterSlot('18:00-19:00')" class="dropdown-item" href="#">18:00-19:00</a>
                             </div>
                         </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <button type="button" id="StoricoUtenteNonRegistrato" class="btn btn-primary"
-                                disabled>Storico Prenotazioni</button>
                     </td>
                 </tr>
                 </tbody>
@@ -190,29 +187,17 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <!--  questi sono tutti i campi della singola riga della tabella  -->
-                    <td>Ium-Tweb 2</td>
-                    <td>Liliana Ardissono</td>
-                    <td>29/12/2021</td>
-                    <td>15:00 - 16:00</td>
-                    <td><button type="button" class="btn btn-primary" onclick="notRegistered()">Prenota</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Reti 1</td>
-                    <td>Marco Botta</td>
-                    <td>29/12/2021</td>
-                    <td>14:00 - 15:00</td>
-                    <td><button type="button" class="btn btn-primary" disabled>Prenota</button></td>
-                </tr>
-                <tr>
-                    <td>Programmazione 3</td>
-                    <td>Liliana Ardissono</td>
-                    <td>29/12/2021</td>
-                    <td>16:00 - 17:00</td>
-                    <td><button type="button" class="btn btn-primary" disabled>Prenota</button></td>
+                <tr v-for="p in allPrenotations">
+                    <td><div>{{p.corso}}</div></td>
+                    <td><div>{{p.docente}}</div></td>
+                    <td><div>{{p.data}}</div></td>
+                    <td><div>{{p.slot_ora}}</div></td>
+                    <td><div v-if="p.stato === '0'">Libera</div>
+                        <div v-if="p.stato === '1'">Prenotata</div></td>
+                    <td><button type="button" class="btn btn-primary" v-if="p.stato === '0'" disabled>Prenota</button>
+                        <button type="button" class="btn btn-primary" v-if="p.stato === '1'" disabled>Disdici prenotazione</button>
 
+                    </td>
                 </tr>
                 </tbody>
             </table>
@@ -840,6 +825,7 @@
             codLogout: 'logout',
             codSubjects: 'availableSubjects',
             codPrenotations: 'viewOwnPrenotations',
+            codAllPrenotations: 'viewAllPrenotations',
             codRimuoviCorso: 'eliminaCorso',
             codRimuoviProf: 'eliminaDocente',
             codRimuoviAssociazione:'rimuoviInsegna',
@@ -942,9 +928,12 @@
                         self.getAllInsegna();
 
                     }else if(self.risposta==='Guest'){
-                        self.setVisibleLogin='1';
                         console.log("vis0.3 "+this.setVisibleLogin);    //li vedo entrambi, this e self
                         console.log("vis0.4 "+self.setVisibleLogin);
+                        self.getAllPrenotations();
+                        self.getAllSubjects();
+                        self.getAllProfs() ;
+                        self.setVisibleLogin='1';
 
                     }else /*if(self.risposta==='Login Errato')*/{
                         //devo printare sul sito un messaggio di errore
@@ -955,6 +944,15 @@
 
                 });
 
+            },
+
+            getAllPrenotations:function(){
+                let self = this;
+                console.log("sono in get all prenotations");
+                $.get("ServletController", {"username": this.username, "password": this.password, "invia": this.codAllPrenotations},function (data2) {
+                    console.log('sono nella post get prenotations');
+                    self.allPrenotations = data2;
+                });
             },
 
             getRegisteredPrenotations:function(){
