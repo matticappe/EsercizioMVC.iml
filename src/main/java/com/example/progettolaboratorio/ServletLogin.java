@@ -114,7 +114,6 @@ public class ServletLogin extends HttpServlet{
          IOException {
         String st = "";
             try {
-                System.out.println("Sono nella Login");
                 String username = request.getParameter("username");
                 String password = request.getParameter("password");
                 if (username.equals(password) && username == "") {
@@ -124,24 +123,16 @@ public class ServletLogin extends HttpServlet{
                     Utente result = null;
                     result = loginUtente(username, password);
                     if (result != null) {
-                        System.out.println("Il login è giusto1");
                         s = request.getSession();
-                        System.out.println("SONO PRIMA DELL'IFFFFFFFF");
                         if (s.isNew()) {
-
                             String account = result.getAccount();
                             s.setAttribute("User", account);
                             int role = result.getRuolo();
                             s.setAttribute("Ruolo", role);
-                            if (isAdmin(request, response) == "yes") {
+                            if (isAdmin(request, response) == "yes")
                                 st = "admin";
-                                System.out.println("Il login è admin");
-                            }
-                            else {
+                            else
                                 st = "utenteRegistrato";
-                                System.out.println("Il login è utenteRegsitarto");
-                            }
-                            System.out.println("Il login è giusto2");
                             return st;
                         }
                     } else {
