@@ -124,17 +124,15 @@ public class ServletLogin extends HttpServlet{
                     result = loginUtente(username, password);
                     if (result != null) {
                         s = request.getSession();
-                        if (s.isNew()) {
-                            String account = result.getAccount();
-                            s.setAttribute("User", account);
-                            int role = result.getRuolo();
-                            s.setAttribute("Ruolo", role);
-                            if (isAdmin(request, response) == "yes")
-                                st = "admin";
-                            else
-                                st = "utenteRegistrato";
-                            return st;
-                        }
+                        String account = result.getAccount();
+                        s.setAttribute("User", account);
+                        int role = result.getRuolo();
+                        s.setAttribute("Ruolo", role);
+                        if (isAdmin(request, response) == "yes")
+                            st = "admin";
+                        else
+                            st = "utenteRegistrato";
+                        return st;
                     } else {
                         st = "Login errato, Username o password errati";
                         return st;
