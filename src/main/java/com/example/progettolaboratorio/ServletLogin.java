@@ -132,7 +132,7 @@ public class ServletLogin extends HttpServlet{
                         else
                             st = "utenteRegistrato";
                     } else {
-                        st = "Login errato, Username o password errati";
+                        st = "Login fallito, Username o password errati";
                     }
                 }
                 return st;
