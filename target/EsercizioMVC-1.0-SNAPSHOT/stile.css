@@ -19,19 +19,41 @@ td:first-child, th:first-child {
 }
 
 /* Create two equal columns that floats next to each other */
-.column1 {
-    float: left;
-    width: 30%;
-    padding: 10px;
-    flex-direction: column;
+@media screen and (max-width: 600px) {
+    .column2 {
+        float: bottom;
+        width: 100%;
+
+        flex-direction: row;
+    }
+    .column1 {
+        float: top;
+        width: 30%;
+
+        flex-direction: row;
+
+    }
 
 }
-.column2 {
-    float: left;
-    width: 70%;
-    padding: 10px;
-    flex-direction: column;
+@media screen and (min-width: 600px) {
+    .column1 {
+        float: left;
+        width: 30%;
+        padding: 10px;
+        flex-direction: column;
+
+    }
+    .column2 {
+        float: right;
+        width: 70%;
+        padding: 10px;
+        flex-direction: column;
+    }
+
+
+
 }
+
 
 .dropdown{
     float:left;

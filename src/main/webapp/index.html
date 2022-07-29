@@ -207,15 +207,14 @@
     <!--  ------------------------------INIZIO SCHERMATA UTENTI REGISTRATI-----------------------------------------  -->
 
     <div v-if="setVisibleLogin==='2'" id="logoutUtenteRegistrato" class="logout">
-        {{allPrenotations}}
+
         <button type="button" v-on:click="setVisibleLogin='0'; registeredUserLogout()" class="btn btn-secondary"
                 data-toggle="tooltip" data-placement="top" title="Tooltip on top">
             Logout
         </button>
     </div>
 
-    <div v-if="setVisibleLogin==='2'" id="userScreenUtenteRegistrato" class="row">
-        <div v-if="setVisibleStorico==='1'" class="column1">
+        <div v-if="setVisibleStorico==='1' && setVisibleLogin==='2'" class="column1" id="column1">
             <table class="table">
                 <thead>
                 <tr>
@@ -302,7 +301,7 @@
 
 
 
-        <div v-if="setVisibleStorico==='1'" class="column2">
+        <div v-if="setVisibleStorico==='1' && setVisibleLogin==='2'" class="column2" id="column2">
             <table class="table">
                 <thead class="thead-light">
                 <tr>
@@ -336,7 +335,7 @@
 
         <!-- inizio schermata storico prenotazioni utenti registrati -->
 
-        <div  v-if="setVisibleStorico==='2'" class="column1" >
+        <div  v-if="setVisibleStorico==='2' && setVisibleLogin==='2'" class="column1" >
                 <table class="table">
                     <thead>
                     <tr>
@@ -353,7 +352,7 @@
                 </table>
         </div>
 
-        <div v-if="setVisibleStorico==='2'" class="column2">
+        <div v-if="setVisibleStorico==='2' && setVisibleLogin==='2'" class="column2">
                 <table class="table">
                     <thead class="thead-light">
                     <tr>
@@ -400,7 +399,7 @@
         </div>
         -->
 
-    </div>
+
 
 
     <!--  ---------------------------------------INIZIO SCHERMATA AMMINISTRATORI-----------------------------------  -->
