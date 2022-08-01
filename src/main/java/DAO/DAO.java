@@ -403,7 +403,7 @@ public class DAO {
             conn1 = DriverManager.getConnection(url1,user,password);
             if(conn1 != null){
                 Statement st = conn1.createStatement();
-                ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONE WHERE " + account);
+                ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONE WHERE " + account+" ORDER BY STATO ASC");
                 int i = 0;
                 while (rs.next()) {
                     Prenotazione p = new Prenotazione(rs.getString("codice"),rs.getString("utente"), rs.getString("docente"), rs.getString("corso"), rs.getString("data"), rs.getString("slot_ora"), rs.getString("stato"));
@@ -490,7 +490,7 @@ public class DAO {
             conn1 = DriverManager.getConnection(url1,user,password);
             if(conn1 != null){
                 Statement st = conn1.createStatement();
-                ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONE join DOCENTE on(PRENOTAZIONE.docente = DOCENTE.account) WHERE (UTENTE IS NULL OR UTENTE IS NOT NULL)"+data+""+corso+""+slot_ora+""+docente+""+utente+" ORDER BY STATO DESC" );   //CONTROLLA LE VIRGOLETTE DOVE CI SONO TUTTI I +...+...+...+
+                ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONE join DOCENTE on(PRENOTAZIONE.docente = DOCENTE.account) WHERE (UTENTE IS NULL OR UTENTE IS NOT NULL)"+data+""+corso+""+slot_ora+""+docente+""+utente+" ORDER BY STATO ASC" );   //CONTROLLA LE VIRGOLETTE DOVE CI SONO TUTTI I +...+...+...+
                 int i = 0;
                 while (rs.next()) {
                     Prenotazione p = new Prenotazione(rs.getString("codice"),rs.getString("utente"), rs.getString("docente"), rs.getString("corso"), rs.getString("data"), rs.getString("slot_ora"), rs.getString("stato"));

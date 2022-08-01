@@ -28,7 +28,7 @@ td:first-child, th:first-child {
     }
     .column1 {
         float: top;
-        width: 30%;
+        width: 100%;
 
         flex-direction: row;
 

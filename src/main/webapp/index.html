@@ -11,6 +11,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 
+
     <title>PRJLAB</title>
     <link rel="stylesheet" href="stile.css" />
     <!--    -------------STILE DELLA PAGINA UTENTE (tabella)------------->
@@ -187,13 +188,15 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="p in allPrenotations">
+                <tr v-for="p in allPrenotations" v-if="dataValida(p.data)">
                     <td><div>{{p.corso}}</div></td>
                     <td><div>{{p.docente}}</div></td>
                     <td><div>{{p.data}}</div></td>
                     <td><div>{{p.slot_ora}}</div></td>
                     <td><div v-if="p.stato === '0'">Libera</div>
-                        <div v-if="p.stato === '1'">Prenotata</div></td>
+                        <div v-if="p.stato === '1'">Prenotata</div>
+                        <div v-if="p.stato === '1'">Effettuata</div>
+                    </td>
                     <td><button type="button" class="btn btn-primary" v-if="p.stato === '0'" disabled>Prenota</button>
                         <button type="button" class="btn btn-primary" v-if="p.stato === '1'" disabled>Disdici prenotazione</button>
 
@@ -315,15 +318,19 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="p in allPrenotations">
+                <tr v-for="p in allPrenotations" v-if="dataValida(p.data)">
                     <td><div>{{p.corso}}</div></td>
                     <td><div>{{p.docente}}</div></td>
                     <td><div>{{p.data}}</div></td>
                     <td><div>{{p.slot_ora}}</div></td>
                     <td><div v-if="p.stato === '0'">Libera</div>
-                        <div v-if="p.stato === '1'">Prenotata</div></td>
+                        <div v-if="p.stato === '1'">Prenotata</div>
+                        <!--le prenotazioni prenotate la cui data è gia passata le facciamo vedere solo nello storico delle prenotazioni -->
+                        <!-- <div v-if="p.stato === '1' && !dataValida(p.data)">Effettuata</div> -->
+
                     <td><button type="button" class="btn btn-primary" v-if="p.stato === '0'" v-on:click="addPrenotation(p.codice)">Prenota</button>
                         <button type="button" class="btn btn-primary" v-if="p.stato === '1'" v-on:click="removePrenotation(p.codice)">Disdici prenotazione</button>
+                        <!--le prenotazioni prenotate la cui data è gia passata le facciamo vedere solo nello storico delle prenotazioni-->
 
                     </td>
                 </tr>
@@ -372,9 +379,11 @@
                         <td><div>{{p.data}}</div></td>
                         <td><div>{{p.slot_ora}}</div></td>
                         <td><div v-if="p.stato === '2'">Disdetta</div>
-                            <div v-if="p.stato === '1'">Prenotata</div></td>
+                            <div v-if="p.stato === '1' && dataValida(p.data)">Prenotata</div>
+                            <div v-if="p.stato === '1' && !dataValida(p.data)">Sostenuta</div></td>
                         <td>
-                            <button type="button" class="btn btn-primary" v-if="p.stato === '1' && isValido(p.corso, p.docente)" v-on:click="removePrenotationHistory(p.codice)">Disdici prenotazione</button>
+                            <button type="button" class="btn btn-primary" v-if="p.stato === '1' && isValido(p.corso, p.docente) && dataValida(p.data)" v-on:click="removePrenotationHistory(p.codice)">Disdici prenotazione</button>
+                            <button type="button" class="btn btn-primary" v-if="p.stato === '1' && isValido(p.corso, p.docente) && !dataValida(p.data)" disabled>Sostenuta</button>
                             <button type="button" class="btn btn-primary" v-if="p.stato === '1' && !isValido(p.corso, p.docente)" v-on:click="removePrenotationHistory(p.codice)" disabled>Docente o corso cancellato</button>
                             <button type="button" class="btn btn-primary" v-if="p.stato === '2'" disabled>Disdetta</button>
 
@@ -759,9 +768,14 @@
                     <td><div>{{p.slot_ora}}</div></td>
                     <td><div v-if="p.stato === '2'">Disdetta da {{p.utente}}</div>
                         <div v-if="p.stato === '1'">Prenotato da {{p.utente}}</div>
-                        <div v-if="p.stato === '0'">Libera</div></td>
+                        <div v-if="p.stato === '0' && dataValida(p.data)">Libera</div>
+                        <div v-if="p.stato === '0' && !dataValida(p.data)">Data scaduta</div></td>
                     <td>
-                        <div v-if="!(prenCodeShow===p.codice)">
+                        <div v-if="!(prenCodeShow===p.codice) && !dataValida(p.data)">
+                            <button type="button" class="btn btn-primary" v-if="p.stato === '0'" disabled>Data Scaduta</button>
+                        </div>
+
+                        <div v-if="!(prenCodeShow===p.codice) && dataValida(p.data)">
                             <button type="button" class="btn btn-primary" v-if="p.stato === '0'" v-on:click="prenCodeShow =p.codice" onclick="prenota(this)">Prenota per</button>
                         </div>
 
@@ -775,7 +789,8 @@
                         </div>
 
                         <button type="button" class="btn btn-primary" v-if="p.stato === '2'" v-on:click="removePrenotationAdmin(p.codice), prenCodeShow=''" disabled>Prenotazione di {{p.utente}} disdetta</button>
-                        <button type="button" class="btn btn-primary" v-if="p.stato === '1' && isValido(p.corso, p.docente)" v-on:click="removePrenotationAdmin(p.codice), prenCodeShow=''">Cancella prenotazione di {{p.utente}}</button>
+                        <button type="button" class="btn btn-primary" v-if="p.stato === '1' && isValido(p.corso, p.docente) && dataValida(p.data)" v-on:click="removePrenotationAdmin(p.codice), prenCodeShow=''">Cancella prenotazione di {{p.utente}}</button>
+                        <button type="button" class="btn btn-primary" v-if="p.stato === '1' && isValido(p.corso, p.docente) && !dataValida(p.data)" disabled>Prenotazione sostenuta da {{p.utente}}</button>
                         <button type="button" class="btn btn-primary" v-if="p.stato === '1' && !isValido(p.corso, p.docente)" v-on:click="removePrenotationAdmin(p.codice), prenCodeShow=''" disabled>Docente o corso cancellato</button>
 
 
@@ -864,6 +879,7 @@
             profAssociazione:'',
             corsoAssociazione:'',
             prenCodeShow:'0',
+            dataAttuale:'08/03/2022',
         },
         /*
         mounted:function(){
@@ -1317,6 +1333,33 @@
 
                 }.bind(this), 1000);
             },
+
+            dataValida:function(dataPrenotaz){
+                let self = this;
+                console.log("sono nel coso per vedere se la prenotazione è scaduta");
+                let dataPr=dataPrenotaz[6].concat(dataPrenotaz[7].concat(dataPrenotaz[8].concat(dataPrenotaz[9])));
+                console.log("Data CONCATENATA = "+ dataPr);
+                let dataAct = self.dataAttuale[6].concat(self.dataAttuale[7].concat(self.dataAttuale[8].concat(self.dataAttuale[9])));
+                if(dataAct > dataPr){   //controllo dell anno
+                    return false;
+                }else{                  //controllo del mese
+                    let dataPr=dataPrenotaz[3].concat(dataPrenotaz[4]);
+                    let dataAct = self.dataAttuale[3].concat(self.dataAttuale[4]);
+                    if(dataAct > dataPr){
+                        return false;
+                    }else{
+                        let dataPr=dataPrenotaz[0].concat(dataPrenotaz[1]);
+                        let dataAct = self.dataAttuale[0].concat(self.dataAttuale[1]);
+                        if(dataAct >= dataPr){
+                            return false;
+                        }else{
+                            return true;
+                        }
+                    }
+                }
+
+
+                },
 
 
             isValido:function(corso, docente){
