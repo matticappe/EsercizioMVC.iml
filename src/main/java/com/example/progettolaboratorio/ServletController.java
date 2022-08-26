@@ -137,14 +137,10 @@ public class ServletController extends HttpServlet {
                     break;
 
                 case "viewOwnPrenotations":
-                    System.out.println("1");
                     actionRD="viewOwnPrenotations";
                     request.setAttribute("actionRD",actionRD);
-                    System.out.println("2");
-                    rd=ctx.getNamedDispatcher("ServletPrenotazione");
-                    System.out.println("3");
+                    rd=ctx.getNamedDispatcher("ServletPrenotazione");;
                     rd.include(request,response);
-                    System.out.println("4");
 
                     ArrayList<Prenotazione> s9 = (ArrayList<Prenotazione>) request.getAttribute("risultato");
                     if(s9 != null){
@@ -406,7 +402,12 @@ public class ServletController extends HttpServlet {
     public ArrayList<Utente> stampaUtenti(HttpServletRequest request, HttpServletResponse response) throws ServletException,
             IOException {
         ArrayList<Utente> list = null;
-        if(isAdmin(request,response).equals("yes")){
+        String username;
+        HttpSession s=request.getSession();
+        int ruolo=0;
+        if(s!=null)
+            ruolo = (int) s.getAttribute("Role");
+        if(isAdmin(request,response).equals("yes")||ruolo==1){
             list = DAO.ViewAllUsers();
         }
         return list;

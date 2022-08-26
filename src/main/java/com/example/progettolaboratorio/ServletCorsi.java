@@ -52,7 +52,7 @@ public class ServletCorsi extends HttpServlet{
     public String inserimentoCorso(HttpServletRequest request, HttpServletResponse response) throws ServletException,
             IOException {
         String result = "";
-        System.out.println("Sono nella inserimentoDocente");
+        System.out.println("Sono nella inserimentoCorso");
         String corso = request.getParameter("corso");
         result = DAO.inserimentoCorso(corso);
         System.out.println(corso);

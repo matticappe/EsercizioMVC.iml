@@ -67,7 +67,7 @@ public class ServletLogin extends HttpServlet{
                         String account = result.getAccount();
                         s.setAttribute("User", account);
                         int role = result.getRuolo();
-                        s.setAttribute("Ruolo", role);
+                        s.setAttribute("Role", role);
                         if (isAdmin(request, response).equals("yes"))
                             st = "admin";
                         else
@@ -93,10 +93,17 @@ public class ServletLogin extends HttpServlet{
     }
     public String isAdmin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
         String result = "";
-        String username = request.getParameter("username");
-        boolean flag;
-        flag = DAO.isAdmin(username);
-        if(flag){
+        String username;
+        int ruolo=0;
+        if(s==null)
+            username = request.getParameter("username");
+        else{
+            username = s.getAttribute("User").toString();
+            ruolo= (int) s.getAttribute("Role");
+        }
+
+        DAO.isAdmin(username);
+        if(DAO.isAdmin(username)||ruolo==1){
             result = "yes";         //è un admin
         }
         else{

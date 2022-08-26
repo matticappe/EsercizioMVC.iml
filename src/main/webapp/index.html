@@ -552,6 +552,7 @@
                     <tr v-if="showRimuoviCorso==='1'">
                         <td>
                             <div class="list-group">
+                                <button type="button" class="btn btn-primary" v-on:click="showRimuoviCorso ='0'">Indietro</button>
                                 <a v-if="checkRimuoviCorso==='0'" href="#" v-on:click="salvaNomeCorsoRimuovere(s.titolo), checkRimuoviCorso='1'" class="list-group-item list-group-item-action" v-for="s in allSubjects">{{s.titolo}}</a>
                                 <a v-if="checkRimuoviCorso==='1'" href="#" class="list-group-item list-group-item-action" >
                                     <span class="badge badge-pill badge-danger">Sei sicuro di voler rimuovere ?</span>
@@ -574,6 +575,7 @@
                     <tr v-if="showRimuoviProf==='1'">
                         <td>
                             <div class="list-group">
+                                <button type="button" class="btn btn-primary" v-on:click="showRimuoviProf ='0'">Indietro</button>
                                 <a v-if="checkRimuoviProf==='0'" href="#" v-on:click="salvaNomeProfRimuovere(p.account); checkRimuoviProf='1'" class="list-group-item list-group-item-action" v-for="p in allProfs">{{p.nomeCognome}}</a>
                                 <a v-if="checkRimuoviProf==='1'" href="#" class="list-group-item list-group-item-action" >
                                     <span class="badge badge-pill badge-danger">Sei sicuro di voler rimuovere ?</span>
@@ -594,6 +596,7 @@
 
                     <tr v-if="showAddProf==='1'">
                         <td>
+                            <button type="button" class="btn btn-primary" v-on:click="showAddProf ='0'">Indietro</button>
                             <form v-if="checkAddProf==='0'">
                                 <div class="form-group">
                                     <label for="exampleFormControlInput1">Inserisci Account</label>
@@ -648,6 +651,7 @@
 
                     <tr v-if="showAddCorso==='1'">
                         <td>
+                            <button type="button" class="btn btn-primary" v-on:click="showAddCorso ='0'">Indietro</button>
                             <form v-if="checkAddCorso==='0'">
                                 <div class="form-group">
                                     <label for="exampleFormControlInput1">Inserisci nome corso</label>
@@ -727,6 +731,8 @@
                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                         <a class="dropdown-item" v-on:click="salvaCorsoAssociazione(c.titolo)" href="#" v-for="c in allSubjects">{{c.titolo}}</a>
                                     </div>
+
+                                    <br>
                                     <br>
                                     <button type="button" class="btn btn-primary" v-on:click="checkAddAssociazione='1'">Aggiungi Associazione</button>
 

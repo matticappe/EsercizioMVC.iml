@@ -96,7 +96,12 @@ public class ServletPrenotazione extends HttpServlet{
             IOException {
         System.out.println("ViewOwnPrenot");
         ArrayList<Prenotazione> list;
-        String username = request.getParameter("username");
+        String username;
+        HttpSession s=request.getSession();
+        if(s!=null)
+            username = s.getAttribute("User").toString();
+        else
+            username=request.getParameter("username");
         String username1;
         if(username==null || username==""){
             username1="";
@@ -111,7 +116,12 @@ public class ServletPrenotazione extends HttpServlet{
     public ArrayList<Prenotazione> viewOwnActPrenotations(HttpServletRequest request, HttpServletResponse response) throws ServletException,
             IOException {
         ArrayList<Prenotazione> list;
-        String username = request.getParameter("username");
+        String username;
+        HttpSession s=request.getSession();
+        if(s!=null)
+            username = s.getAttribute("User").toString();
+        else
+            username=request.getParameter("username");
 
         String username1;
         if(username==null || username==""){
@@ -137,7 +147,9 @@ public class ServletPrenotazione extends HttpServlet{
         String data = request.getParameter("data");
         String materia = request.getParameter("materia");
         String docente = request.getParameter("docente");
-        String utente = request.getParameter("utente");
+        String utente;
+        HttpSession s=request.getSession();
+            utente=request.getParameter("utente");
 
         String data_filter;
         String utente_filter;
@@ -180,7 +192,9 @@ public class ServletPrenotazione extends HttpServlet{
         String data = request.getParameter("data");
         String materia = request.getParameter("materia");
         String docente = request.getParameter("docente");
-        String utente = request.getParameter("username");
+        String utente;
+        HttpSession s=request.getSession();
+            utente=request.getParameter("username");
 
         String data1;
         String materia1;
@@ -217,7 +231,12 @@ public class ServletPrenotazione extends HttpServlet{
 
     public String effettuaPrenotazione(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
         String codice = request.getParameter("codice");
-        String utente = request.getParameter("utente");
+        String utente;
+        HttpSession s=request.getSession();
+        if(s!=null)
+            utente = s.getAttribute("User").toString();
+        else
+            utente=request.getParameter("username");
         String result = DAO.effettuaPrenotazione(codice,utente);
         return result;
     }
