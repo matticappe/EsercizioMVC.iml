@@ -65,7 +65,7 @@ public class ServletLogin extends HttpServlet{
                     if (result != null) {
                         s = request.getSession();
                         String account = result.getAccount();
-                        s.setAttribute("User", account);
+                        s.setAttribute("userName", account);
                         int role = result.getRuolo();
                         s.setAttribute("Role", role);
                         if (isAdmin(request, response).equals("yes"))
@@ -98,7 +98,7 @@ public class ServletLogin extends HttpServlet{
         if(s==null)
             username = request.getParameter("username");
         else{
-            username = s.getAttribute("User").toString();
+            username = s.getAttribute("userName").toString();
             ruolo= (int) s.getAttribute("Role");
         }
 

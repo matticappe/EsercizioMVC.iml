@@ -99,7 +99,7 @@ public class ServletPrenotazione extends HttpServlet{
         String username;
         HttpSession s=request.getSession();
         if(s!=null)
-            username = s.getAttribute("User").toString();
+            username =s.getAttribute("userName").toString();
         else
             username=request.getParameter("username");
         String username1;
@@ -118,11 +118,14 @@ public class ServletPrenotazione extends HttpServlet{
         ArrayList<Prenotazione> list;
         String username;
         HttpSession s=request.getSession();
-        if(s!=null)
-            username = s.getAttribute("User").toString();
-        else
-            username=request.getParameter("username");
-
+        if(s!=null) {
+            username =s.getAttribute("userName").toString();
+            System.out.println("UserName= "+ username);
+        }
+        else {
+            username = request.getParameter("username");
+            System.out.println("2");
+        }
         String username1;
         if(username==null || username==""){
             username1="";
@@ -149,6 +152,9 @@ public class ServletPrenotazione extends HttpServlet{
         String docente = request.getParameter("docente");
         String utente;
         HttpSession s=request.getSession();
+        if(s!=null)
+            utente =s.getAttribute("userName").toString();
+        else
             utente=request.getParameter("utente");
 
         String data_filter;
@@ -194,6 +200,9 @@ public class ServletPrenotazione extends HttpServlet{
         String docente = request.getParameter("docente");
         String utente;
         HttpSession s=request.getSession();
+        if(s!=null)
+            utente =s.getAttribute("userName").toString();
+        else
             utente=request.getParameter("username");
 
         String data1;
@@ -233,10 +242,10 @@ public class ServletPrenotazione extends HttpServlet{
         String codice = request.getParameter("codice");
         String utente;
         HttpSession s=request.getSession();
-        if(s!=null)
-            utente = s.getAttribute("User").toString();
+        if(s!=null&&s.getAttribute("userName")!=null)
+            utente = s.getAttribute("userName").toString();
         else
-            utente=request.getParameter("username");
+            utente=request.getParameter("utente");
         String result = DAO.effettuaPrenotazione(codice,utente);
         return result;
     }
