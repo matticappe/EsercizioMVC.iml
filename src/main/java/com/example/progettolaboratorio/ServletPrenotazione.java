@@ -150,12 +150,10 @@ public class ServletPrenotazione extends HttpServlet{
         String data = request.getParameter("data");
         String materia = request.getParameter("materia");
         String docente = request.getParameter("docente");
-        String utente;
-        HttpSession s=request.getSession();
-        if(s!=null)
-            utente =s.getAttribute("userName").toString();
-        else
-            utente=request.getParameter("utente");
+        String utente; //utente è l'utente finale
+        utente=request.getParameter("utente");
+
+        System.out.println("Utente"+utente);
 
         String data_filter;
         String utente_filter;
