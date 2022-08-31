@@ -240,8 +240,8 @@ public class ServletPrenotazione extends HttpServlet{
         String codice = request.getParameter("codice");
         String utente;
         HttpSession s=request.getSession();
-        if(s!=null&&s.getAttribute("userName")!=null)
-            utente = s.getAttribute("userName").toString();
+        if(s!=null&&s.getAttribute("utente")!=null)
+            utente = s.getAttribute("utente").toString();
         else
             utente=request.getParameter("utente");
         String result = DAO.effettuaPrenotazione(codice,utente);

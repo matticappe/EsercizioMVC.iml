@@ -40,7 +40,7 @@
 
 <div id="loginScreen">
     <div v-if="setVisibleLogin==='0'" class="d-flex justify-content-center">
-<!--        {{setVisibleLogin}}-->
+
         <div class="col-8 col-lg-3">
             <h2 class="d-flex justify-content-center">Form di autenticazione
 
@@ -416,7 +416,7 @@
 
 
     <div v-if="setVisibleLogin==='4'" id="logoutAmministratore" class="logout">
-        {{newSearchUser}}
+
         <button type="button" v-on:click="setVisibleLogin='0'; registeredUserLogout()" class="btn btn-secondary"
                 data-toggle="tooltip" data-placement="top" title="Tooltip on top">
             Logout

@@ -28,12 +28,14 @@ public class ServletCorsi extends HttpServlet{
     }
     public void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException,
             IOException {
+        System.out.println("sono nella classe servletcorsi");
         String answ;
         ArrayList <Corso> answ1;
 
         String action =(String) request.getAttribute("actionRD");
             switch (action){
                 case "inserimentoCorsi":
+                    System.out.println("sono in inserimentoCorsi switch");
                     answ =(String) inserimentoCorso(request,response);
                     request.setAttribute("risultato",answ);
                     break;

@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
@@ -73,7 +74,8 @@ public class ServletController extends HttpServlet {
                     break;
 
                 case "inserimentoCorso":
-                    actionRD="inserimentoCorso";
+                    System.out.println("sono nella inserimentoCorso");
+                    actionRD="inserimentoCorsi";
                     request.setAttribute("actionRD",actionRD);
                     rd=ctx.getNamedDispatcher("ServletCorsi");
                     rd.include(request,response);
